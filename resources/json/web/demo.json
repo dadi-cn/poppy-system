@@ -1,0 +1,13 @@
+{
+	"status" : 0,
+	"message" : "示例信息",
+	"data" : {
+		"name" : "lol",
+		"code" : "000600000000",
+		"title" : "英雄联盟",
+		"list_order" : 10,
+		"desc" : "英雄联盟的打单介绍",
+		"desc_url" : "http://www.baidu.com/logo.png",
+		"thumb" : "http://www.baidu.com/logo.png"
+	}
+}

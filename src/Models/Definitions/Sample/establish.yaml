@@ -1,0 +1,8 @@
+title: 礼物
+fields:
+    title:
+        label: 礼物名称
+        type: input
+    image:
+        label: 礼物图片
+        type: picture

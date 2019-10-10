@@ -1,0 +1,28 @@
+system:button.sample:
+    type: link
+    title: 示例
+    route: user:backend.user.punish
+    route_params:
+        - punish
+system:backend.pam.establish:
+    type: iframe
+    title: 编辑用户信息
+    icon: fa fa-edit
+    route: system:backend.pam.establish
+system:backend.pam.password:
+    type: iframe
+    title: 修改密码
+    icon: fa fa-key
+    route: system:backend.pam.password
+    params:
+        - id
+system:backend.pam.disable:
+    type: iframe
+    title: 当前启用, 点击禁用
+    icon: fa fa-unlock text-success
+    route: system:backend.pam.disable
+system:backend.pam.enable:
+    type: iframe
+    title: 当前禁用, 点击启用
+    icon: fa fa-lock text-danger
+    route: system:backend.pam.enable

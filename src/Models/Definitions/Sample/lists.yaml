@@ -1,0 +1,52 @@
+model: \Poppy\System\Models\PamAccount
+filter: \Poppy\System\Models\Filters\PamAccountFilter
+search:
+    -
+        placeholder: 通行证
+        name: passport
+
+
+fields:
+    id:
+        title: 用户ID
+    username:
+        title: 用户名
+    mobile:
+        title: 手机
+    mail:
+        title: 邮箱
+    login_times:
+        title: 登录次数
+    created_at:
+        title: 创建时间
+handle:
+    -
+        ui: system:backend.pam.establish
+        policy: edit
+        params:
+            - id
+    -
+        ui: system:backend.pam.disable
+        policy: disable
+        params:
+            - id
+    -
+        ui: system:backend.pam.enable
+        policy: enable
+        params:
+            - id
+    -
+        ui: system:backend.pam.password
+        params:
+            - id
+    -
+        title: 修改密码
+        route: system:backend.pam.password
+        params:
+            - id
+    -
+        icon: fa fa-key
+        title: 修改密码
+        route: system:backend.pam.password
+        params:
+            - id

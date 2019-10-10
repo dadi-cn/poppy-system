@@ -1,0 +1,38 @@
+{
+	"name" : "系统",
+	"slug" : "system",
+	"type" : "poppy",
+	"version" : "1.1",
+	"order" : 1000,
+	"description" : "This is the description for the poppy Backend module.",
+	"autoload" : [
+		"src/classes/functions.php"
+	],
+	"dependencies" : [
+		{
+			"class" : "\\HieuLe\\Active\\Active",
+			"package" : "hieu-le/active",
+			"description" : "根据 url 生成对应导航的 active 状态"
+		},
+		{
+			"class" : "\\Symfony\\Component\\Yaml\\Yaml",
+			"package" : "symfony/yaml",
+			"description" : "Yaml 解析器"
+		},
+		{
+			"class" : "\\EloquentFilter\\ServiceProvider",
+			"package" : "tucker-eric/eloquentfilter",
+			"description" : "An Eloquent Way To Filter Laravel Models"
+		},
+		{
+			"class" : "\\Tymon\\JWTAuth\\Factory",
+			"package" : "tymon/jwt-auth",
+			"description" : "Jwt Auth Token"
+		},
+		{
+			"class" : "\\Curl\\Curl",
+			"package" : "php-curl-class/php-curl-class",
+			"description" : "PHP Curl Class makes it easy to send HTTP requests and integrate with web APIs."
+		}
+	]
+}
