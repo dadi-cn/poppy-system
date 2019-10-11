@@ -1,5 +1,6 @@
 # 开发文档
 
+- [更新清单](./docs/build.md)
 - [IDE 配置插件](./docs/ide.md)
 - [项目设定](./docs/setting.md)
 - [最佳实践](./docs/suggest.md)
