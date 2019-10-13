@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\FileHelper;
@@ -99,7 +100,7 @@ class ApiDocController extends DevelopController
 			if (isset($data['current_params'])) {
 				foreach ($data['current_params'] as $current_param) {
 					if (!isset($data['params'][$current_param->field]) && !$current_param->optional) {
-						if (starts_with($current_param->field, ':')) {
+						if (Str::startsWith($current_param->field, ':')) {
 							$variableName             = trim($current_param->field, ':');
 							$values                   = StrHelper::parseKey(strip_tags($current_param->description));
 							$variables[$variableName] = $values;

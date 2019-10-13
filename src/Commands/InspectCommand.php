@@ -5,12 +5,13 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
+use Poppy\System\Classes\Inspect\CommentParser;
+use Poppy\System\Models\PamPermission;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Poppy\System\Classes\Inspect\CommentParser;
-use Poppy\System\Models\PamPermission;
 use Throwable;
 
 /**
@@ -181,7 +182,7 @@ class InspectCommand extends Command
 		$modules->each(function ($module) use (&$seoList) {
 			collect(\Route::getRoutes())->map(function (Route $route) use ($module, &$seoList) {
 				$name = $route->getName();
-				if (starts_with($name, $module)) {
+				if (Str::startsWith($name, $module)) {
 					$seoKey   = str_replace([':', '.', '::'], ['::', '_', '::seo.'], $name);
 					$transKey = trans($seoKey);
 					if ($transKey === $seoKey || $transKey === '') {
@@ -396,7 +397,7 @@ class InspectCommand extends Command
 						continue;
 					}
 					$string = ltrim($item_key, '*');
-					if ($field['type'] !== $item && str_contains($field['field'], $string)) {
+					if ($field['type'] !== $item && Str::contains($field['field'], $string)) {
 						$table[] = $funToTable($field, $type, $url);
 					}
 					continue;
@@ -462,7 +463,7 @@ class InspectCommand extends Command
 				$moduleName = $this->moduleName($pathName);
 
 				// 排除指定的类
-				if (str_contains($pathName, [
+				if (Str::contains($pathName, [
 					'database/', 'update/', 'functions.php', 'ServiceProvider',
 					'http/routes/', '.sql', '.txt', '.pem', '.xml', '.md', '.yaml', '.table', '.stub',
 				])) {
@@ -472,7 +473,7 @@ class InspectCommand extends Command
 				// 模块名称解析错误
 				if (!$moduleName) {
 					// module name not check with extension
-					if (str_contains($pathName, 'extensions')) {
+					if (Str::contains($pathName, 'extensions')) {
 						continue;
 					}
 					$this->warn('Error module name in path:' . $pathName);
@@ -482,7 +483,7 @@ class InspectCommand extends Command
 
 				$relativePath = $file->getRelativePath();
 				$className    = $this->className($moduleName, $relativePath, $file->getFilename());
-				if (str_contains($className, 'Framework')) {
+				if (Str::contains($className, 'Framework')) {
 					$className = 'Poppy\\' . $className;
 				}
 				try {
@@ -561,7 +562,7 @@ class InspectCommand extends Command
 					}
 
 					// 排除魔术方法
-					if (starts_with($methodName, '__')) {
+					if (Str::startsWith($methodName, '__')) {
 						continue;
 					}
 
@@ -771,7 +772,7 @@ class InspectCommand extends Command
 			foreach ($files as $file) {
 				if (preg_match('/models\/(?<model>[A-Za-z]+)\.php/', $file, $matches)) {
 					// dd($matches['model']);
-					$key           = snake_case($matches['model']);
+					$key           = Str::snake($matches['model']);
 					$className     = poppy_class($slug, 'Models\\' . $matches['model']);
 					$ref           = new ReflectionClass($className);
 					$docComment    = $ref->getDocComment();
@@ -812,7 +813,7 @@ class InspectCommand extends Command
 				$moduleName = $this->moduleName($pathName);
 
 				// 排除指定的类
-				if (!str_contains($pathName, ['http/request/'])) {
+				if (!Str::contains($pathName, ['http/request/'])) {
 					continue;
 				}
 
@@ -852,7 +853,7 @@ class InspectCommand extends Command
 					}
 
 					// 排除魔术方法
-					if (starts_with($methodName, '__')) {
+					if (Str::startsWith($methodName, '__')) {
 						continue;
 					}
 
@@ -902,7 +903,7 @@ class InspectCommand extends Command
 				$moduleName = $this->moduleName($pathName);
 
 				// 排除指定的类
-				if (!str_contains($pathName, ['action/'])) {
+				if (!Str::contains($pathName, ['action/'])) {
 					continue;
 				}
 
@@ -945,7 +946,7 @@ class InspectCommand extends Command
 						||
 						$method->isConstructor()
 						||
-						starts_with($methodName, ['set', 'get'])
+						Str::startsWith($methodName, ['set', 'get'])
 					) {
 						continue;
 					}

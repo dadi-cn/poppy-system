@@ -2,6 +2,7 @@
 
 use Form;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 use Poppy\System\Services\Contracts\ServiceArray;
 use Poppy\System\Services\Contracts\ServiceForm;
 use Poppy\System\Services\Contracts\ServiceHtml;
@@ -24,7 +25,7 @@ class ServiceFactory
 			return null;
 		}
 		$hooks  = app('module')->hooks()->get($id);
-		$method = 'parse' . studly_case($service['type']);
+		$method = 'parse' . Str::studly($service['type']);
 
 		if (is_callable([$this, $method])) {
 			return $this->$method($hooks, $params);

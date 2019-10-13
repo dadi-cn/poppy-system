@@ -5,6 +5,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Poppy\Framework\Classes\Resp;
 use Poppy\System\Classes\Progress;
@@ -44,7 +45,7 @@ class ProgressController extends DevelopController
 			return Resp::error('模型不存在');
 		}
 
-		$class = '\\' . ucfirst($module) . '\\Progress\\' . studly_case($class_name);
+		$class = '\\' . ucfirst($module) . '\\Progress\\' . Str::studly($class_name);
 		if (!class_exists($class)) {
 			return Resp::error('类不存在');
 		}
@@ -59,7 +60,7 @@ class ProgressController extends DevelopController
 		$this->fix['method'] = $method;
 
 		if ($this->fix['left'] === 0) {
-			app('setting')->set('system::progress.' . snake_case($class_name), $class_name);
+			app('setting')->set('system::progress.' . Str::snake($class_name), $class_name);
 		}
 
 		return $this->fixView();

@@ -1,6 +1,7 @@
 <?php namespace Poppy\System\Classes\Api\Sign;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Helper\ArrayHelper;
@@ -32,7 +33,7 @@ class DefaultSignProvider implements SignContract
 	{
 		$token = function () {
 			$token = $this->request->header('Authorization');
-			if ($token && starts_with($token, 'Bearer ')) {
+			if ($token && Str::startsWith($token, 'Bearer ')) {
 				$token = substr($token, 7);
 			}
 			if (!$token) {

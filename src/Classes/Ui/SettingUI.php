@@ -3,6 +3,7 @@
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Input;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
@@ -80,7 +81,7 @@ class SettingUI
 	public function __construct($key)
 	{
 		try {
-			if (starts_with($key, 'addon.')) {
+			if (Str::startsWith($key, 'addon.')) {
 				$this->pages = [];
 				$folder      = str_after($key, 'addon.');
 				$file        = base_path('addons/' . $folder . '/configurations/pages.yaml');
