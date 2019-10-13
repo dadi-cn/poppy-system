@@ -2,6 +2,7 @@
 
 use Faker\Factory;
 use Faker\Generator;
+use Illuminate\Support\Str;
 use Throwable;
 
 /**
@@ -69,7 +70,7 @@ class BaseApiRequest
 	 */
 	public function jump($url): bool
 	{
-		if (str_contains($url, $this->jumpUrl)) {
+		if (Str::contains($url, $this->jumpUrl)) {
 			return true;
 		}
 

@@ -3,6 +3,7 @@
 use ArrayAccess;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use JsonSerializable;
 use Poppy\Framework\Classes\Traits\HasAttributesTrait;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
@@ -21,7 +22,7 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 	 */
 	public function __construct($slug)
 	{
-		if (!str_contains($slug, '.')) {
+		if (!Str::contains($slug, '.')) {
 			$this->attributes = [
 				'directory' => poppy_path($slug),
 				'namespace' => poppy_class($slug),
@@ -34,7 +35,7 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 
 		$this->attributes = [
 			'directory' => $poppyPath . '/' . $poppyModule,
-			'namespace' => 'Poppy\\' . studly_case($poppyModule),
+			'namespace' => 'Poppy\\' . Str::studly($poppyModule),
 			'slug'      => $slug,
 			'enabled'   => app('poppy')->isEnabled($slug),
 		];

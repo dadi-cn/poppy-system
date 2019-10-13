@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Mail\Mailable;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Poppy\Framework\Classes\Resp;
 
@@ -49,7 +50,7 @@ class LayoutController extends DevelopController
 	{
 		try {
 			/** @var Mailable $class */
-			$class = poppy_class('system', 'Mail\\' . studly_case($page) . 'Mail');
+			$class = poppy_class('system', 'Mail\\' . Str::studly($page) . 'Mail');
 
 			return (new $class())->render();
 		} catch (Exception $e) {

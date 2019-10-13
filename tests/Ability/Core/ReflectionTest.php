@@ -4,6 +4,7 @@
  * Copyright (C) Update For IDE
  */
 
+use Illuminate\Support\Str;
 use Poppy\Framework\Application\TestCase;
 use ReflectionClass;
 use Poppy\System\Setting\SettingServiceProvider;
@@ -37,7 +38,7 @@ class ReflectionTest extends TestCase
 			}
 
 			// except magic
-			if (starts_with($methodName, '__')) {
+			if (Str::startsWith($methodName, '__')) {
 				continue;
 			}
 

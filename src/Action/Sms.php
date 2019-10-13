@@ -1,5 +1,6 @@
 <?php namespace Poppy\System\Action;
 
+use Illuminate\Support\Str;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Classes\Traits\PamTrait;
@@ -163,7 +164,7 @@ class Sms
 	public function send($type, $mobile, $params = []): bool
 	{
 		$sendType = sys_setting('system::sms.send_type') ?: 'local';
-		$class    = 'System\\Classes\\Sms\\' . studly_case($sendType) . 'Sms';
+		$class    = 'System\\Classes\\Sms\\' . Str::studly($sendType) . 'Sms';
 		if (!$class) {
 			return $this->setError('发送类型不正确');
 		}

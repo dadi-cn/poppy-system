@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Str;
 use Intervention\Image\Constraint;
 use Intervention\Image\Image;
 use Poppy\Framework\Classes\Traits\AppTrait;
@@ -254,7 +255,7 @@ class Uploader
 	public function saveInput($content): bool
 	{
 		$extension = 'png';
-		if (str_contains($this->mimeType, '/')) {
+		if (Str::contains($this->mimeType, '/')) {
 			$extension = str_after($this->mimeType, '/');
 		}
 

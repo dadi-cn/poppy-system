@@ -1,5 +1,6 @@
 <?php namespace Poppy\System\Classes\Loader;
 
+use Illuminate\Support\Str;
 use Poppy\Framework\Foundation\Application;
 use Poppy\Framework\Helper\StrHelper;
 use Throwable;
@@ -123,7 +124,7 @@ class AddonLoader
 			return true;
 		}
 
-		if (starts_with($className, '\Addons')) {
+		if (Str::startsWith($className, '\Addons')) {
 			$names = explode('\\', $className);
 
 			array_shift($names);
@@ -131,8 +132,8 @@ class AddonLoader
 			$group  = array_shift($names);
 			$plugin = array_shift($names);
 			$file   = array_pop($names);
-			$path   = 'addons/' . snake_case($group) . '/' . snake_case($plugin) . '/src/' .
-				($names ? snake_case(implode('/', $names)) . '/' : '') . $file . '.php';
+			$path   = 'addons/' . Str::snake($group) . '/' . Str::snake($plugin) . '/src/' .
+				($names ? Str::snake(implode('/', $names)) . '/' : '') . $file . '.php';
 
 			if ($this->isRealFilePath($path)) {
 				$this->includeClass($className, $path);

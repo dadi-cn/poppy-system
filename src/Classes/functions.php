@@ -327,7 +327,7 @@ if (!function_exists('sys_addon')) {
 	{
 		static $addons;
 		[$group, $addon] = explode('/', trim($folder, '/\\'));
-		$class = '\\Addons\\' . studly_case($group) . '\\' . $addon . '\\Addon';
+		$class = '\\Addons\\' . Str::studly($group) . '\\' . $addon . '\\Addon';
 		if (!class_exists($class)) {
 			return null;
 		}
@@ -377,7 +377,7 @@ if (!function_exists('sys_url')) {
 
 		if (is_array($input)) {
 			foreach ($input as $_key => $_val) {
-				if (starts_with($_key, '_')) {
+				if (Str::startsWith($_key, '_')) {
 					unset($input[$_key]);
 				}
 			}

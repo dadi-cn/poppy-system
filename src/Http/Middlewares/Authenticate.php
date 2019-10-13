@@ -5,9 +5,10 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as IlluminateAuthenticate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Poppy\Framework\Classes\Resp;
-use Route;
 use Poppy\System\Models\PamAccount;
+use Route;
 
 /**
  * Class Authenticate.
@@ -17,10 +18,12 @@ class Authenticate extends IlluminateAuthenticate
 
 	/**
 	 * 授权
-	 * @param array $guards 提供的保护伞
+	 * @param Request $request
+	 * @param array   $guards 提供的保护伞
+	 * @return mixed
 	 * @throws AuthenticationException
 	 */
-	protected function authenticate(array $guards)
+	protected function authenticate($request, array $guards)
 	{
 		if (empty($guards)) {
 			return app('auth')->authenticate();
@@ -43,7 +46,7 @@ class Authenticate extends IlluminateAuthenticate
 	public function handle($request, Closure $next, ...$guards)
 	{
 		try {
-			$this->authenticate($guards);
+			$this->authenticate($request, $guards);
 
 		} catch (Exception $e) {
 			if ($request->expectsJson()) {
@@ -62,7 +65,7 @@ class Authenticate extends IlluminateAuthenticate
 			$isWeb = in_array(PamAccount::GUARD_WEB, $guards, true);
 			if ($isWeb || in_array(PamAccount::GUARD_JWT_WEB, $guards, true)) {
 				$route = Route::currentRouteName();
-				if ($route && str_contains($route, ':mobile.') && config('poppy.guard_location.mobile')) {
+				if ($route && Str::contains($route, ':mobile.') && config('poppy.guard_location.mobile')) {
 					$appends = [
 						'location' => route_url(config('poppy.guard_location.mobile'), [], [
 							'go' => route_url($route),

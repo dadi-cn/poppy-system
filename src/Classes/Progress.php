@@ -1,5 +1,6 @@
 <?php namespace Poppy\System\Classes;
 
+use Illuminate\Support\Str;
 use Poppy\Framework\Helper\FileHelper;
 
 /**
@@ -40,8 +41,8 @@ class Progress
 			$files = FileHelper::listFile($item['path']);
 			foreach ($files as $file) {
 				$name        = FileHelper::removeExtension($file);
-				$class       = snake_case(substr($name, strrpos($name, '/') + 1));
-				$cache_class = sys_setting('system::progress.' . snake_case($class)) ?? [];
+				$class       = Str::snake(substr($name, strrpos($name, '/') + 1));
+				$cache_class = sys_setting('system::progress.' . Str::snake($class)) ?? [];
 				// 获取 sys_setting 中 已经执行过的类 进行对比 返回 执行过的类
 				if ($class === $cache_class) {
 					$progresses[]    = $class;

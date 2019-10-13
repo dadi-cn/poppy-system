@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\UserProvider as UserProviderBase;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Poppy\System\Classes\Auth\Password\DefaultPasswordProvider;
 use Poppy\System\Classes\Contracts\Auth\Password;
 use Poppy\System\Models\PamAccount;
@@ -54,7 +55,7 @@ class PamProvider implements UserProviderBase
 		$query = $this->createModel()->newQuery();
 
 		foreach ($credentials as $key => $value) {
-			if (!str_contains($key, ['password', 'pwd_type'])) {
+			if (!Str::contains($key, ['password', 'pwd_type'])) {
 				$query->where($key, $value);
 			}
 		}
