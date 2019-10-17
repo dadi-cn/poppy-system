@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use PHPUnit\Runner\Exception;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Helper\UtilHelper;
@@ -199,7 +200,7 @@ class Pam
 			if (!$prefix) {
 				return $this->setError(trans('system::action.pam.not_set_name_prefix'));
 			}
-			$username = $prefix . '_' . Carbon::now()->format('YmdHis') . str_random(6);
+			$username = $prefix . '_' . Carbon::now()->format('YmdHis') . Str::random(6);
 		}
 		else {
 			$hasAccountName = true;
@@ -367,7 +368,7 @@ class Pam
 			return $this->setError($validator->messages());
 		}
 
-		$key               = str_random(6);
+		$key               = Str::random(6);
 		$regDatetime       = $pam->created_at->toDateTimeString();
 		$cryptPassword     = $this->password()->genPassword($password, $regDatetime, $key);
 		$pam->password     = $cryptPassword;

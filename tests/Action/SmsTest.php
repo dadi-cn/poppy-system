@@ -4,6 +4,7 @@
  * Copyright (C) Update For IDE
  */
 
+use Illuminate\Support\Str;
 use Poppy\System\Action\Sms;
 use Poppy\System\Tests\Base\SystemTestCase;
 
@@ -19,7 +20,7 @@ class SmsTest extends SystemTestCase
 	{
 		$Sms = $this->action();
 		if ($Sms->send('captcha', '15254109156', [
-			'code' => 'Test_' . str_random(4),
+			'code' => 'Test_' . Str::random(4),
 		])) {
 			$this->assertTrue(true);
 		}

@@ -42,7 +42,7 @@ if (!function_exists('sys_gen_order')) {
 		try {
 			$sequence = random_int(1000, 9999);
 		} catch (Exception $e) {
-			$sequence = str_random(4);
+			$sequence = Str::random(4);
 		}
 		$current = Carbon::now()->format('YmdHis');
 

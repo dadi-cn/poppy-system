@@ -1,6 +1,7 @@
 <?php namespace Poppy\System\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Process\Process;
 
@@ -162,7 +163,7 @@ class DocCommand extends Command
 	 */
 	private function performTask($key)
 	{
-		$path = base_path('modules');
+		$path = base_path();
 		$aim  = base_path('public/docs/' . $key);
 
 		if (!file_exists($path)) {
@@ -170,7 +171,17 @@ class DocCommand extends Command
 
 			return;
 		}
-		$f     = ' -f ' . 'request/api.*/' . $key . '/.*\.php$';
+
+
+		$f = ' -f "modules/.*/src/http/request/api.*/' . $key . '/.*\.php$"';
+		if (env('APP_POPPY') === 'development') {
+			// in poppy development mode
+			$f .= ' -f "poppy/.*/src/Http/Request/Api.*/' . Str::studly($key) . '/.*\.php$"';
+		}
+		else {
+			$f .= ' -f "vendor/poppy/.*/src/Http/Request/Api.*/' . Str::studly($key) . '/.*\.php$"';
+		}
+
 		$lower = strtolower($key);
 		$shell = 'apidoc -i ' . $path . '  -o ' . $aim . ' ' . $f;
 		$this->info($shell);

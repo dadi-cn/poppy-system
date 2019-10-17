@@ -256,7 +256,7 @@ class Uploader
 	{
 		$extension = 'png';
 		if (Str::contains($this->mimeType, '/')) {
-			$extension = str_after($this->mimeType, '/');
+			$extension = Str::after($this->mimeType, '/');
 		}
 
 		// 磁盘对象
@@ -350,7 +350,7 @@ class Uploader
 	private function genRelativePath($extension = 'png'): string
 	{
 		$now      = Carbon::now();
-		$fileName = $now->format('is') . str_random(8) . '.' . $extension;
+		$fileName = $now->format('is') . Str::random(8) . '.' . $extension;
 
 		return ($this->folder ? $this->folder . '/' : '') . $now->format('Ym/d/H/') . $fileName;
 	}

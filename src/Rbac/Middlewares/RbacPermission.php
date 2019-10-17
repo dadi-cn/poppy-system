@@ -2,6 +2,7 @@
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Poppy\Framework\Classes\Resp;
 use Route;
 use Poppy\System\Models\PamAccount;
@@ -41,7 +42,7 @@ class RbacPermission
 
 		/* 存在方法权限, 不验证 global
 		 * ---------------------------------------- */
-		$method           = str_after(Route::currentRouteAction(), '@');
+		$method           = Str::after(Route::currentRouteAction(), '@');
 		$methodPermission = $permissions[$method] ?? '';
 		if ($methodPermission && app('permission')->has($methodPermission)) {
 			if ($user->capable($methodPermission)) {

@@ -1,6 +1,7 @@
 <?php namespace Poppy\System\Classes;
 
 use Collective\Html\FormBuilder as CollectiveFormBuilder;
+use Illuminate\Support\Str;
 use Input;
 use Poppy\Framework\Helper\FileHelper;
 use Poppy\Framework\Helper\StrHelper;
@@ -45,7 +46,7 @@ class FormBuilder extends CollectiveFormBuilder
 	public function spinner($name, $value = null, $options = []): string
 	{
 		$value     = (string) $this->getValueAttribute($name, $value);
-		$id        = 'spinner_' . str_random(6);
+		$id        = 'spinner_' . Str::random(6);
 		$attribute = $this->html->attributes($options);
 		$code      = <<<CODE
 <div id="{$id}" class="layui-spinner">
@@ -75,7 +76,7 @@ CODE;
 	{
 		$str   = '';
 		$value = (string) $this->getValueAttribute($name, $value);
-		$id    = $options['id'] ?? 'radio_' . str_random(4);
+		$id    = $options['id'] ?? 'radio_' . Str::random(4);
 
 		foreach ($lists as $key => $val) {
 			$options['id']    = $id . '_' . $key;
@@ -131,7 +132,7 @@ CODE;
 	 */
 	public function code($name, $value = '', $options = []): string
 	{
-		$options['id'] = $this->getIdAttribute($name, $options) ?: 'code_' . str_random(5);
+		$options['id'] = $this->getIdAttribute($name, $options) ?: 'code_' . Str::random(5);
 		$hiddenId      = $options['id'] . '_hidden';
 		$hidden        = $this->hidden($name, $value, [
 			'id' => $hiddenId,
@@ -286,7 +287,7 @@ TIP;
 	 */
 	public function thumb($name, $value = null, $options = []): string
 	{
-		$id    = $this->getIdAttribute($name, $options) ?? 'thumb_' . str_random(6);
+		$id    = $this->getIdAttribute($name, $options) ?? 'thumb_' . Str::random(6);
 		$value = (string) $this->getValueAttribute($name, $value);
 		$pam   = $options['pam'] ?? [];
 		$token = $pam ? app('tymon.jwt.auth')->fromUser($pam) : '';
@@ -350,7 +351,7 @@ CONTENT;
 	 */
 	public function upload($name, $value = null, $options = []): string
 	{
-		$id    = $this->getIdAttribute($name, $options) ?? 'upload_' . str_random(6);
+		$id    = $this->getIdAttribute($name, $options) ?? 'upload_' . Str::random(6);
 		$value = (string) $this->getValueAttribute($name, $value);
 		$pam   = $options['pam'] ?? [];
 		$type  = $options['type'] ?? 'images';
@@ -461,7 +462,7 @@ CONTENT;
 	 */
 	public function multiThumb($name, $value = null, $options = []): string
 	{
-		$id       = $this->getIdAttribute($name, $options) ?? 'multi_thumb_' . str_random(6);
+		$id       = $this->getIdAttribute($name, $options) ?? 'multi_thumb_' . Str::random(6);
 		$number   = $options['number'] ?? 3;
 		$pop_size = $options['pop_size'] ?? '300';
 		$type     = $options['type'] ?? 'image';
@@ -698,7 +699,7 @@ MULTI;
 	 */
 	public function timePicker($name, $value = '', $options = []): string
 	{
-		$options['id'] = $this->getIdAttribute($name, $options) ?: 'time_picker_' . str_random(4);
+		$options['id'] = $this->getIdAttribute($name, $options) ?: 'time_picker_' . Str::random(4);
 		$value         = (string) $this->getValueAttribute($name, $value);
 
 		$options['class'] = 'layui-input ' . ($options['class'] ?? '');
@@ -728,7 +729,7 @@ HTML;
 	 */
 	public function datetimePicker($name, $value = '', $options = []): string
 	{
-		$options['id'] = $this->getIdAttribute($name, $options) ?: 'datetime_picker_' . str_random(4);
+		$options['id'] = $this->getIdAttribute($name, $options) ?: 'datetime_picker_' . Str::random(4);
 		$value         = (string) $this->getValueAttribute($name, $value);
 
 		$options['class'] = 'layui-input ' . ($options['class'] ?? '');
@@ -758,7 +759,7 @@ HTML;
 	 */
 	public function datePicker($name, $value = '', array $options = []): string
 	{
-		$options['id'] = $this->getIdAttribute($name, $options) ?: 'date_picker_' . str_random(4);
+		$options['id'] = $this->getIdAttribute($name, $options) ?: 'date_picker_' . Str::random(4);
 		$value         = (string) $this->getValueAttribute($name, $value);
 
 		$options['class'] = 'layui-input ' . ($options['class'] ?? '');
@@ -786,7 +787,7 @@ HTML;
 	 */
 	public function dateRangePicker($name, $value = '', $options = []): string
 	{
-		$options['id'] = $this->getIdAttribute($name, $options) ?: 'daterange_picker_' . str_random(4);
+		$options['id'] = $this->getIdAttribute($name, $options) ?: 'daterange_picker_' . Str::random(4);
 		$value         = (string) $this->getValueAttribute($name, $value);
 
 		$options['class'] = 'layui-input ' . ($options['class'] ?? '');
@@ -815,7 +816,7 @@ HTML;
 	 */
 	public function monthPicker($name, $value = '', $options = []): string
 	{
-		$options['id'] = $this->getIdAttribute($name, $options) ?: 'month_picker_' . str_random(4);
+		$options['id'] = $this->getIdAttribute($name, $options) ?: 'month_picker_' . Str::random(4);
 		$value         = (string) $this->getValueAttribute($name, $value);
 
 		$options['class'] = 'layui-input ' . ($options['class'] ?? '');
@@ -844,7 +845,7 @@ HTML;
 	 */
 	public function colorPicker($name, $value = '', $options = []): string
 	{
-		$options['id']    = $this->getIdAttribute($name, $options) ?: 'colorpicker_' . str_random(5);
+		$options['id']    = $this->getIdAttribute($name, $options) ?: 'colorpicker_' . Str::random(5);
 		$value            = (string) $this->getValueAttribute($name, $value);
 		$options['class'] = 'layui-input ' . ($options['class'] ?? '');
 		$attr             = $this->html->attributes($options);

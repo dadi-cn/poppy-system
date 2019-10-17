@@ -4,7 +4,6 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Input;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
 use Poppy\Framework\Exceptions\ApplicationException;
@@ -83,7 +82,7 @@ class SettingUI
 		try {
 			if (Str::startsWith($key, 'addon.')) {
 				$this->pages = [];
-				$folder      = str_after($key, 'addon.');
+				$folder      = Str::after($key, 'addon.');
 				$file        = base_path('addons/' . $folder . '/configurations/pages.yaml');
 				$definition  = app('poppy.yaml')->parseFile($file);
 
@@ -142,7 +141,7 @@ class SettingUI
 			$this->tabs[$_key] = $tab;
 		}
 
-		$this->url = $this->url ?: Input::url();
+		$this->url = $this->url ?: route_url();
 	}
 
 	/**

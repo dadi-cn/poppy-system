@@ -2,6 +2,7 @@
 
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Str;
 use Input;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Exceptions\ApplicationException;
@@ -54,8 +55,8 @@ class PageUi
 	public function __construct($key)
 	{
 		try {
-			$module     = str_before($key, '.');
-			$model      = str_after($key, '.');
+			$module     = Str::before($key, '.');
+			$model      = Str::after($key, '.');
 			$file       = poppy_path($module, 'src/models/definitions/' . $model . '/establish.yaml');
 			$definition = app('poppy.yaml')->parseFile($file);
 

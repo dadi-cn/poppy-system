@@ -30,7 +30,7 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 				'enabled'   => app('poppy')->isEnabled($slug),
 			];
 		}
-		$poppyModule = str_after($slug, '.');
+		$poppyModule = Str::after($slug, '.');
 		$poppyPath   = app('path.poppy');
 
 		$this->attributes = [

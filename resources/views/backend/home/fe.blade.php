@@ -5,7 +5,7 @@
     </div>
     <div class="layui-card-body">
         <div>
-            Pjax Content #main {!! str_random(5) !!}
+            Pjax Content #main {!! \Illuminate\Support\Str::random(5) !!}
         </div>
         {!! Form::open(['class'=> 'layui-form', 'data-pjax', 'pjax-ctr'=> '#main']) !!}
         <div class="layui-form-item">
@@ -22,7 +22,7 @@
         </div>
         {!! Form::close() !!}
         <div id="pjax-container">
-            Pjax Content #pjax-container {!! str_random(5) !!}
+            Pjax Content #pjax-container {!! \Illuminate\Support\Str::random(5) !!}
         </div>
 
         <table class="layui-table">

@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Str;
 use Poppy\Extension\Aliyun\Core\Config;
 use Poppy\Extension\Aliyun\Core\DefaultAcsClient;
 use Poppy\Framework\Classes\Traits\AppTrait;
@@ -208,10 +209,10 @@ class Verification
 		// 生成 10 分钟的有效 code
 		$now     = Carbon::now();
 		$unix    = Carbon::now()->addMinutes($expired_min)->timestamp;
-		$randStr = str_random(16);
-		$key     = $now->timestamp . '_' . str_random(6);
+		$randStr = Str::random(16);
+		$key     = $now->timestamp . '_' . Str::random(6);
 		if (!$hidden_str) {
-			$hidden_str = str_random(6);
+			$hidden_str = Str::random(6);
 		}
 		$str      = $unix . '|' . $key . '|' . $hidden_str . '|' . $randStr;
 		$cacheKey = 'system.action.verification.once_code';

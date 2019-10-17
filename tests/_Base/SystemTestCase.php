@@ -6,14 +6,15 @@ use Faker\Generator;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Support\Str;
 use Log;
 use Poppy\Framework\Application\TestCase;
 use Poppy\Framework\Helper\ArrayHelper;
 use Poppy\Framework\Helper\StrHelper;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\SysCaptcha;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class SystemTestCase extends TestCase
 {
@@ -51,14 +52,14 @@ class SystemTestCase extends TestCase
 	 */
 	protected $reportType = ['log', 'console'];
 
-	public function setUp()
+	public function setUp(): void
 	{
 		parent::setUp();
 		DB::enableQueryLog();
 		DB::beginTransaction();
 	}
 
-	public function tearDown()
+	public function tearDown(): void
 	{
 		DB::rollBack();
 		parent::tearDown();
@@ -231,7 +232,7 @@ class SystemTestCase extends TestCase
 		$resp = $this->jsonPost('util/captcha/send', [
 			'passport'   => $passport,
 			'type'       => $type,
-			'image_code' => str_random(4),
+			'image_code' => Str::random(4),
 		]);
 		$this->assertStatusSuccess($resp);
 
