@@ -1,50 +1,50 @@
 @charset "utf-8";
 .text-danger {
-	color : #ff5722;
+	color: #ff5722;
 }
 
 .text-success {
-	color : #5fb878;
+	color: #5fb878;
 }
 
 .text-warning {
-	color : #ffb800;
+	color: #ffb800;
 }
 
 .text-info {
-	color : #1E9FFF;
+	color: #1E9FFF;
 }
 
 /* 系统的缩略图组件
  * ---------------------------------------- */
 .system--form_thumb {
 	.form_thumb-ctr {
-		display   : inline-block;
-		font-size : 18px;
+		display: inline-block;
+		font-size: 18px;
 
 		.fa-times {
-			color : #ff5722;
+			color: #ff5722;
 		}
 
 		.fa-image {
-			color : #5fb878;
+			color: #5fb878;
 		}
 	}
 }
 
 .system--form_upload {
 	.form_thumb-ctr {
-		display   : inline-block;
-		font-size : 18px;
+		display: inline-block;
+		font-size: 18px;
 
 		.fa {
-			cursor   : pointer;
-			position : relative;
-			top      : 3px;
+			cursor: pointer;
+			position: relative;
+			top: 3px;
 		}
 		.fa-times {
-			color       : #ff5722;
-			margin-left : 5px;
+			color: #ff5722;
+			margin-left: 5px;
 		}
 	}
 }
@@ -52,184 +52,184 @@
 /* 页面级别的样式
  * ---------------------------------------- */
 .system--page {
-	padding : 15px;
+	padding: 15px;
 	.layui-form-label {
-		width : 160px;
+		width: 160px;
 	}
 
 	.layui-input-block {
-		margin-left : 190px;
-		min-height  : 36px;
+		margin-left: 190px;
+		min-height: 36px;
 	}
 
 	.layui-form-sm {
 		.layui-btn {
-			height      : 30px;
-			line-height : 30px;
-			padding     : 0 10px;
-			font-size   : 12px
+			height: 30px;
+			line-height: 30px;
+			padding: 0 10px;
+			font-size: 12px
 		}
 		.layui-input {
-			height    : 30px;
-			font-size : 12px;
+			height: 30px;
+			font-size: 12px;
 		}
 		.layui-input[name=page], .layui-input[name=pagesize] {
-			text-align   : center;
-			padding-left : 0;
+			text-align: center;
+			padding-left: 0;
 		}
 	}
 
 	.layui-card {
-		border : 1px solid #e6e6e6;
+		border: 1px solid #e6e6e6;
 	}
 
 	.layui-card-footer {
-		position      : relative;
-		height        : 42px;
-		line-height   : 42px;
-		padding       : 0 15px;
-		border-top    : 1px solid #f6f6f6;
-		color         : #333333;
-		border-radius : 2px 2px 0 0;
-		font-size     : 14px;
+		position: relative;
+		height: 42px;
+		line-height: 42px;
+		padding: 0 15px;
+		border-top: 1px solid #f6f6f6;
+		color: #333333;
+		border-radius: 2px 2px 0 0;
+		font-size: 14px;
 	}
 
 	.page-list_group {
-		display     : block;
-		font-size   : 14px;
-		line-height : 2;
-		border      : 1px solid #e6e6e6;
+		display: block;
+		font-size: 14px;
+		line-height: 2;
+		border: 1px solid #e6e6e6;
 
 		li {
-			padding : 9px 15px;
+			padding: 9px 15px;
 
 			&.active {
-				background : #e6e6e6;
+				background: #e6e6e6;
 			}
 		}
 	}
 
 	.page-header {
 		.layui-btn-xs i {
-			font-size : 12px !important;
+			font-size: 12px !important;
 		}
 	}
 
 	.layui-table-condensed {
 		th, td {
-			padding     : 3px 5px;
-			min-height  : 28px;
-			line-height : 28px;
-			font-size   : 13px;
+			padding: 3px 5px;
+			min-height: 28px;
+			line-height: 28px;
+			font-size: 13px;
 		}
 		.layui-input {
-			height : 28px;
+			height: 28px;
 		}
 	}
 	.layui-card-pager {
-		float : right;
+		float: right;
 	}
 }
 
 .layui-form-sm {
 	.layui-btn {
-		height      : 30px;
-		line-height : 30px;
-		padding     : 0 10px;
-		font-size   : 12px
+		height: 30px;
+		line-height: 30px;
+		padding: 0 10px;
+		font-size: 12px
 	}
 	.layui-input {
-		height    : 30px;
-		font-size : 12px;
+		height: 30px;
+		font-size: 12px;
 	}
 	.layui-input[name=page], .layui-input[name=pagesize] {
-		text-align   : center;
-		padding-left : 0;
+		text-align: center;
+		padding-left: 0;
 	}
 	.layui-form-label {
-		padding   : 5px 10px;
-		font-size : 12px;
+		padding: 5px 10px;
+		font-size: 12px;
 	}
 }
 
 .develop--log {
 	li {
-		line-height : 30px;
+		line-height: 30px;
 	}
 }
 
 label.validation:before {
-	content     : '* ';
-	color       : red;
-	font-weight : bold;
-	font-style  : normal;
+	content: '* ';
+	color: red;
+	font-weight: bold;
+	font-style: normal;
 }
 
 .layui-upload.upload--multi {
-	position : relative;
+	position: relative;
 
 	.layui-elem-quote {
-		padding : 0 15px;
+		padding: 0 15px;
 	}
 
 	.multi-img {
-		position      : relative;
-		display       : inline-block;
-		width         : 150px;
-		height        : 106px;
-		margin        : 15px 10px 10px 0;
-		transition    : box-shadow .25s;
-		border-radius : 2px;
-		box-shadow    : 0 2px 2px -2px rgba(0, 0, 0, 0.2);
-		border        : 1px solid #cccccc;
-		text-align    : center;
-		float         : left;
+		position: relative;
+		display: inline-block;
+		width: 150px;
+		height: 106px;
+		margin: 15px 10px 10px 0;
+		transition: box-shadow .25s;
+		border-radius: 2px;
+		box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.2);
+		border: 1px solid #cccccc;
+		text-align: center;
+		float: left;
 		&:hover, &.multi-checked {
-			cursor     : pointer;
-			box-shadow : 0 0 1px rgba(0, 0, 0, 0.2);
-			border     : 1px solid red;
+			cursor: pointer;
+			box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+			border: 1px solid red;
 		}
 
 		&.multi-uploaded {
-			position : relative;
+			position: relative;
 
 			.fa {
-				position      : absolute;
-				right         : 10px;
-				top           : 10px;
-				color         : #009688;
-				display       : block !important;
-				border        : 1px solid #009688;
-				border-radius : 10px;
-				padding       : 3px;
-				background    : #ffffff;
+				position: absolute;
+				right: 10px;
+				top: 10px;
+				color: #009688;
+				display: block !important;
+				border: 1px solid #009688;
+				border-radius: 10px;
+				padding: 3px;
+				background: #ffffff;
 			}
 		}
 
 		input {
-			position : absolute;
-			left     : 0;
-			top      : 0;
+			position: absolute;
+			left: 0;
+			top: 0;
 		}
 		input[type=input] {
-			right  : 0;
-			bottom : 0;
-			width  : 30px;
-			height : 30px;
+			right: 0;
+			bottom: 0;
+			width: 30px;
+			height: 30px;
 		}
 
 		button {
-			position      : absolute;
-			right         : 0;
-			top           : 0;
-			border-radius : 6px;
+			position: absolute;
+			right: 0;
+			top: 0;
+			border-radius: 6px;
 		}
 	}
 
 	.layui-upload-img {
-		height        : 106px;
-		border-radius : 2px;
-		max-width     : 150px;
+		height: 106px;
+		border-radius: 2px;
+		max-width: 150px;
 	}
 }
 
@@ -237,12 +237,12 @@ label.validation:before {
 	.layui-side {
 		.layui-nav-item {
 			.fa {
-				display    : block !important;
-				position   : absolute;
-				top        : 70%;
-				left       : 20px;
-				margin-top : -19px;
-				font-size  : 16px;
+				display: block !important;
+				position: absolute;
+				top: 70%;
+				left: 20px;
+				margin-top: -19px;
+				font-size: 16px;
 			}
 		}
 	}
@@ -254,70 +254,107 @@ label.validation:before {
 	.layui-nav-tree {
 		a {
 			cite {
-				padding-left : 10px;
+				padding-left: 10px;
 			}
 		}
 	}
 }
 
 .layui-spinner {
-	position : relative;
-	display  : inline-block;
+	position: relative;
+	display: inline-block;
 
 	.layui-spinner-up {
-		position                   : absolute;
-		top                        : 1px;
-		right                      : 1px;
-		width                      : 40px;
-		height                     : 18px;
-		border-bottom-right-radius : 0;
-		border-bottom-left-radius  : 0;
-		text-align                 : center;
-		line-height                : 18px;
-		border                     : 1px solid #e6e6e6;
-		border-top                 : none;
-		border-right               : none;
-		cursor                     : pointer;
+		position: absolute;
+		top: 1px;
+		right: 1px;
+		width: 40px;
+		height: 18px;
+		border-bottom-right-radius: 0;
+		border-bottom-left-radius: 0;
+		text-align: center;
+		line-height: 18px;
+		border: 1px solid #e6e6e6;
+		border-top: none;
+		border-right: none;
+		cursor: pointer;
 		&:hover {
-			color : #333;
+			color: #333;
 		}
 	}
 
 	.layui-spinner-down {
-		position                : absolute;
-		bottom                  : 1px;
-		right                   : 1px;
-		width                   : 40px;
-		height                  : 18px;
-		border-top-right-radius : 0;
-		border-top-left-radius  : 0;
-		text-align              : center;
-		line-height             : 18px;
-		border-left             : 1px solid #e6e6e6;
-		cursor                  : pointer;
+		position: absolute;
+		bottom: 1px;
+		right: 1px;
+		width: 40px;
+		height: 18px;
+		border-top-right-radius: 0;
+		border-top-left-radius: 0;
+		text-align: center;
+		line-height: 18px;
+		border-left: 1px solid #e6e6e6;
+		cursor: pointer;
 		&:hover {
-			color : #333;
+			color: #333;
 		}
 	}
 
 	.layui-input {
-		padding-right : 25px;
+		padding-right: 25px;
 	}
 }
 
 select[lay-ignore] {
-	border           : 1px solid #e6e6e6;
-	background-color : #fff;
-	border-radius    : 2px;
-	height           : 30px;
-	line-height      : 30px;
-	padding          : 0 10px;
-	font-size        : 12px;
-	cursor           : pointer;
-	display          : block;
-	width            : 100%;
+	border: 1px solid #e6e6e6;
+	background-color: #fff;
+	border-radius: 2px;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 10px;
+	font-size: 12px;
+	cursor: pointer;
+	display: block;
+	width: 100%;
 }
 
 div.layui-input.layui-input-inline {
-	padding-left : 8px !important;
+	padding-left: 8px !important;
 }
+
+
+.layui-input-group {
+	display: flex;
+	width: 100%;
+	.layui-input {
+		position: relative;
+		flex: 1 1 auto;
+		width: 1%;
+		margin-bottom: 0;
+		&:not(:first-child) {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+			border-left: none;
+		}
+	}
+	.layui-input-group-addon {
+		display: flex;
+		align-items: center;
+		padding: .375rem .75rem;
+		margin-bottom: 0;
+		font-size: 1rem;
+		font-weight: 400;
+		line-height: 1.5;
+		color: #495057;
+		text-align: center;
+		white-space: nowrap;
+		background-color: #e9ecef;
+		border: 1px solid #ced4da;
+		border-radius: .25rem;
+		&:first-child {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+	}
+}
+

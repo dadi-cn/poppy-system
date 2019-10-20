@@ -13,6 +13,8 @@ use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Poppy\Framework\Classes\Resp;
 use Poppy\System\Action\Pam;
+use Poppy\System\Classes\Forms\Setting;
+use Poppy\System\Classes\Layout\Content;
 use Poppy\System\Classes\Ui\ListUi;
 use Poppy\System\Classes\Ui\PageUi;
 use Poppy\System\Classes\Ui\SettingUI;
@@ -178,7 +180,7 @@ class HomeController extends BackendController
 	 * @param string  $path    地址
 	 * @return mixed
 	 */
-	public function setting(Request $request, $path = 'module.system')
+	public function setting(Request $request, $path = 'poppy.system')
 	{
 		try {
 			$Setting = (new SettingUI($path))->setPam($this->pam());
@@ -205,6 +207,11 @@ class HomeController extends BackendController
 	{
 
 		return view('system::backend.home.easyweb.' . $type);
+	}
+
+	public function settingB()
+	{
+		return (new Content())->title('A')->body(new Setting());
 	}
 
 	/**

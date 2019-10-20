@@ -17,6 +17,8 @@ Route::group([
 		->name('system:backend.home.logout');
 	$router->any('setting/{path?}', 'HomeController@setting')
 		->name('system:backend.home.setting');
+	$router->any('setting_b/{path?}', 'HomeController@settingB')
+		->name('system:backend.home.setting_b');
 	$router->any('easy-web/{type}', 'HomeController@easyWeb')
 		->name('system:backend.home.easy-web');
 

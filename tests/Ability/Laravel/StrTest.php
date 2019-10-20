@@ -19,4 +19,12 @@ class StrTest extends SystemTestCase
 		$this->assertEquals('ApiV1', $studly);
 	}
 
+	/**
+	 * 截取字符
+	 */
+	public function testCut(): void
+	{
+		$code = 'voice:' . md5('8') . '.mp3';
+		$this->assertEquals('voice', Str::before($code, ':'));
+	}
 }

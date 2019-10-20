@@ -75,27 +75,22 @@ class DocCommand extends Command
 			case 'cs':
 				$this->info(
 					'Please Run Command:' . "\n" .
-					'php-cs-fixer fix --config=' . pf_path('.php_cs') . ' --diff --dry-run --verbose --diff-format=udiff'
+					'php-cs-fixer fix --config=' . framework_path('.php_cs') . ' --diff --dry-run --verbose --diff-format=udiff'
 				);
 				break;
 			case 'cs-pf':
 				$this->info(
 					'Please Run Command:' . "\n" .
-					'php-cs-fixer fix ' . pf_path('') . ' --config=' . pf_path('.php_cs') . ' --diff --dry-run --verbose --diff-format=udiff'
+					'php-cs-fixer fix ' . framework_path() . ' --config=' . framework_path('.php_cs') . ' --diff --dry-run --verbose --diff-format=udiff'
 				);
 				break;
 			case 'phplint':
 			case 'lint':
-				$lintFile = base_path('vendor/bin/phplint');
-				if (file_exists($lintFile)) {
-					$this->info(
-						'Please Run Command:' . "\n" .
-						'phplint ' . base_path() . ' -c ' . pf_path('.phplint.yml')
-					);
-				}
-				else {
-					$this->warn('Please run `composer require overtrue/phplint -vvv` to install phplint');
-				}
+				$this->warn('First. Run `composer global require overtrue/phplint -vvv` to install phplint');
+				$this->info(
+					'Then. Run Command:' . "\n" .
+					'phplint ' . base_path() . ' -c ' . framework_path('.phplint.yml')
+				);
 				break;
 			case 'php':
 			case 'sami':

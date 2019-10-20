@@ -78,13 +78,11 @@ class ModuleManager
 	 */
 	public function repository(): Modules
 	{
-		// if (!$this->repository instanceof Modules) {
+		if (!$this->repository instanceof Modules) {
 			$this->repository = new Modules();
 			$slugs            = app('poppy')->enabled()->pluck('slug');
-			\Log::debug($slugs);
 			$this->repository->initialize($slugs);
-		// }
-
+		}
 		return $this->repository;
 	}
 

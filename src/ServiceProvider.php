@@ -34,7 +34,7 @@ class ServiceProvider extends PoppyServiceProvider
 	/**
 	 * @var string Module name
 	 */
-	protected $name = 'system';
+	protected $name = 'poppy.system';
 
 	protected $listens = [
 		// laravel

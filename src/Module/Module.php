@@ -3,10 +3,8 @@
 use ArrayAccess;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use JsonSerializable;
 use Poppy\Framework\Classes\Traits\HasAttributesTrait;
-use Poppy\Framework\Exceptions\ModuleNotFoundException;
 
 /**
  * Class Module.
@@ -18,28 +16,15 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 	/**
 	 * Module constructor.
 	 * @param $slug
-	 * @throws ModuleNotFoundException
 	 */
 	public function __construct($slug)
 	{
-		if (!Str::contains($slug, '.')) {
-			$this->attributes = [
-				'directory' => poppy_path($slug),
-				'namespace' => poppy_class($slug),
-				'slug'      => $slug,
-				'enabled'   => app('poppy')->isEnabled($slug),
-			];
-		}
-		$poppyModule = Str::after($slug, '.');
-		$poppyPath   = app('path.poppy');
-
 		$this->attributes = [
-			'directory' => $poppyPath . '/' . $poppyModule,
-			'namespace' => 'Poppy\\' . Str::studly($poppyModule),
+			'directory' => poppy_path($slug),
+			'namespace' => poppy_class($slug),
 			'slug'      => $slug,
 			'enabled'   => app('poppy')->isEnabled($slug),
 		];
-
 	}
 
 	/**

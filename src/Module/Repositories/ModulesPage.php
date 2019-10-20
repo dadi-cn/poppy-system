@@ -13,7 +13,7 @@ class ModulesPage extends Repository
 	 * Initialize.
 	 * @param Collection $slugs 集合
 	 */
-	public function initialize(Collection $slugs)
+	public function initialize(Collection $slugs): void
 	{
 		$this->items = sys_cache('system')->rememberForever(
 			'system.module.repo.page',
@@ -21,7 +21,7 @@ class ModulesPage extends Repository
 				$collection = collect();
 				$slugs->each(function ($items, $slug) use ($collection) {
 					if ($items) {
-						$collection->put('module.' . $slug, $items);
+						$collection->put($slug, $items);
 					}
 				});
 				$collection->transform(function ($definition) {
@@ -32,6 +32,9 @@ class ModulesPage extends Repository
 								switch ($definition['format']) {
 									case 'boolean':
 										$definition['value'] = (bool) $setting;
+										break;
+									case 'string':
+										$definition['value'] = (string) $setting;
 										break;
 									default:
 										$definition['value'] = $setting;

@@ -3,6 +3,7 @@
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
@@ -20,7 +21,7 @@ class SettingUI
 	use AppTrait, PamTrait, KeyParserTrait;
 
 	/**
-	 * @var string 需要处理的 addon.sms/module.system
+	 * @var string 需要处理的 addon.sms/poppy.system
 	 */
 	private $key;
 
@@ -189,7 +190,7 @@ class SettingUI
 				continue;
 			}
 			$rule[$key]  = $this->getValidates($field, 'laravel');
-			$title[$key] = array_get($field, 'label');
+			$title[$key] = Arr::get($field, 'label');
 		}
 		if ($rule) {
 			$validator = Validator::make($configs, $rule, [], $title);
@@ -199,8 +200,8 @@ class SettingUI
 		}
 
 		foreach ($configs as $key => $value) {
-			$key = str_replace_first('______________', '::', $key);
-			$key = str_replace_last('______________', '.', $key);
+			$key = Str::replaceFirst('______________', '::', $key);
+			$key = Str::replaceFirst('______________', '.', $key);
 			app('setting')->set($key, $value);
 		}
 
