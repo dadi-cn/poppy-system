@@ -91,7 +91,7 @@ class RoleController extends BackendController
 	{
 		$role = PamRole::find($id);
 		if (is_post()) {
-			$perms = (array) Input::input('permission_id');
+			$perms = (array) \Request::input('permission_id');
 			$Role  = $this->action();
 			if (!$Role->savePermission($id, $perms)) {
 				return Resp::web(Resp::SUCCESS, $Role->getError());

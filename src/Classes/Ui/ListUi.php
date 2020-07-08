@@ -3,10 +3,10 @@
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Str;
-use Input;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\System\Classes\Traits\PamTrait;
+use Request;
 use View;
 
 /**
@@ -100,7 +100,7 @@ class ListUi
 			throw new ApplicationException('配置文件不正确, 原因' . $e->getMessage());
 		}
 
-		$this->url = $this->url ?: Input::url();
+		$this->url = $this->url ?: Request::url();
 	}
 
 	/**

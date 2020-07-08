@@ -32,7 +32,7 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 	 */
 	public function directory()
 	{
-		return $this->attributes['directory'];
+		return $this->get('directory');
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 	 */
 	public function namespace()
 	{
-		return $this->attributes['namespace'];
+		return $this->get('namespace');
 	}
 
 	/**
@@ -48,7 +48,7 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 	 */
 	public function slug(): string
 	{
-		return $this->attributes['slug'];
+		return $this->get('slug');
 	}
 
 	/**
@@ -56,7 +56,7 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 	 */
 	public function isEnabled(): bool
 	{
-		return (bool) $this->attributes['enabled'];
+		return (bool) $this->offsetGet('enabled');
 	}
 
 	/**

@@ -11,6 +11,6 @@ Route::group([
 		->name('system:web.res.mix');
 	$router->any('res/translate', 'ResController@translate')
 		->name('system:web.res.translate');
-	$router->any('ph/img/{width?}/{height?}', 'PlaceholderController@image')
+	$router->any('ph/img/{spec}/{text?}', 'PlaceholderController@image')
 		->name('system:web.ph.image');
 });

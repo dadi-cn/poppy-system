@@ -4,9 +4,8 @@ use File;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Input;
-use Redirect;
 use Request;
+use Redirect;
 use Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Poppy\System\Classes\LogViewer;
@@ -30,7 +29,7 @@ class LogController extends DevelopController
 			return Response::download(storage_path() . '/logs/' . base64_decode(input('dl')));
 		}
 
-		if (Input::has('del')) {
+		if (Request::has('del')) {
 			File::delete(storage_path() . '/logs/' . base64_decode(input('del')));
 
 			return Redirect::to(Request::url());

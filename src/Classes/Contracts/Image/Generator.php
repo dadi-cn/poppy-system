@@ -1,17 +1,17 @@
 <?php namespace Poppy\System\Classes\Contracts\Image;
 
+use Intervention\Image\Image;
+
 /**
  * Interface untuk image generator
- * @author Zamrony P. Juhara
  */
 interface Generator
 {
 	/**
-	 * Membuat image berdasarkan panjang dan lebar
-	 * yang ditentukan oleh parameter
+	 * 生成文件
 	 * @param int $width
 	 * @param int $height
-	 * @return Intervention\Image\Image
+	 * @return Image
 	 */
 	public function generate($width, $height);
 }

@@ -3,7 +3,7 @@
 use Illuminate\Http\Response;
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Traits\ViewTrait;
-use Poppy\System\Classes\ImageGenerator\RandomBlurMozaicGenerator;
+use Poppy\System\Classes\ImageGenerator\PlainGenerator;
 
 /**
  * 占位符
@@ -18,19 +18,31 @@ class PlaceholderController extends Controller
 	}
 
 	/**
-	 * @param int $width
-	 * @param int $height
+	 * @param int    $spec
+	 * @param string $text
 	 * @return Response
 	 */
-	public function image($width = 100, $height = 100)
+	public function image($spec = 50, $text = '')
 	{
-		return $this->generateImage($width, $height, 'png');
+		return $this->generateImage($spec, $text);
 	}
 
-	private function generateImage($width, $height, $format)
+	private function generateImage($spec, $text)
 	{
-		$img = (new RandomBlurMozaicGenerator())->generate($width, $height);
+		$width = $height = 0;
+		if (is_numeric($spec)) {
+			$width = $height = $spec;
+		}
+		if (strpos($spec, 'x') !== false) {
+			[$width, $height] = explode('x', $spec);
+			$width  = (int) $width;
+			$height = (int) $height;
+			if (!$height) {
+				$height = $width;
+			}
+		}
+		$img = (new PlainGenerator())->gen($width, $height, $text);
 
-		return $img->response($format);
+		return $img->response('png');
 	}
 }

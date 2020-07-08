@@ -193,7 +193,7 @@ class SystemTestCase extends TestCase
 			else {
 				$remember = $key . '.';
 				// 末尾以 at 结尾的均识别为
-				if (ends_with($key, '_at')) {
+				if (Str::endsWith($key, '_at')) {
 					continue;
 				}
 				$this->assertNull(

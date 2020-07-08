@@ -4,7 +4,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Input;
 use Mail;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Validation\Rule;
@@ -28,13 +27,13 @@ class MailController extends BackendController
 
 	/**
 	 * 保存邮件配置
-	 * @return JsonResponse|RedirectResponse|Response|Redirector
+	 * @return \Illuminate\Contracts\View\Factory|JsonResponse|RedirectResponse|Response|Redirector|\Illuminate\View\View
 	 */
 	public function store()
 	{
 		if (is_post()) {
 			$Setting = app('setting');
-			$all     = Input::all();
+			$all     = input();
 			foreach ($all as $key => $value) {
 				if (!$value) {
 					continue;

@@ -2,7 +2,6 @@
 
 use Collective\Html\FormBuilder as CollectiveFormBuilder;
 use Illuminate\Support\Str;
-use Input;
 use Poppy\Framework\Helper\FileHelper;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\TreeHelper;
@@ -226,7 +225,7 @@ Editor;
 	 */
 	public function order($name, $value = '', $route_name = '', $pjax = false): string
 	{
-		$input = Input::all();
+		$input = input();
 		$value = $value ?: ($input['_order'] ?? '');
 		switch ($value) {
 			case $name . '_desc':

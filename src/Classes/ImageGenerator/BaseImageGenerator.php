@@ -1,19 +1,20 @@
 <?php namespace Poppy\System\Classes\ImageGenerator;
 
 use Intervention\Image\ImageManager;
-use Poppy\System\Classes\Contracts\Image\Generator;
 
 /**
- * kelas dasar untuk image generator
- *
- * @author Zamrony P. Juhara
+ * 图形生成器
  */
-abstract class BaseImageGenerator implements Generator
+abstract class BaseImageGenerator
 {
 	protected $manager;
 
 	public function __construct()
 	{
 		$this->manager = new ImageManager();
+	}
+
+	public function gen($width, $height, $text)
+	{
 	}
 }

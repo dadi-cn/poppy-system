@@ -107,7 +107,7 @@ class Uploader
 	 */
 	public function setReturnUrl($url)
 	{
-		if (!ends_with($url, '/')) {
+		if (!Str::endsWith($url, '/')) {
 			$url .= '/';
 		}
 		$this->returnUrl = $url;

@@ -1,7 +1,7 @@
 <?php namespace Poppy\System\Http\Request\ApiV1\Web;
 
 use Illuminate\Http\UploadedFile;
-use Input;
+use Request;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\System\Action\OssUploader;
@@ -29,7 +29,7 @@ class UploadController extends WebApiController
 		$type       = input('type', 'form');
 		$image_type = input('image_type', 'default');
 
-		$all               = Input::all();
+		$all               = Request::all();
 		$all['image_type'] = $image_type ?: 'default';
 		$all['type']       = $type;
 
@@ -56,7 +56,7 @@ class UploadController extends WebApiController
 		$urls = [];
 		if ($type === 'form') {
 			$Image->setExtension(['jpg', 'png', 'gif', 'jpeg', 'bmp', 'mp4', 'rm', 'rmvb', 'wmv']);
-			$image = Input::file('image');
+			$image = Request::file('image');
 			if (!is_array($image)) {
 				$image = [$image];
 			}
@@ -171,7 +171,7 @@ class UploadController extends WebApiController
 			$Uploader->setExtension(['jpg', 'png', 'gif', 'jpeg', 'bmp']);
 			$Uploader->setResizeDistrict(1440);
 		}
-		$file = Input::file('file');
+		$file = Request::file('file');
 		if (!is_array($file)) {
 			$file = [$file];
 		}

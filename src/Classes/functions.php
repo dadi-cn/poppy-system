@@ -160,7 +160,7 @@ if (!function_exists('sys_mark')) {
 			$type     = '';
 			foreach ($supports as $key) {
 				$uf = ucfirst($key);
-				if (!$isFind && ends_with($doName, $uf)) {
+				if (!$isFind && Str::endsWith($doName, $uf)) {
 					$type   = $uf;
 					$doName = substr($doName, 0, strpos($doName, $uf));
 					$isFind = true;
