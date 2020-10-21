@@ -64,9 +64,9 @@ class ServiceProvider extends PoppyServiceProvider
 	 */
 	public function boot()
 	{
-		$this->loadViewsFrom(dirname(__DIR__) . '/resources/views', 'system');
-		$this->loadTranslationsFrom(dirname(__DIR__) . '/resources/lang', 'system');
-		$this->loadMigrationsFrom(dirname(__DIR__) . '/resources/migrations');
+		$this->loadViewsFrom(dirname(__DIR__) . '/resources/views', 'poppy-system');
+		$this->loadTranslationsFrom(dirname(__DIR__) . '/resources/lang', 'poppy-system');
+		$this->loadMigrationsFrom(dirname(__DIR__) . '/src/Databases/Migrations');
 
 		if ($this->listens) {
 			$this->bootListener();
@@ -78,13 +78,13 @@ class ServiceProvider extends PoppyServiceProvider
 
 		// 注册 api 文档配置
 		$this->publishes([
-			__DIR__ . '/../resources/config/module.php'                       => base_path('config/module.php'),
+			__DIR__ . '/../resources/config/system.php'                       => base_path('config/poppy.php'),
 			__DIR__ . '/../resources/images/system/spacer.gif'                => public_path('assets/images/system/spacer.gif'),
 			__DIR__ . '/../resources/views/vendor/pagination-layui.blade.php' => resource_path('views/vendor/pagination/layui.blade.php'),
 		], 'poppy-system');
 
 		// 配置文件
-		$this->mergeConfigFrom(dirname(__DIR__) . '/resources/config/module.php', 'module');
+		$this->mergeConfigFrom(dirname(__DIR__) . '/resources/config/system.php', 'poppy');
 
 		$this->bootConfigMail();
 	}
@@ -98,13 +98,6 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->app->register(Http\MiddlewareServiceProvider::class);
 		$this->app->register(Http\RouteServiceProvider::class);
 		$this->app->register(Setting\SettingServiceProvider::class);
-
-		if (!is_production() && class_exists('Clockwork\Support\Laravel\ClockworkServiceProvider')) {
-			$this->app->register(ClockworkServiceProvider::class);
-		}
-		if (!is_production() && class_exists('\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider')) {
-			$this->app->register(IdeHelperServiceProvider::class);
-		}
 
 		$this->registerConsole();
 

@@ -1,4 +1,4 @@
-<?php namespace Poppy\Core\Http\Middlewares;
+<?php namespace Poppy\System\Http\Middlewares;
 
 use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
 
