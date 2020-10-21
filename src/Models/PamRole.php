@@ -6,8 +6,8 @@ use Illuminate\Support\Collection;
 use Poppy\Framework\Helper\ArrayHelper;
 use Poppy\Framework\Http\Pagination\PageInfo;
 use Poppy\System\Classes\Traits\FilterTrait;
-use Poppy\System\Rbac\Contracts\RbacRoleContract;
-use Poppy\System\Rbac\Traits\RbacRoleTrait;
+use Poppy\Core\Rbac\Contracts\RbacRoleContract;
+use Poppy\Core\Rbac\Traits\RbacRoleTrait;
 
 /**
  * 用户角色

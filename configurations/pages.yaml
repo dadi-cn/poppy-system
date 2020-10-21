@@ -1,260 +1,240 @@
 title: 系统设置
 tabs:
-    site:
-        default: true
-        show: true
-        title: 站点设置
-        fields:
-            name:
-                default: ''
-                description: ''
-                label: 网站名称
-                key: system::site.name
-                placeholder: 请输入网站名称
-                type: input
-                validates:
-                    required: true
-            title:
-                default: ' '
-                label: 网站标题
-                key: system::site.title
-                placeholder: 请输入网站标题, 将显示在标题栏中
-                type: input
-            keywords:
-                default: ' '
-                label: 网站关键词
-                key: system::site.keywords
-                type: input
-            description:
-                default: ' '
-                label: 网站描述
-                key: system::site.description
-                placeholder: 请输入网站描述
-                type: textarea
-            logo:
-                default: ''
-                label: Logo
-                key: system::site.logo
-                placeholder: 网站logo
-                description: 后台Logo 在此更换, 更改左上角的Logo 地址
-                type: picture
-            enabled:
-                default: false
-                description: 关闭后网站将不能访问
-                format: boolean
-                label: 站点开启
-                key: system::site.is_open
-                type: switch
-                opinion_required:
-                    0:
-                        - system::site.close_reason
-            statistics_code:
-                default: ' '
-                label: 统计代码
-                key: system::site.statistics_code
-                type: code
-            close_reason:
-                default: ' '
-                label: 网站停止服务说明
-                key: system::site.close_reason
-                placeholder: 网站暂停服务描述
-                type: textarea
-    pam:
-        show: true
-        title: Pam设置
-        fields:
-            disabled_reason:
-                default: ' '
-                label: 账号被封禁原因
-                key: system::pam.disabled_reason
-                placeholder: 账号被封禁原因
-                type: input
-            prefix:
-                default: ' '
-                label: 账号前缀
-                key: system::pam.prefix
-                placeholder: 请输入账号前缀, 用于账号注册默认用户名生成
-                type: input
-                validates:
-                    required: true
-            disable_reason:
-                default: ' '
-                label: 封禁提示
-                key: system::pam.disable_reason
-                placeholder: 当后台封禁该用户, 时候给予用户的提示信息, 没有则使用默认的系统封禁提示
-                type: textarea
-            test_account:
-                default: ' '
-                label: 测试账号
-                key: system::pam.test_account
-                placeholder: 请填写测试账号, 每行一个
-                description: 在此测试账号内的应用, 不需要正确的验证码即可登录
-                type: textarea
-    sms:
-        show: true
-        title: 发送短信配置
-        fields:
-            sms_send_type:
-                default: local
-                description: '选择本地则文件存储在日志中, 需要自行查看, 选择aliyun 需要安装 `poppy/ext-aliyun` 扩展'
-                format: string
-                label: 短信发送方式
-                key: system::sms.send_type
-                type: radio
-                opinions:
-                    aliyun: 阿里云
-                    local: 本地
-                validates:
-                    required: true
-            sms_expired_minute:
-                default: 5
-                label: 验证码有效期(分钟)
-                key: system::sms.expired_minute
-                type: input
-            sms_sign:
-                default: ' '
-                label: 签名
-                key: system::sms.sign
-                type: input
-            sms_aliyun_access_key:
-                default: ' '
-                label: AccessKey(阿里云)
-                key: system::sms_aliyun.access_key
-                type: input
-            sms_aliyun_access_secret:
-                default: ' '
-                label: AccessSecret(阿里云)
-                key: system::sms_aliyun.access_secret
-                type: input
-    picture:
-        show: true
-        title: 图片上传配置
-        fields:
-            save_type:
-                default: local
-                description: '选择本地则文件存储在本地'
-                format: string
-                label: 图片存储位置
-                key: system::oss.save_type
-                type: radio
-                opinions:
-                    aliyun: 阿里云
-                    qiniu: 七牛云
-                    local: 本地
-                validates:
-                    required: true
-            qiniu_access_key:
-                default: ' '
-                label: AccessKey(七牛云)
-                key: system::oss_qiniu.access_key
-                type: input
-            qiniu_access_secret:
-                default: ' '
-                label: AccessSecret(七牛云)
-                key: system::oss_qiniu.access_secret
-                type: input
-            qiniu_bucket:
-                default: ' '
-                label: Bucket(七牛云)
-                key: system::oss_qiniu.bucket
-                type: input
-            qiniu_url_prefix:
-                default: ' '
-                label: 域名前缀(七牛云)
-                key: system::oss_qiniu.url_prefix
-                type: input
-            aliyun_access_key:
-                default: ' '
-                label: AccessKey(阿里云)
-                key: system::oss_aliyun.access_key
-                type: input
-            access_key_secret:
-                default: ' '
-                label: AccessSecret(阿里云)
-                key: system::oss_aliyun.access_secret
-                type: input
-            endpoint:
-                default: ' '
-                label: EndPoint(阿里云)
-                key: system::oss_aliyun.endpoint
-                type: input
-            bucket:
-                default: ' '
-                label: Bucket(阿里云)
-                key: system::oss_aliyun.bucket
-                type: input
-            url_prefix:
-                default: ' '
-                label: 域名前缀(阿里云)
-                key: system::oss_aliyun.url_prefix
-                type: input
-            role_arn:
-                default: ' '
-                label: 角色资源描述符
-                key: system::oss_aliyun.role_arn
-                description: '角色资源描述符，在RAM的控制台的资源详情页上可以获取, 形如: acs:ram::157552**058:role/oss-upload'
-                type: input
-            temp_app_key:
-                default: ' '
-                label: 临时授权key
-                key: system::oss_aliyun.temp_app_key
-                type: input
-            temp_app_secret:
-                default: ' '
-                label: 临时授权secret
-                key: system::oss_aliyun.temp_app_secret
-                type: input
-    third_login:
-        show: true
-        title: 第三方登录
-        fields:
-            mobile_wechat_is_open:
-                default: false
-                label: 手机微信登录
-                key: system::login_wechat.mobile_is_open
-                type: switch
-            mobile_wechat_app_id:
-                default: ' '
-                label: appId(手机微信)
-                key: system::login_wechat.mobile_app_id
-                type: input
-            mobile_wechat_app_secret:
-                default: ' '
-                label: appSecret(手机微信)
-                key: system::login_wechat.mobile_app_secret
-                type: input
-            mobile_qq_is_open:
-                default: false
-                label: 手机QQ登录
-                key: system::login_qq.mobile_is_open
-                type: switch
-            mobile_qq_app_id:
-                default: ' '
-                label: appId(手机QQ)
-                key: system::login_qq.mobile_app_id
-                type: input
-            mobile_qq_app_key:
-                default: ' '
-                label: appKey(手机QQ)
-                key: system::login_qq.mobile_app_key
-                type: input
-    testing:
-        show: true
-        title: 测试设置
-        fields:
-            users:
-                label: 测试用户
-                key: system::testing.users
-                description: 测试用户在做自动化测试的时候会排除在外 
-                type: textarea
-    api:
-        title: 接口
-        fields:
-            app_sign_config:
-                default: false
-                description: '是否开启加密'
-                format: boolean
-                label: 启用参数加密
-                key: system::api.enable_sign
-                required: false
-                type: switch
+  site:
+    default: true
+    show: true
+    title: 站点设置
+    fields:
+      -
+        default: ''
+        description: ''
+        label: 网站名称
+        key: system::site.name
+        placeholder: 请输入网站名称
+        type: input
+        validates:
+          required: true
+      -
+        default: ' '
+        label: 网站标题
+        key: system::site.title
+        placeholder: 请输入网站标题, 将显示在标题栏中
+        type: input
+      -
+        default: ' '
+        label: 网站关键词
+        key: system::site.keywords
+        type: input
+      -
+        default: ' '
+        label: 网站描述
+        key: system::site.description
+        placeholder: 请输入网站描述
+        type: textarea
+      -
+        default: ''
+        label: Logo
+        key: system::site.logo
+        placeholder: 网站logo
+        description: 后台Logo 在此更换, 更改左上角的Logo 地址
+        type: picture
+      -
+        default: false
+        description: 关闭后网站将不能访问
+        format: boolean
+        label: 站点开启
+        key: system::site.is_open
+        type: switch
+        opinion_required:
+          0:
+            - system::site.close_reason
+      -
+        default: ' '
+        label: 统计代码
+        key: system::site.statistics_code
+        type: code
+      -
+        default: ' '
+        label: 网站停止服务说明
+        key: system::site.close_reason
+        placeholder: 网站暂停服务描述
+        type: textarea
+  pam:
+    show: true
+    title: Pam设置
+    fields:
+      -
+        default: ' '
+        label: 账号被封禁原因
+        key: system::pam.disabled_reason
+        placeholder: 账号被封禁原因
+        type: input
+      -
+        default: ' '
+        label: 账号前缀
+        key: system::pam.prefix
+        placeholder: 请输入账号前缀, 用于账号注册默认用户名生成
+        type: input
+        validates:
+          required: true
+      -
+        default: ' '
+        label: 封禁提示
+        key: system::pam.disable_reason
+        placeholder: 当后台封禁该用户, 时候给予用户的提示信息, 没有则使用默认的系统封禁提示
+        type: textarea
+      -
+        default: ' '
+        label: 测试账号
+        key: system::pam.test_account
+        placeholder: 请填写测试账号, 每行一个
+        description: 在此测试账号内的应用, 不需要正确的验证码即可登录
+        type: textarea
+  sms:
+    show: true
+    title: 发送短信配置
+    fields:
+      -
+        default: local
+        description: '选择本地则文件存储在日志中, 需要自行查看, 选择aliyun 需要安装 `poppy/ext-aliyun` 扩展'
+        format: string
+        label: 短信发送方式
+        key: system::sms.send_type
+        type: radio
+        opinions:
+          aliyun: 阿里云
+          local: 本地
+        validates:
+          required: true
+      -
+        default: 5
+        label: 验证码有效期(分钟)
+        key: system::sms.expired_minute
+        type: input
+      -
+        default: ' '
+        label: 签名
+        key: system::sms.sign
+        type: input
+      -
+        default: ' '
+        label: AccessKey(阿里云)
+        key: system::sms_aliyun.access_key
+        type: input
+      -
+        default: ' '
+        label: AccessSecret(阿里云)
+        key: system::sms_aliyun.access_secret
+        type: input
+  picture:
+    show: true
+    title: 图片上传配置
+    fields:
+      -
+        default: local
+        description: '选择本地则文件存储在本地'
+        format: string
+        label: 图片存储位置
+        key: system::oss.save_type
+        type: radio
+        opinions:
+          aliyun: 阿里云
+          qiniu: 七牛云
+          local: 本地
+        validates:
+          required: true
+      -
+        default: ' '
+        label: AccessKey(七牛云)
+        key: system::oss_qiniu.access_key
+        type: input
+      -
+        default: ' '
+        label: AccessSecret(七牛云)
+        key: system::oss_qiniu.access_secret
+        type: input
+      -
+        default: ' '
+        label: Bucket(七牛云)
+        key: system::oss_qiniu.bucket
+        type: input
+      -
+        default: ' '
+        label: 域名前缀(七牛云)
+        key: system::oss_qiniu.url_prefix
+        type: input
+      -
+        default: ' '
+        label: AccessKey(阿里云)
+        key: system::oss_aliyun.access_key
+        type: input
+      -
+        default: ' '
+        label: AccessSecret(阿里云)
+        key: system::oss_aliyun.access_secret
+        type: input
+      -
+        default: ' '
+        label: EndPoint(阿里云)
+        key: system::oss_aliyun.endpoint
+        type: input
+      -
+        default: ' '
+        label: Bucket(阿里云)
+        key: system::oss_aliyun.bucket
+        type: input
+      -
+        default: ' '
+        label: 域名前缀(阿里云)
+        key: system::oss_aliyun.url_prefix
+        type: input
+      -
+        default: ' '
+        label: 角色资源描述符
+        key: system::oss_aliyun.role_arn
+        description: '角色资源描述符，在RAM的控制台的资源详情页上可以获取, 形如: acs:ram::157552**058:role/oss-upload'
+        type: input
+      -
+        default: ' '
+        label: 临时授权key
+        key: system::oss_aliyun.temp_app_key
+        type: input
+      -
+        default: ' '
+        label: 临时授权secret
+        key: system::oss_aliyun.temp_app_secret
+        type: input
+  third_login:
+    show: true
+    title: 第三方登录
+    fields:
+      -
+        default: false
+        label: 手机微信登录
+        key: system::login_wechat.mobile_is_open
+        type: switch
+      -
+        default: ' '
+        label: appId(手机微信)
+        key: system::login_wechat.mobile_app_id
+        type: input
+      -
+        default: ' '
+        label: appSecret(手机微信)
+        key: system::login_wechat.mobile_app_secret
+        type: input
+      -
+        default: false
+        label: 手机QQ登录
+        key: system::login_qq.mobile_is_open
+        type: switch
+      -
+        default: ' '
+        label: appId(手机QQ)
+        key: system::login_qq.mobile_app_id
+        type: input
+      -
+        default: ' '
+        label: appKey(手机QQ)
+        key: system::login_qq.mobile_app_key
+        type: input

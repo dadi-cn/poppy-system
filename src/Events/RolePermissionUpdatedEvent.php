@@ -7,7 +7,9 @@ use Poppy\System\Models\PamRole;
  */
 class RolePermissionUpdatedEvent
 {
-	/** @var PamRole */
+	/**
+	 * @var PamRole
+	 */
 	public $role;
 
 	public function __construct(PamRole $role)

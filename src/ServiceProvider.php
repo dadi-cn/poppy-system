@@ -11,7 +11,7 @@ use Illuminate\Auth\Events\Failed as AuthFailEvent;
 use Illuminate\Auth\Events\Login as AuthLoginEvent;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
-use Poppy\Framework\Poppy\Events\PoppyOptimized as PoppyOptimizedEvent;
+use Poppy\Core\Events\PermissionInitEvent;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use Poppy\System\Classes\Auth\Guard\JwtAuthGuard;
 use Poppy\System\Classes\Auth\Provider\BackendProvider;
@@ -19,8 +19,6 @@ use Poppy\System\Classes\Auth\Provider\DevelopProvider;
 use Poppy\System\Classes\Auth\Provider\PamProvider;
 use Poppy\System\Classes\Auth\Provider\WebProvider;
 use Poppy\System\Classes\FormBuilder;
-use Poppy\System\Classes\Loader\AddonLoader;
-use Poppy\System\Listeners\PoppyOptimized\ClearCacheListener;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamRole;
 use Poppy\System\Models\Policies\PamAccountPolicy;
@@ -41,13 +39,11 @@ class ServiceProvider extends PoppyServiceProvider
 		AuthLoginEvent::class           => [
 
 		],
+		PermissionInitEvent::class      => [
+			Listeners\PermissionInit\InitToDbListener::class,
+		],
 		AuthFailEvent::class            => [
 			Listeners\AuthFailed\LogListener::class,
-		],
-
-		// poppy
-		PoppyOptimizedEvent::class      => [
-			ClearCacheListener::class,
 		],
 
 		// system
@@ -82,8 +78,6 @@ class ServiceProvider extends PoppyServiceProvider
 
 		// 注册 api 文档配置
 		$this->publishes([
-			__DIR__ . '/../resources/config/sami.php'                         => storage_path('sami/config.php'),
-			__DIR__ . '/../resources/config/fw.php'                           => storage_path('sami/fw.php'),
 			__DIR__ . '/../resources/config/module.php'                       => base_path('config/module.php'),
 			__DIR__ . '/../resources/images/system/spacer.gif'                => public_path('assets/images/system/spacer.gif'),
 			__DIR__ . '/../resources/views/vendor/pagination-layui.blade.php' => resource_path('views/vendor/pagination/layui.blade.php'),
@@ -104,9 +98,6 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->app->register(Http\MiddlewareServiceProvider::class);
 		$this->app->register(Http\RouteServiceProvider::class);
 		$this->app->register(Setting\SettingServiceProvider::class);
-		$this->app->register(Module\ModuleServiceProvider::class);
-		$this->app->register(Rbac\RbacServiceProvider::class);
-		$this->app->register(Permission\PermissionServiceProvider::class);
 
 		if (!is_production() && class_exists('Clockwork\Support\Laravel\ClockworkServiceProvider')) {
 			$this->app->register(ClockworkServiceProvider::class);
@@ -120,8 +111,13 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->registerAuth();
 
 		$this->registerSchedule();
+	}
 
-		$this->registerAddons();
+	public function provides(): array
+	{
+		return [
+			'system.form',
+		];
 	}
 
 	private function registerSchedule()
@@ -152,12 +148,6 @@ class ServiceProvider extends PoppyServiceProvider
 			// system:module
 			Commands\UserCommand::class,
 			Commands\InstallCommand::class,
-			Commands\DocCommand::class,
-			Commands\InspectCommand::class,
-			Commands\MaintainCommand::class,
-
-			// system:permission
-			Permission\Commands\PermissionCommand::class,
 		]);
 	}
 
@@ -194,14 +184,6 @@ class ServiceProvider extends PoppyServiceProvider
 		});
 	}
 
-	/**
-	 * 加载扩展
-	 */
-	private function registerAddons()
-	{
-		(new AddonLoader($this->app))->register();
-	}
-
 	private function bootConfigMail()
 	{
 		config([
@@ -214,12 +196,5 @@ class ServiceProvider extends PoppyServiceProvider
 			'mail.username'     => sys_setting('system::mail.username') ?: config('mail.username'),
 			'mail.password'     => sys_setting('system::mail.password') ?: config('mail.password'),
 		]);
-	}
-
-	public function provides(): array
-	{
-		return [
-			'system.form',
-		];
 	}
 }

@@ -47,20 +47,4 @@ class SettingTest extends SystemTestCase
 		// 存在未设置的配置,停止
 		$this->assertEmpty($null_setting, '有未设置的配置项: ' . $json);
 	}
-
-	/**
-	 * 测试发送邮件
-	 */
-	public function testMail()
-	{
-		$email   = $this->env('mail');
-		$content = '测试邮件发送';
-
-		try {
-			Mail::to($email)->send(new TestMail($content));
-			$this->assertTrue(true);
-		} catch (Throwable $e) {
-			$this->assertFalse(true, $e->getMessage());
-		}
-	}
 }

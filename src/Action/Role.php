@@ -1,8 +1,11 @@
 <?php namespace Poppy\System\Action;
 
+
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Arr;
+use Poppy\Core\Rbac\Permission\Permission;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Classes\Traits\PamTrait;
@@ -12,7 +15,6 @@ use Poppy\System\Models\PamPermission;
 use Poppy\System\Models\PamPermissionRole;
 use Poppy\System\Models\PamRole;
 use Poppy\System\Models\PamRoleAccount;
-use Poppy\System\Permission\Permission;
 use Validator;
 use View;
 
@@ -52,10 +54,9 @@ class Role
 		}
 
 		$initDb = [
-			'title'       => (string) array_get($data, 'title', ''),
-			'name'        => (string) array_get($data, 'name', ''),
-			'type'        => (string) array_get($data, 'guard', ''),
-			'description' => (string) array_get($data, 'description', ''),
+			'title'       => (string) Arr::get($data, 'title', ''),
+			'type'        => (string) Arr::get($data, 'guard', ''),
+			'description' => (string) Arr::get($data, 'description', ''),
 		];
 
 		$rule = [
@@ -67,18 +68,6 @@ class Role
 					}
 				}),
 			],
-			'name'  => [
-				Rule::required(),
-				Rule::string(),
-				Rule::alphaDash(),
-				Rule::between(3, 15),
-				Rule::unique($this->roleTable, 'name')->where(function ($query) use ($id) {
-					if ($id) {
-						$query->where('id', '!=', $id);
-					}
-				}),
-			],
-
 			'type' => [
 				Rule::required(),
 				Rule::in([
@@ -137,7 +126,7 @@ class Role
 		}
 
 		// 用户不是root　同时没有权限，　则无法更新
-		if (!$this->pam->capable('backend:system.role.permissions')) {
+		if (!$this->pam->capable('backend:user.role.permissions')) {
 			return $this->setError('无权操作权限更新');
 		}
 

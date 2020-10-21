@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Poppy\Core\Rbac\Traits\RbacUserTrait;
 use Poppy\Framework\Http\Pagination\PageInfo;
 use Poppy\System\Action\Pam;
 use Poppy\System\Classes\Traits\FilterTrait;
-use Poppy\System\Rbac\Traits\RbacUserTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
 
 /**

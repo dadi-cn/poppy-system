@@ -1,4 +1,4 @@
-<?php namespace Poppy\System\Http\Middlewares;
+<?php namespace Poppy\Core\Http\Middlewares;
 
 use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
 
@@ -25,6 +25,6 @@ class EncryptCookies extends \Illuminate\Cookie\Middleware\EncryptCookies
 	 */
 	private function append()
 	{
-		$this->except = (array) config('module.system.uncrypt_cookies');
+		$this->except = (array) config('poppy.core.uncrypt_cookies');
 	}
 }

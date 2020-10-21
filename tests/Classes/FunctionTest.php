@@ -23,11 +23,4 @@ class FunctionTest extends SystemTestCase
 		$this->assertSame('h:dance,h:lol,h:pubg,h:wz', sys_str_unique('h:lol,h:wz,h:pubg,h:dance', 'h:wz'));
 		$this->assertNotSame('h:lol,h:dance,h:pubg,h:wz', sys_str_unique('h:lol,h:wz,h:pubg,h:dance', 'h:wz'));
 	}
-
-	public function testSysCache(): void
-	{
-		sys_cache('test')->forever('test.sys.cache', 'sys_cache');
-		$value = sys_cache('test')->get('test.sys.cache');
-		$this->assertEquals('sys_cache', $value);
-	}
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\JsonResponse;
 use Poppy\Framework\Classes\Resp;
@@ -50,21 +51,23 @@ class AuthController extends WebApiController
 	 */
 	public function access(): JsonResponse
 	{
+		/** @var ResponseFactory $response */
+		$response = app(ResponseFactory::class);
 		try {
 			if (!$user = app('tymon.jwt.auth')->parseToken()->authenticate()) {
-				return $this->getResponse()->json([
+				return $response->json([
 					'message' => '登录失效，请重新登录！',
 				], 401, [], JSON_UNESCAPED_UNICODE);
 			}
 		} catch (JWTException $e) {
-			return $this->getResponse()->json([
+			return $response->json([
 				'message' => 'Token 错误',
 			], 401, [], JSON_UNESCAPED_UNICODE);
 		}
 
 		return Resp::success(
 			'有效登录',
-			(new PamResource($user))->toArray($this->getRequest())
+			(new PamResource($user))->toArray(app('request'))
 		);
 	}
 
@@ -84,7 +87,8 @@ class AuthController extends WebApiController
 	 */
 	public function token($guard = 'web'): JsonResponse
 	{
-
+		/** @var ResponseFactory $response */
+		$response = app(ResponseFactory::class);
 		$validator = Validator::make($this->getRequest()->all(), [
 			'passport' => Rule::required(),
 			'password' => Rule::required(),
@@ -100,7 +104,7 @@ class AuthController extends WebApiController
 			$seconds = $this->limiter()->availableIn($this->throttleKey($this->getRequest()));
 			$message = $this->getTranslator()->get('auth.throttle', ['seconds' => $seconds]);
 
-			return $this->getResponse()->json([
+			return $response->json([
 				'message' => $message,
 			], 401, [], JSON_UNESCAPED_UNICODE);
 		}
@@ -108,7 +112,7 @@ class AuthController extends WebApiController
 		$credentials = (new Pam())->passportData($this->getRequest());
 
 		if (!$this->guard($guard)->attempt($credentials)) {
-			return $this->getResponse()->json([
+			return $response->json([
 				'message' => '认证失败',
 			], 401, [], JSON_UNESCAPED_UNICODE);
 		}
@@ -118,19 +122,19 @@ class AuthController extends WebApiController
 		$user = $this->guard($guard)->user();
 
 		if ($user->is_enable === SysConfig::NO) {
-			return $this->getResponse()->json([
+			return $response->json([
 				'message' => '用户被禁用, 原因 : ' . $user->disable_reason . ', 解禁时间 : ' . $user->disable_end_at,
 				'status'  => Resp::ERROR,
 			], 200, [], JSON_UNESCAPED_UNICODE);
 		}
 
 		if (!$token = app('tymon.jwt.auth')->fromUser($user)) {
-			return $this->getResponse()->json([
+			return $response->json([
 				'message' => '凭证有误',
 			], 401, [], JSON_UNESCAPED_UNICODE);
 		}
 
-		return $this->getResponse()->json([
+		return $response->json([
 			'token'   => $token,
 			'message' => '认证通过',
 			'status'  => Resp::SUCCESS,

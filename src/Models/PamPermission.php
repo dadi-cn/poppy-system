@@ -3,8 +3,8 @@
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Poppy\System\Rbac\Contracts\RbacPermissionContract;
-use Poppy\System\Rbac\Traits\RbacPermissionTrait;
+use Poppy\Core\Rbac\Contracts\RbacPermissionContract;
+use Poppy\Core\Rbac\Traits\RbacPermissionTrait;
 
 /**
  * 用户权限

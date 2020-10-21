@@ -134,65 +134,6 @@ if (!function_exists('sys_str_unique')) {
 	}
 }
 
-if (!function_exists('sys_mark')) {
-	/**
-	 * 系统 Debug 标识符, 方便快速进行定位
-	 * @param string|object $object
-	 * @param string        $class
-	 * @param string|array  $append
-	 * @param bool          $with_time
-	 * @return string
-	 */
-	function sys_mark($object, $class, $append = '', $with_time = false)
-	{
-		$suffix = static function ($string) {
-			return trim(substr(strrchr($string, '\\'), 1));
-		};
-
-		// fetch do name
-		if (is_object($object)) {
-			$supports = [
-				'event',
-			];
-			$doClass  = get_class($object);
-			$doName   = $suffix($doClass);
-			$isFind   = false;
-			$type     = '';
-			foreach ($supports as $key) {
-				$uf = ucfirst($key);
-				if (!$isFind && Str::endsWith($doName, $uf)) {
-					$type   = $uf;
-					$doName = substr($doName, 0, strpos($doName, $uf));
-					$isFind = true;
-					continue;
-				}
-			}
-			if ($type) {
-				$doName = $type . ':' . $doName;
-			}
-		}
-		else {
-			$doName = $object;
-		}
-
-		// class name
-		$className = $suffix($class);
-
-		// append data
-		$content = '';
-		if (is_array($append)) {
-			$content = json_encode($append, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-		}
-		if (is_string($append)) {
-			$content = $append;
-		}
-		if ($append instanceof Resp) {
-			$content = $append->getMessage();
-		}
-
-		return ($with_time ? Carbon::now()->format('m-d h:i:s') . ' ' : '') . '[' . $doName . '.' . $className . '] ' . $content;
-	}
-}
 
 if (!function_exists('sys_str_to_json')) {
 	/**
@@ -225,33 +166,6 @@ if (!function_exists('sys_array_to_json')) {
 	}
 }
 
-if (!function_exists('sys_success')) {
-	/**
-	 * 开发环境下记录成功信息, 便于错误调试
-	 * @param mixed  $object
-	 * @param string $class
-	 * @param string $append
-	 */
-	function sys_success($object, $class, $append = '')
-	{
-		if (!is_production() && config('app.debug')) {
-			Log::info(sys_mark($object, $class, $append, true));
-		}
-	}
-}
-
-if (!function_exists('sys_error')) {
-	/**
-	 * alias for \Log::debug()
-	 * @param mixed  $object
-	 * @param string $class
-	 * @param string $append
-	 */
-	function sys_error($object, $class, $append = '')
-	{
-		Log::error(sys_mark($object, $class, $append, true));
-	}
-}
 
 if (!function_exists('sys_is_pjax')) {
 	/**
@@ -317,28 +231,6 @@ if (!function_exists('sys_parent_id')) {
 	}
 }
 
-if (!function_exists('sys_addon')) {
-	/**
-	 * 父级用户
-	 * @param string $folder
-	 * @return null|mixed
-	 */
-	function sys_addon($folder)
-	{
-		static $addons;
-		[$group, $addon] = explode('/', trim($folder, '/\\'));
-		$class = '\\Addons\\' . Str::studly($group) . '\\' . $addon . '\\Addon';
-		if (!class_exists($class)) {
-			return null;
-		}
-		if (!isset($addons[$class])) {
-			$addons[$class] = new $class();
-		}
-
-		return $addons[$class];
-	}
-}
-
 if (!function_exists('sys_url')) {
 	/**
 	 * URL生成
@@ -387,32 +279,7 @@ if (!function_exists('sys_url')) {
 	}
 }
 
-if (!function_exists('sys_hook')) {
-	/**
-	 * Hook 调用
-	 * @param string $id
-	 * @param array  $params
-	 * @return mixed
-	 */
-	function sys_hook($id, array $params = [])
-	{
-		return (new ServiceFactory())->parse($id, $params);
-	}
-}
 
-if (!function_exists('sys_cacher')) {
-	/**
-	 * 缓存器, 随机秒数缓存器, 不在同意时刻读取值
-	 * @param string $key
-	 * @param mixed  $value
-	 * @param int    $second
-	 * @return mixed
-	 */
-	function sys_cacher($key, $value, $second = 30)
-	{
-		return Cacher::seconds($key, $value, $second);
-	}
-}
 
 if (!function_exists('sys_mix')) {
 	/**
@@ -426,49 +293,7 @@ if (!function_exists('sys_mix')) {
 	}
 }
 
-if (!function_exists('sys_cache')) {
-	/**
-	 * 缓存器, 随机秒数缓存器, 不在同意时刻读取值
-	 * @param string $tag 标签, 支持字串, 支持类名
-	 * @return Cache|TaggedCache
-	 */
-	function sys_cache($tag = null)
-	{
-		$cache = Container::getInstance()->make('cache');
-		if ($tag && ($cache->getStore() instanceof TaggableStore)) {
-			if (strpos(trim($tag, '\\'), '\\') !== false) {
-				$tag = strtolower(substr($tag, 0, strpos($tag, '\\')));
-			}
 
-			return $cache->tags($tag);
-		}
-
-		return $cache;
-	}
-}
-
-if (!function_exists('sys_db')) {
-	/**
-	 * 模型缓存
-	 * @param string $key 需要支持的缓存
-	 * @return string
-	 */
-	function sys_db($key): string
-	{
-		static $cache;
-		if (!$cache) {
-			$cache = sys_cache('system')->get('system.lang.models');
-			if (!$cache) {
-				Artisan::call('system:inspect', [
-					'type' => 'db_seo',
-				]);
-				$cache = sys_cache('system')->get('system.lang.models');
-			}
-		}
-
-		return data_get($cache, $key);
-	}
-}
 
 if (!function_exists('sys_is_mobile')) {
 	/**
