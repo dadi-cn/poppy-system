@@ -1,7 +1,7 @@
-@extends('system::backend.tpl.default')
+@extends('poppy-system::backend.tpl.default')
 
 @section('head-css')
-    @include('system::backend.home.easyweb.common.include_css')
+    @include('poppy-system::backend.home.easyweb.common.include_css')
     <style>
         .layui-card-body {
             padding : 0;
@@ -135,7 +135,7 @@
 
     </div>
 
-    @include('system::backend.home.easyweb.common.include_js')
+    @include('poppy-system::backend.home.easyweb.common.include_js')
     <script>
 	layui.use(['layer', 'form', 'admin'], function () {
 		var $     = layui.jquery;

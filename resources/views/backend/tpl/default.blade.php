@@ -1,4 +1,4 @@
-@extends('system::tpl.default')
+@extends('poppy-system::tpl.default')
 @section('title', $_title ?? '')
 @section('description', $_description ?? '')
 @if (!sys_is_pjax())
@@ -6,14 +6,14 @@
     {!! Html::favicon('assets/images/favicon.png') !!}
 @endsection
 @section('head-css')
-    @include('system::backend.tpl._style')
+    @include('poppy-system::backend.tpl._style')
 @endsection
 @section('head-script')
-    @include('system::backend.tpl._script')
+    @include('poppy-system::backend.tpl._script')
 @endsection
 @endif
 @section('body-main')
-    @include('system::tpl._toastr')
+    @include('poppy-system::tpl._toastr')
     <div class="layui-fluid system--page" data-pjax pjax-ctr="#main" id="main">
         <div class="layui-card">
             @yield('backend-main')

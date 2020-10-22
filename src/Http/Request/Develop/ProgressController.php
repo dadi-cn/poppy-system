@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\Framework\Classes\Resp;
 use Poppy\System\Classes\Progress;
 use Poppy\System\Classes\Traits\FixTrait;
@@ -16,13 +17,13 @@ use Poppy\System\Classes\Traits\FixTrait;
  */
 class ProgressController extends DevelopController
 {
-	use FixTrait;
+	use FixTrait, CoreTrait;
 
 	public function lists()
 	{
 		Progress::handle();
 
-		return view('system::develop.progress.lists', [
+		return view('poppy-system::develop.progress.lists', [
 			'all'     => Progress::getAll(),
 			'already' => Progress::getAlready(),
 		]);
@@ -40,8 +41,8 @@ class ProgressController extends DevelopController
 			return Resp::error('请填写执行参数');
 		}
 
-		list($module, $class_name) = explode('.', $method);
-		if (!app('module')->pages()->offsetExists('module.' . $module)) {
+		[$module, $class_name] = explode('.', $method);
+		if (!$this->coreModule()->pages()->offsetExists('module.' . $module)) {
 			return Resp::error('模型不存在');
 		}
 

@@ -177,7 +177,7 @@ class ListUi
 			'url'         => $this->url,
 			'pam'         => $this->pam,
 		]);
-		return view('system::backend.tpl.ui_list');
+		return view('poppy-system::backend.tpl.ui_list');
 	}
 
 	/**

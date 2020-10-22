@@ -1,6 +1,6 @@
-@extends('system::tpl.develop')
+@extends('poppy-system::tpl.develop')
 @section('develop-main')
-    @include('system::develop.inc.header')
+    @include('poppy-system::develop.inc.header')
     <div class="layui-tab layui-tab-card">
         <ul class="layui-tab-title">
             @foreach($pages as $key => $conf)

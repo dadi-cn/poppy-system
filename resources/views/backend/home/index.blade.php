@@ -1,4 +1,4 @@
-@extends('system::tpl.default')
+@extends('poppy-system::tpl.default')
 @section('title', $_title ?? '')
 @section('description', $_description ?? '')
 @section('head-meta')
@@ -12,11 +12,11 @@
 @section('body-class', 'layui-layout-body')
 @section('body-main')
     <div id="LAY_app">
-        @include('system::tpl._toastr')
+        @include('poppy-system::tpl._toastr')
         <div class="layui-layout layui-layout-admin">
-            @include('system::backend.tpl._header')
-            @include('system::backend.tpl._sidemenu')
-            @include('system::backend.tpl._pagetabs')
+            @include('poppy-system::backend.tpl._header')
+            @include('poppy-system::backend.tpl._sidemenu')
+            @include('poppy-system::backend.tpl._pagetabs')
             <!-- 主体内容 -->
             <div class="layui-body" id="LAY_app_body">
                 <div class="layadmin-tabsbody-item layui-show">

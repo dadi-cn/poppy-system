@@ -48,7 +48,7 @@ class AddonController extends BackendController
 			return Resp::error($e->getMessage());
 		}
 
-		return view('system::backend.addon.index', [
+		return view('poppy-system::backend.addon.index', [
 			'items' => $items,
 		]);
 	}

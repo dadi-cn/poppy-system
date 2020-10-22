@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.fe')
+@extends('poppy-system::backend.tpl.fe')
 @section('backend-fe')
     <div class="layui-container">
         <ul class="layui-nav layui-bg-cyan">
@@ -13,13 +13,13 @@
             </li>
         </ul>
         @if(if_query('type', ''))
-            @include('system::develop.layout.fe-index')
+            @include('poppy-system::develop.layout.fe-index')
         @endif
         @if(if_query('type', 'upload'))
-            @include('system::develop.layout.fe-upload')
+            @include('poppy-system::develop.layout.fe-upload')
         @endif
         @if(if_query('type', 'form'))
-            @include('system::develop.layout.fe-form')
+            @include('poppy-system::develop.layout.fe-form')
         @endif
     </div>
 @endsection

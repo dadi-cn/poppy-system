@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.default')
+@extends('poppy-system::backend.tpl.default')
 @section('backend-main')
     <div class="layui-card-header">
         {!! $title !!}
@@ -8,12 +8,12 @@
             {!! Form::model(input(),['method' => 'get', 'class'=> 'form-inline mt8 form-sm', 'data-pjax', 'pjax-ctr'=> '#main']) !!}
             @foreach($search as $_s)
                 <div class="layui-input-inline">
-                    @include('system::backend.tpl._render', [
+                    @include('poppy-system::backend.tpl._render', [
                         'item' => $_s
                     ])
                 </div>
             @endforeach
-            @include('system::backend.tpl.inc_search')
+            @include('poppy-system::backend.tpl.inc_search')
             {!! Form::close() !!}
         @endif
 
@@ -61,7 +61,7 @@
             @else
                 <tr>
                     <td colspan="7">
-                        @include('system::backend.tpl.inc_empty')
+                        @include('poppy-system::backend.tpl.inc_empty')
                     </td>
                 </tr>
             @endif

@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.default')
+@extends('poppy-system::backend.tpl.default')
 @section('backend-main')
     <div class="layui-card-header">
         角色管理

@@ -1,4 +1,4 @@
-@extends('system::tpl.develop')
+@extends('poppy-system::tpl.develop')
 @section('develop-main')
     <div class="layui-row">
         <div class="layui-col-md6 layui-col-md-offset3">

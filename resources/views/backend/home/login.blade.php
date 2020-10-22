@@ -1,8 +1,8 @@
-@extends('system::tpl.default')
+@extends('poppy-system::tpl.default')
 @section('title', $_title ?? '')
 @section('description', $_description ?? '')
 @section('head-css')
-    @include('system::backend.tpl._style')
+    @include('poppy-system::backend.tpl._style')
     <style>
         .login-pane {
             background    : rgba(1, 1, 1, 0.1);
@@ -17,11 +17,11 @@
     </style>
 @endsection
 @section('head-script')
-    @include('system::backend.tpl._script')
+    @include('poppy-system::backend.tpl._script')
 @endsection
 @section('body-class', 'gray-bg backend--login')
 @section('body-main')
-    @include('system::tpl._toastr')
+    @include('poppy-system::tpl._toastr')
     <div class="layui-container">
         <div class="layui-col-md6 layui-col-md-offset3">
             {!! Form::open(['class'=> 'layui-form layui-form-pane login-pane']) !!}

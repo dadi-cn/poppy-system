@@ -32,7 +32,7 @@
                                         {!! $item['label'] !!}
                                     </label>
                                     <div class="layui-input-block">
-                                        @include('system::backend.tpl._render')
+                                        @include('poppy-system::backend.tpl._render')
                                     </div>
                                 </div>
                             @endforeach

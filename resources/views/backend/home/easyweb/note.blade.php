@@ -1,6 +1,6 @@
-@extends('system::backend.tpl.default')
+@extends('poppy-system::backend.tpl.default')
 @section('head-css')
-    @include('system::backend.home.easyweb.common.include_css')
+    @include('poppy-system::backend.home.easyweb.common.include_css')
     <style>
         html, body {
             background-color : #F8F8F8;
@@ -83,7 +83,7 @@
     </div>
     <div class="btn-circle" id="btnAdd" title="添加便签"><i class="layui-icon layui-icon-add-1"></i></div>
 
-    @include('system::backend.home.easyweb.common.include_js')
+    @include('poppy-system::backend.home.easyweb.common.include_js')
     <script>
 	var dataList = [];  // 标签列表
 

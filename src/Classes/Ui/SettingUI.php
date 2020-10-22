@@ -5,6 +5,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
 use Poppy\Framework\Exceptions\ApplicationException;
@@ -18,7 +19,7 @@ use View;
  */
 class SettingUI
 {
-	use AppTrait, PamTrait, KeyParserTrait;
+	use AppTrait, PamTrait, KeyParserTrait, CoreTrait;
 
 	/**
 	 * @var string 需要处理的 addon.sms/poppy.system
@@ -96,8 +97,8 @@ class SettingUI
 				}
 			}
 			else {
-				$this->pages = app('module')->pages();
-				$definition  = app('module')->pages()->offsetGet($key);
+				$this->pages = $this->coreModule()->pages();
+				$definition  = $this->coreModule()->pages()->offsetGet($key);
 			}
 
 			$this->key   = $key;
@@ -161,9 +162,9 @@ class SettingUI
 			'_is_iframe'  => input('_iframe'),
 		]);
 		if (input('_iframe')) {
-			return view('system::backend.tpl.setting_dialog');
+			return view('poppy-system::backend.tpl.setting_dialog');
 		}
-		return view('system::backend.tpl.setting_page');
+		return view('poppy-system::backend.tpl.setting_page');
 	}
 
 	/**

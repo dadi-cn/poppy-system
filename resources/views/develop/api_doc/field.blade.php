@@ -1,4 +1,4 @@
-@extends('system::tpl.develop')
+@extends('poppy-system::tpl.develop')
 @section('develop-main')
     <div class="row">
         <div class="col-sm-12">

@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.default')
+@extends('poppy-system::backend.tpl.default')
 @section('backend-main')
     <div class="layui-card-header">
         账户日志
@@ -14,7 +14,7 @@
         <div class="layui-input-inline">
             {!! Form::text('area', null, ['class' => 'layui-input', 'placeholder' => '登陆地区']) !!}
         </div>
-        @include('system::backend.tpl.inc_search')
+        @include('poppy-system::backend.tpl.inc_search')
         {!! Form::close() !!}
         <table class="layui-table">
             <tr>

@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.dialog')
+@extends('poppy-system::backend.tpl.dialog')
 @section('backend-main')
-    @include('system::backend.tpl.setting_content')
+    @include('poppy-system::backend.tpl.setting_content')
 @endsection

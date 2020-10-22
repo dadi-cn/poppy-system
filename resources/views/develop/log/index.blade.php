@@ -1,4 +1,4 @@
-@extends('system::tpl.develop')
+@extends('poppy-system::tpl.develop')
 @section('head-css')
     @parent()
     <style>
@@ -21,7 +21,7 @@
     </style>
 @endsection
 @section('develop-main')
-    @include('system::develop.inc.header')
+    @include('poppy-system::develop.inc.header')
     <fieldset class="layui-elem-field layui-field-title">
         <legend><i class="fa fa-calendar"></i> 日志查看器</legend>
     </fieldset>

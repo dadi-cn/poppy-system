@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use phpDocumentor\Reflection\DocBlock\Tags\Property;
 use phpDocumentor\Reflection\DocBlockFactory;
+use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\Framework\Classes\Resp;
 use ReflectionClass;
 use Poppy\System\Models\SysConfig;
@@ -17,13 +18,14 @@ use Throwable;
  */
 class EnvController extends DevelopController
 {
+	use CoreTrait;
 	/**
 	 * php info
 	 * @return Factory|View
 	 */
 	public function phpinfo()
 	{
-		return view('system::develop.env.phpinfo');
+		return view('poppy-system::develop.env.phpinfo');
 	}
 
 	/**
@@ -33,7 +35,7 @@ class EnvController extends DevelopController
 	 */
 	public function config($path = '')
 	{
-		$pages = app('module')->pages();
+		$pages = $this->coreModule()->pages();
 		// $config = sys_hook('system.api_config');
 		// dump($config);
 		if ($path) {
@@ -82,7 +84,7 @@ class EnvController extends DevelopController
 			return $group;
 		});
 
-		return view('system::develop.env.config', [
+		return view('poppy-system::develop.env.config', [
 			'pages' => $pages,
 			'tabs'  => $tabs,
 			'path'  => $path,
@@ -151,7 +153,7 @@ class EnvController extends DevelopController
 			}
 			return $modules;
 		});
-		return view('system::develop.env.model', [
+		return view('poppy-system::develop.env.model', [
 			'items' => $items,
 		]);
 	}
@@ -262,7 +264,7 @@ class EnvController extends DevelopController
 			$formatTables[$table] = $formatColumns;
 		}
 
-		return view('system::develop.env.db', [
+		return view('poppy-system::develop.env.db', [
 			'items' => $formatTables,
 		]);
 	}

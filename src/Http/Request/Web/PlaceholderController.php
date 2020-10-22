@@ -14,7 +14,7 @@ class PlaceholderController extends Controller
 
 	public function index()
 	{
-		return view('system::web.place_holder.index');
+		return view('poppy-system::web.place_holder.index');
 	}
 
 	/**

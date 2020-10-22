@@ -1,6 +1,6 @@
-@extends('system::tpl.develop')
+@extends('poppy-system::tpl.develop')
 @section('develop-main')
-    @include('system::develop.inc.header')
+    @include('poppy-system::develop.inc.header')
     <div class="row">
         <div class="col-sm-12" style="word-break: break-all;">
             <p class="alert alert-info">

@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.default')
+@extends('poppy-system::backend.tpl.default')
 @section('backend-main')
     <div class="layui-card-header">
         用户管理
@@ -28,7 +28,7 @@
         <div class="layui-input-inline">
             {!! Form::select('role_id', $roles, null, ['placeholder'=> '用户角色', 'class' => 'layui-input']) !!}
         </div>
-        @include('system::backend.tpl.inc_search')
+        @include('poppy-system::backend.tpl.inc_search')
         {!! Form::close() !!}
 
         <table class="layui-table">
@@ -77,7 +77,7 @@
             @else
                 <tr>
                     <td colspan="7">
-                        @include('system::backend.tpl.inc_empty')
+                        @include('poppy-system::backend.tpl.inc_empty')
                     </td>
                 </tr>
             @endif

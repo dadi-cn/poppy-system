@@ -43,7 +43,7 @@ class PamController extends BackendController
 		$types         = PamAccount::kvType();
 		$items         = PamAccount::filter($input, PamAccountFilter::class)->paginateFilter($this->pagesize);
 
-		return view('system::backend.pam.index', [
+		return view('poppy-system::backend.pam.index', [
 			'items' => $items,
 			'type'  => $type,
 			'types' => $types,
@@ -97,7 +97,7 @@ class PamController extends BackendController
 			}
 		}
 
-		return view('system::backend.pam.establish', [
+		return view('poppy-system::backend.pam.establish', [
 			'type'  => $type,
 			'roles' => PamRole::getLinear($type, 'name'),
 		]);
@@ -134,7 +134,7 @@ class PamController extends BackendController
 			return Resp::web(Resp::ERROR, $actPam->getError());
 		}
 
-		return view('system::backend.pam.password', [
+		return view('poppy-system::backend.pam.password', [
 			'pam' => $pam,
 		]);
 	}
@@ -162,7 +162,7 @@ class PamController extends BackendController
 			return Resp::web(Resp::SUCCESS, '当前用户已封禁', 'pjax|1');
 		}
 
-		return view('system::backend.pam.disable', [
+		return view('poppy-system::backend.pam.disable', [
 			'id' => $id,
 		]);
 	}
@@ -191,7 +191,7 @@ class PamController extends BackendController
 
 		$user = PamAccount::find($id);
 
-		return view('system::backend.pam.enable', [
+		return view('poppy-system::backend.pam.enable', [
 			'id'   => $id,
 			'user' => $user,
 		]);
@@ -208,7 +208,7 @@ class PamController extends BackendController
 			->paginate($this->pagesize)
 			->appends($input);
 
-		return view('system::backend.pam.log', [
+		return view('poppy-system::backend.pam.log', [
 			'items' => $items,
 		]);
 	}

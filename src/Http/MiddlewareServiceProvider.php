@@ -5,7 +5,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Poppy\Framework\Http\Middlewares\CrossPreflight;
 use Poppy\Framework\Http\Middlewares\EnableCrossRequest;
-use Poppy\System\Rbac\Middlewares\RbacPermission;
+use Poppy\System\Http\Middlewares\RbacPermission;
 
 class MiddlewareServiceProvider extends ServiceProvider
 {

@@ -1,6 +1,6 @@
-@extends('system::tpl.develop')
+@extends('poppy-system::tpl.develop')
 @section('develop-main')
-    @include('system::develop.inc.header')
+    @include('poppy-system::develop.inc.header')
     <h3>数据库字典</h3>
     @foreach($items as $tb_name =>  $item)
         <h4>{!! $tb_name !!}</h4>

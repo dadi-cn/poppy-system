@@ -55,7 +55,7 @@ class MailController extends BackendController
 			'password'   => $Setting->get('system::mail.password'),
 		];
 
-		return view('system::backend.mail.establish', [
+		return view('poppy-system::backend.mail.establish', [
 			'item' => $data,
 		]);
 	}
@@ -94,6 +94,6 @@ class MailController extends BackendController
 			}
 		}
 
-		return view('system::backend.mail.test');
+		return view('poppy-system::backend.mail.test');
 	}
 }

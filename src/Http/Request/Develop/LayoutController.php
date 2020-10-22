@@ -76,7 +76,7 @@ class LayoutController extends DevelopController
 			return Resp::success('J_request 请求测试');
 		}
 
-		return view('system::develop.layout.fe', [
+		return view('poppy-system::develop.layout.fe', [
 			'pam' => $this->pam(),
 		]);
 	}

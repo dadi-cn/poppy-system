@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.dialog')
+@extends('poppy-system::backend.tpl.dialog')
 @section('backend-main')
     {!! Form::model($user ?? null, ['route'=> [$_route, $id]]) !!}
     {!! Form::hidden('id', $id ?? 0) !!}

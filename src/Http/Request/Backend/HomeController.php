@@ -34,7 +34,7 @@ class HomeController extends BackendController
 	 */
 	public function index()
 	{
-		return view('system::backend.home.index');
+		return view('poppy-system::backend.home.index');
 	}
 
 	/**
@@ -58,7 +58,7 @@ class HomeController extends BackendController
 			return Resp::web(Resp::SUCCESS, '登录成功', 'location|' . route('system:backend.home.index'));
 		}
 
-		return view('system::backend.home.login');
+		return view('poppy-system::backend.home.login');
 	}
 
 	/**
@@ -92,7 +92,7 @@ class HomeController extends BackendController
 			return Resp::web(Resp::SUCCESS, '密码修改成功, 请重新登录', 'location|' . route('system:backend.home.login'));
 		}
 
-		return view('system::backend.home.password');
+		return view('poppy-system::backend.home.password');
 	}
 
 	/**
@@ -107,7 +107,7 @@ class HomeController extends BackendController
 				return Resp::success('提交信息成功', 'top_reload|1');
 			}
 
-			return view('system::backend.home.fe-' . $param);
+			return view('poppy-system::backend.home.fe-' . $param);
 		}
 		try {
 			$random = random_int(0, 9999);
@@ -115,7 +115,7 @@ class HomeController extends BackendController
 			$random = 0;
 		}
 
-		return view('system::backend.home.fe', compact('random'));
+		return view('poppy-system::backend.home.fe', compact('random'));
 	}
 
 
@@ -171,7 +171,7 @@ class HomeController extends BackendController
 	 */
 	public function cp()
 	{
-		return view('system::backend.home.cp');
+		return view('poppy-system::backend.home.cp');
 	}
 
 	/**
@@ -206,7 +206,7 @@ class HomeController extends BackendController
 	public function easyWeb($type = null)
 	{
 
-		return view('system::backend.home.easyweb.' . $type);
+		return view('poppy-system::backend.home.easyweb.' . $type);
 	}
 
 	public function settingB()

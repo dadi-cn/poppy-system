@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.dialog')
+@extends('poppy-system::backend.tpl.dialog')
 @section('backend-main')
     @if ($total > 0)
         <div class="alert alert-info">本次需要更新 <strong>{{$total}}</strong> 条信息, 每批次更新 <strong>{{$section}}</strong> 条, 还剩余

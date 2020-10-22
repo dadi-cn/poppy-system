@@ -2,6 +2,7 @@
 
 use Collective\Html\FormBuilder as CollectiveFormBuilder;
 use Illuminate\Support\Str;
+use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\Framework\Helper\FileHelper;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\TreeHelper;
@@ -11,6 +12,7 @@ use Poppy\Framework\Helper\TreeHelper;
  */
 class FormBuilder extends CollectiveFormBuilder
 {
+	use CoreTrait;
 	/**
 	 * 生成树选择
 	 * @param string $name     名称
@@ -880,6 +882,6 @@ HTML;
 	 */
 	public function ui($name, $route_params = [], $display = true): string
 	{
-		return app('module')->uis()->render($name, $route_params, $display);
+		return $this->coreModule()->uis()->render($name, $route_params, $display);
 	}
 }

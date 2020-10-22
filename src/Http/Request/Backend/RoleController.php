@@ -42,7 +42,7 @@ class RoleController extends BackendController
 		$input['type'] = $type;
 		$items         = PamRole::filter($input, PamRoleFilter::class)->paginateFilter();
 
-		return view('system::backend.role.index', compact('items', 'type'));
+		return view('poppy-system::backend.role.index', compact('items', 'type'));
 	}
 
 	/**
@@ -63,7 +63,7 @@ class RoleController extends BackendController
 		}
 		$id && $Role->init($id) && $Role->share();
 
-		return view('system::backend.role.establish');
+		return view('poppy-system::backend.role.establish');
 	}
 
 	/**
@@ -105,7 +105,7 @@ class RoleController extends BackendController
 			return Resp::web(Resp::ERROR, '暂无权限信息(请检查是否初始化权限)！');
 		}
 
-		return view('system::backend.role.menu', compact('permission', 'role'));
+		return view('poppy-system::backend.role.menu', compact('permission', 'role'));
 	}
 
 	/**

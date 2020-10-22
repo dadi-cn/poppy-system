@@ -131,7 +131,7 @@ class ApiDocController extends DevelopController
 				return Resp::error('没有找到对应 URL 地址');
 			}
 
-			return view('system::develop.api_doc.auto', [
+			return view('poppy-system::develop.api_doc.auto', [
 				'guard'      => $type,
 				'data'       => $data,
 				'variables'  => $variables,
@@ -300,6 +300,6 @@ class ApiDocController extends DevelopController
 		}
 		$value = Session::get($sessionKey);
 
-		return view('system::develop.api_doc.field', compact('type', 'value', 'field'));
+		return view('poppy-system::develop.api_doc.field', compact('type', 'value', 'field'));
 	}
 }

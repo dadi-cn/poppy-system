@@ -1,6 +1,6 @@
-@extends('system::tpl.develop')
+@extends('poppy-system::tpl.develop')
 @section('develop-main')
-    @include('system::develop.inc.header')
+    @include('poppy-system::develop.inc.header')
     <div style="display: flex">
         <div style="flex: 0 0 75%;">
             <div class="dev--box pd8">

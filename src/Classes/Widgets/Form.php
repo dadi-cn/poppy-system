@@ -487,7 +487,7 @@ class Form implements Renderable
 
 		$this->prepareHandle();
 
-		$form = view('system::tpl.widgets.form', $this->getVariables())->render();
+		$form = view('poppy-system::tpl.widgets.form', $this->getVariables())->render();
 
 		if (!($title = $this->title()) || !$this->inbox) {
 			return $form;

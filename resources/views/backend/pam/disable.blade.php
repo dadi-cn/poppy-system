@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.dialog')
+@extends('poppy-system::backend.tpl.dialog')
 @section('backend-main')
     {!! Form::open(['route'=> [$_route, $id]]) !!}
     <div class="layui-form-item">

@@ -281,6 +281,6 @@ class Content implements Renderable
 			'content'     => $this->build(),
 		];
 
-		return view('system::tpl.content', $items)->render();
+		return view('poppy-system::tpl.content', $items)->render();
 	}
 }

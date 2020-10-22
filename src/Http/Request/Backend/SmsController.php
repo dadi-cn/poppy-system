@@ -31,7 +31,7 @@ class SmsController extends BackendController
 	 */
 	public function index()
 	{
-		return view('system::backend.sms.index', [
+		return view('poppy-system::backend.sms.index', [
 			'items' => array_values($this->action()->getTemplates()),
 		]);
 	}
@@ -55,7 +55,7 @@ class SmsController extends BackendController
 		if ($id) {
 			$Sms->init($id) && $Sms->share();
 		}
-		return view('system::backend.sms.establish');
+		return view('poppy-system::backend.sms.establish');
 	}
 
 	/**

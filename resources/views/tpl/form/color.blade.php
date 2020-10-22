@@ -4,7 +4,7 @@
 
     <div class="{{$viewClass['field']}}">
 
-        @include('system::tpl.form.error')
+        @include('poppy-system::tpl.form.error')
 
         <div class="layui-input-group">
 

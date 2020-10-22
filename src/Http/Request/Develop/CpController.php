@@ -23,7 +23,7 @@ class CpController extends DevelopController
 	 */
 	public function index()
 	{
-		return view('system::develop.cp.cp');
+		return view('poppy-system::develop.cp.cp');
 	}
 
 	/**
@@ -52,7 +52,7 @@ class CpController extends DevelopController
 			return CookieHelper::get($cookie_key);
 		};
 		
-		return view('system::develop.cp.api', [
+		return view('poppy-system::develop.cp.api', [
 			'token_default' => $tokenGet('dev_token#default'),
 			'token_web'     => $tokenGet('dev_token#web'),
 			'token_backend' => $tokenGet('dev_token#backend'),
@@ -95,7 +95,7 @@ class CpController extends DevelopController
 			return Resp::error($Curl->errorMessage);
 		}
 
-		return view('system::develop.cp.api_login', compact('type'));
+		return view('poppy-system::develop.cp.api_login', compact('type'));
 	}
 
 	/**
@@ -118,7 +118,7 @@ class CpController extends DevelopController
 		}
 		$token = Session::get($tokenKey);
 
-		return view('system::develop.cp.set_token', compact('type', 'token'));
+		return view('poppy-system::develop.cp.set_token', compact('type', 'token'));
 	}
 
 	/**

@@ -4,16 +4,19 @@ namespace Poppy\System\Classes\Forms;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\System\Classes\Widgets\Form;
 
 class Setting extends Form
 {
 
+	use CoreTrait;
+
 
 
 	public function setModule($module)
 	{
-		$definition = app('module')->pages()->offsetGet($module);
+		$definition = $this->coreModule()->pages()->offsetGet($module);
 	}
 	/**
 	 * The form title.

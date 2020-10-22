@@ -37,7 +37,7 @@ class LogController extends DevelopController
 
 		$logs = LogViewer::all();
 
-		return view('system::develop.log.index', [
+		return view('poppy-system::develop.log.index', [
 			'logs'         => $logs,
 			'files'        => LogViewer::getFiles(true),
 			'current_file' => LogViewer::getFileName(),

@@ -1,4 +1,4 @@
-@extends('system::tpl.mail')
+@extends('poppy-system::tpl.mail')
 @section('mail-main')
     <h3>函数</h3>
     <table class="table-inner">

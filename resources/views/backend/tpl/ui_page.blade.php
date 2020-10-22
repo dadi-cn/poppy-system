@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.default')
+@extends('poppy-system::backend.tpl.default')
 @section('backend-main')
     <div class="layui-card-header">
         {!! $title !!}
@@ -12,7 +12,7 @@
                     {!! $item['label'] !!}
                 </label>
                 <div class="layui-input-block">
-                    @include('system::backend.tpl._render', [
+                    @include('poppy-system::backend.tpl._render', [
                        'item' => $item
                     ])
                 </div>

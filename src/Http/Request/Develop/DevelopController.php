@@ -3,6 +3,7 @@
 use Auth;
 use Faker\Generator;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Traits\ViewTrait;
 use Poppy\System\Models\PamAccount;
@@ -13,7 +14,7 @@ use View;
  */
 class DevelopController extends Controller
 {
-	use ViewTrait;
+	use ViewTrait, CoreTrait;
 
 	/**
 	 * Faker
@@ -24,7 +25,7 @@ class DevelopController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		View::share('_menus', app('module')->menus()->where('type', 'develop')->toArray());
+		View::share('_menus', $this->coreModule()->menus()->where('type', 'develop')->toArray());
 		$this->faker = app(Generator::class);
 	}
 

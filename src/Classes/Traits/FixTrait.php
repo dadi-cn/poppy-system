@@ -65,7 +65,7 @@ trait FixTrait
 			'method'  => $this->fix['method'],
 		]);
 
-		return view('system::backend.tpl.progress', [
+		return view('poppy-system::backend.tpl.progress', [
 			'total'         => $this->fix['total'],
 			'section'       => $this->fix['section'],
 			'left'          => $this->fix['left'],

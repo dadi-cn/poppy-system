@@ -1,6 +1,6 @@
 <div class="layui-row layui-col-space15 mt15">
     <div class="layui-col-xs3" style="line-height: 2;">
-        @include('system::develop.layout._side')
+        @include('poppy-system::develop.layout._side')
     </div>
     <div class="layui-col-xs9">
         {!! Form::open(['class'=> 'layui-form']) !!}

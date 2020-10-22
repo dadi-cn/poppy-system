@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.default')
+@extends('poppy-system::backend.tpl.default')
 @section('backend-main')
     <div class="layui-card-header">
         短信模板管理
@@ -36,7 +36,7 @@
             @else
                 <tr>
                     <td colspan="6">
-                        @include('system::backend.tpl.inc_empty')
+                        @include('poppy-system::backend.tpl.inc_empty')
                     </td>
                 </tr>
             @endif

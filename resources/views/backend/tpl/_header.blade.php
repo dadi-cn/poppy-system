@@ -25,7 +25,6 @@
         </li>
         --}}
     </ul>
-    {!! sys_hook('system.html_top_nav') !!}
     <ul class="layui-nav layui-layout-right" data-pjax pjax-ctr="#main">
         <li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="#" layadmin-event="note" ew-event="note"  class="J_ignore">

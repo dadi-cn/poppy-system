@@ -4,22 +4,19 @@
  * Copyright (C) Update For IDE
  */
 
-use Mail;
-use Poppy\System\Mail\TestMail;
-use Poppy\System\Module\ModuleManager;
+use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\System\Tests\Base\SystemTestCase;
-use Throwable;
 
 class SettingTest extends SystemTestCase
 {
+	use CoreTrait;
 	/**
 	 * 配置项检测
 	 */
 	public function testNullCheck()
 	{
 		$null_setting = [];
-		/** @var ModuleManager $modules */
-		app('module')->pages()->map(function ($module_setting) use (&$null_setting) {
+		$this->coreModule()->pages()->map(function ($module_setting) use (&$null_setting) {
 			$tabs = $module_setting['tabs'] ?? collect();
 
 			$module_title = $module_setting['title'] ?? '';

@@ -1,13 +1,13 @@
-@extends('system::tpl.develop')
+@extends('poppy-system::tpl.develop')
 @section('develop-main')
-    @include('system::develop.api_doc.nav')
+    @include('poppy-system::develop.api_doc.nav')
     @if (!$data['file_exists'])
         <div class="layui-elem-quote">
             Api Doc 文件不存在, 请运行 <code>php artisan system:doc api</code> 来生成 Api 文档
         </div>
         <hr>
     @else
-        @include('system::develop.api_doc.auto_pam')
+        @include('poppy-system::develop.api_doc.auto_pam')
         <div class="layui-row layui-col-space10" id="app">
             <div class="layui-col-md6 mt5">
                 {{-- ajax 方式, 便于调试, 需要服务器配置跨域 --}}
@@ -22,9 +22,9 @@
                 {!! Form::hidden('u_url' , $api_url.$data['current']->url) !!}
                 {!! Form::hidden('u_method' , $data['current']->type) !!}
                 --}}
-                @include('system::develop.api_doc.auto_token')
-                @include('system::develop.api_doc.auto_certificate')
-                @include('system::develop.api_doc.auto_params')
+                @include('poppy-system::develop.api_doc.auto_token')
+                @include('poppy-system::develop.api_doc.auto_certificate')
+                @include('poppy-system::develop.api_doc.auto_params')
 
                 <div class="layui-form-item">
                     {!! Form::button($data['current']->title, ['class' => 'layui-btn layui-btn-sm', 'type'=>'submit', 'id'=>'submit']) !!}
@@ -107,7 +107,7 @@
 						}
 					});
 				},
-                @include('system::develop.api_doc.auto_validate')
+                @include('poppy-system::develop.api_doc.auto_validate')
 			}, true);
 			$('#form_auto').validate(conf);
 		});

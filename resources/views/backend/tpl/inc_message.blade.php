@@ -1,6 +1,6 @@
-@extends('system::backend.tpl.default')
+@extends('poppy-system::backend.tpl.default')
 @section('head-css')
-    @include('system::backend.tpl._style')
+    @include('poppy-system::backend.tpl._style')
 @endsection
 @section('body-class', 'gray-bg')
 @section('body-main')

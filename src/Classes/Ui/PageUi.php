@@ -110,6 +110,6 @@ class PageUi
 			'url'         => $this->url,
 			'pam'         => $this->pam,
 		]);
-		return view('system::backend.tpl.ui_page');
+		return view('poppy-system::backend.tpl.ui_page');
 	}
 }

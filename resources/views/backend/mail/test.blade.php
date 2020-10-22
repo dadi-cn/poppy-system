@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.dialog')
+@extends('poppy-system::backend.tpl.dialog')
 @section('backend-main')
     {!! Form::model($item ?? null, ['id'=> 'reason', 'class'=> 'layui-form']) !!}
     <div class="layui-form-item">

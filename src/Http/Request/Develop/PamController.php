@@ -44,7 +44,7 @@ class PamController extends DevelopController
 			]);
 		}
 
-		return view('system::develop.pam.login');
+		return view('poppy-system::develop.pam.login');
 	}
 
 	public function logout()

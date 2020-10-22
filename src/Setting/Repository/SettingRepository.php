@@ -2,6 +2,7 @@
 
 use DB;
 use Exception;
+use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
 use Poppy\System\Models\SysConfig;
@@ -13,7 +14,7 @@ use Poppy\System\Setting\Contracts\SettingContract;
  */
 class SettingRepository implements SettingContract
 {
-	use KeyParserTrait, AppTrait;
+	use KeyParserTrait, AppTrait, CoreTrait;
 
 	/**
 	 * @var bool 检查是否存在这个数据表
@@ -100,7 +101,7 @@ class SettingRepository implements SettingContract
 		$record = $this->findRecord($key);
 		if (!$record) {
 			// get default by setting.yaml
-			$settingItem = app('module')->settings()->get($key);
+			$settingItem = $this->coreModule()->settings()->get($key);
 			if ($settingItem) {
 				$type           = $settingItem['type'] ?? 'string';
 				$defaultSetting = $settingItem['default'] ?? '';

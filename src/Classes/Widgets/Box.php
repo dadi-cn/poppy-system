@@ -104,7 +104,7 @@ class Box extends Widget implements Renderable
 	public function render()
 	{
 		try {
-			return view('system::tpl.widgets.box', $this->variables())->render();
+			return view('poppy-system::tpl.widgets.box', $this->variables())->render();
 		} catch (Throwable $e) {
 			return '';
 		}

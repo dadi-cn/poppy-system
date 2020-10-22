@@ -1,5 +1,5 @@
 {{--自适应布局--}}
-@extends('system::tpl.default')
+@extends('poppy-system::tpl.default')
 @section('title')
     {!! $_title ?? '' !!}
 @endsection

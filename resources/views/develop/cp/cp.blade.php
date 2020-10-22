@@ -1,6 +1,6 @@
-@extends('system::tpl.develop')
+@extends('poppy-system::tpl.develop')
 @section('develop-main')
-    @include('system::develop.inc.header')
+    @include('poppy-system::develop.inc.header')
     @foreach($_menus as $nav_key => $nav)
         <fieldset class="layui-elem-field layui-field-title" id="{{md5($nav['title'])}}">
             <legend>{!!$nav['title'] !!}</legend>

@@ -1,4 +1,4 @@
-@extends('system::backend.tpl.default')
+@extends('poppy-system::backend.tpl.default')
 @section('backend-main')
     <div class="layui-card-header">扩展管理</div>
     <div class="layui-card-body">
@@ -20,7 +20,7 @@
                     </div>
                 @endforeach
             @else
-                @include('system::backend.tpl.inc_empty')
+                @include('poppy-system::backend.tpl.inc_empty')
             @endif
         </div>
     </div>
