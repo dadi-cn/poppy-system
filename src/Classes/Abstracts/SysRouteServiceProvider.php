@@ -6,6 +6,12 @@
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
+/**
+ * Class SysRouteServiceProvider
+ * @package Poppy\System\Classes\Abstracts
+ * @deprecated 使用 Framework 的路由加载
+ * @see  \Poppy\Framework\Application\RouteServiceProvider
+ */
 abstract class SysRouteServiceProvider extends ServiceProvider
 {
     /**
