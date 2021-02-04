@@ -1,5 +1,6 @@
 <?php namespace Poppy\System\Tests\Support;
 
+use Poppy\Core\Classes\PyCoreDef;
 use Poppy\Framework\Application\TestCase;
 
 class FunctionsTest extends TestCase
@@ -9,8 +10,8 @@ class FunctionsTest extends TestCase
     {
         parent::setUp();
 
-        sys_cache('py-core')->forget('module.repo.hooks');
-        sys_cache('py-core')->forget('module.repo.module');
+        sys_cache('py-core')->forget(PyCoreDef::ckModule('hook'));
+        sys_cache('py-core')->forget(PyCoreDef::ckModule('module'));
     }
 
     public function testSysGet()

@@ -12,6 +12,7 @@ use Poppy\Framework\Helper\EnvHelper;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\TimeHelper;
 use Poppy\Framework\Helper\UtilHelper;
+use Poppy\System\Classes\PySystemDef;
 use Poppy\System\Models\PamAccount;
 
 if (!function_exists('sys_setting')) {
@@ -205,7 +206,7 @@ if (!function_exists('sys_parent_id')) {
         }
 
         if (!$rel) {
-            $rel = sys_cache('py-system')->get('functions.pam_parent_rel');
+            $rel = sys_cache('py-system')->get(PySystemDef::ckPamRelParent());
         }
 
         $pamId = ($pam instanceof PamAccount) ? $pam->id : $pam;
@@ -217,7 +218,7 @@ if (!function_exists('sys_parent_id')) {
 
         if (!isset($rel[$pamId])) {
             $rel[$pamId] = $pam->parent_id ?: $pam->id;
-            sys_cache('py-system')->forever('functions.pam_parent_rel', $rel);
+            sys_cache('py-system')->forever(PySystemDef::ckPamRelParent(), $rel);
         }
 
         return $rel[$pamId] ?? 0;

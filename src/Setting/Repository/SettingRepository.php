@@ -6,6 +6,7 @@ use Poppy\Core\Classes\Contracts\SettingContract;
 use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
+use Poppy\System\Classes\PySystemDef;
 use Poppy\System\Models\SysConfig;
 
 /**
@@ -35,7 +36,7 @@ class SettingRepository implements SettingContract
     {
         $tableName = (new SysConfig())->getTable();
 
-        static::$cache = (array) sys_cache('py-system')->get('setting.repo');
+        static::$cache = (array) sys_cache('py-system')->get(PySystemDef::ckSetting());
         if (static::$cache) {
             $this->hasTable = true;
         }
@@ -82,7 +83,7 @@ class SettingRepository implements SettingContract
     public function get($key, $default = '')
     {
         if ($this->reRead) {
-            static::$cache = (array) sys_cache('py-system')->get('setting.repo');
+            static::$cache = (array) sys_cache('py-system')->get(PySystemDef::ckSetting());
         }
 
         if (array_key_exists($key, static::$cache)) {
@@ -200,7 +201,7 @@ class SettingRepository implements SettingContract
      */
     public function save(): void
     {
-        sys_cache('py-system')->forever('setting.repo', static::$cache);
+        sys_cache('py-system')->forever(PySystemDef::ckSetting(), static::$cache);
     }
 
     /**

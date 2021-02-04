@@ -1,5 +1,6 @@
 <?php namespace Poppy\System\Tests\Services;
 
+use Poppy\Core\Classes\PyCoreDef;
 use Poppy\Framework\Application\TestCase;
 use Poppy\Framework\Exceptions\ApplicationException;
 
@@ -10,8 +11,8 @@ class ServicesTest extends TestCase
     {
         parent::setUp();
 
-        sys_cache('py-core')->forget('module.repo.hooks');
-        sys_cache('py-core')->forget('module.repo.module');
+        sys_cache('py-core')->forget(PyCoreDef::ckModule('hook'));
+        sys_cache('py-core')->forget(PyCoreDef::ckModule('module'));
     }
 
     public function testUploadType()
