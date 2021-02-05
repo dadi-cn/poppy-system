@@ -71,11 +71,6 @@ class ServiceProvider extends PoppyServiceProvider
     {
         parent::boot($this->name);
 
-        $this->publishes([
-            __DIR__ . '/../README.md' => resource_path('docs/system/README.md'),
-            __DIR__ . '/../docs/'     => resource_path('docs/system'),
-        ], 'poppy-docs');
-
         $this->bootConfigs();
     }
 

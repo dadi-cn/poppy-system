@@ -13,12 +13,11 @@ use Poppy\System\Tests\Base\SystemTestCase;
 class PamTest extends SystemTestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->initPam();
     }
-
 
     /**
      * 验证码注册

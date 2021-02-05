@@ -9,7 +9,7 @@ use Poppy\System\Tests\Base\SystemTestCase;
 
 class EventTest extends SystemTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->initPam();
