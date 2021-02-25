@@ -22,22 +22,20 @@ class PamTest extends SystemTestCase
     /**
      * 验证码注册
      */
-    public function testCaptchaRegister(): void
+    public function testCaptchaLogin(): void
     {
         // 一个虚拟手机号
         $mobile = $this->faker()->phoneNumber;
 
         // 发送验证码
         $Verification = new Verification();
-        if (!$Verification->genCaptcha($mobile, SysCaptcha::CON_LOGIN)) {
+        if (!$Verification->genCaptcha($mobile)) {
             $this->assertTrue(false, $Verification->getError());
         }
         else {
             $platform = collect(array_keys(PamAccount::kvPlatform()))->random(1)[0];
-            /** @var SysCaptcha $item */
-            $item = SysCaptcha::where('passport', $mobile)->first();
             $Pam  = new Pam();
-            if ($Pam->captchaLogin($mobile, $item->captcha, $platform)) {
+            if ($Pam->captchaLogin($mobile, $Verification->getCaptcha(), $platform)) {
                 $this->assertTrue(true);
             }
             else {

@@ -276,19 +276,6 @@ class SystemTestCase extends TestCase
         return [];
     }
 
-
-    protected function sysCaptcha($passport, $type = 'login')
-    {
-        $resp = $this->jsonPost('util/captcha/send', [
-            'passport'   => $passport,
-            'type'       => $type,
-            'image_code' => Str::random(4),
-        ]);
-        $this->assertStatusSuccess($resp);
-
-        return SysCaptcha::where('passport', $passport)->value('captcha');
-    }
-
     /**
      * @param TestResponse $resp
      */

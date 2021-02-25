@@ -21,7 +21,6 @@ use Poppy\System\Events\PamRegisteredEvent;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamLog;
 use Poppy\System\Models\PamRole;
-use Poppy\System\Models\SysCaptcha;
 use Poppy\System\Models\SysConfig;
 use Throwable;
 use Tymon\JWTAuth\JWTGuard;
@@ -56,7 +55,7 @@ class Pam
      * @param string $platform 平台
      * @return bool
      */
-    public function captchaLogin($passport, $captcha, $platform): bool
+    public function captchaLogin(string $passport, string $captcha, string $platform): bool
     {
         $initDb = [
             'passport' => $passport,
@@ -78,7 +77,6 @@ class Pam
         if (!$verification->checkCaptcha($passport, $captcha)) {
             return $this->setError($verification->getError()->getMessage());
         }
-        $verification->delete($passport);
 
         // 判定账号是否存在, 如果不存在则进行注册
         $this->pam = PamAccount::passport($passport);
@@ -113,7 +111,7 @@ class Pam
      * @param string $platform  支持的平台
      * @return bool
      */
-    public function register($passport, $password = '', $role_name = PamRole::FE_USER, $platform = ''): bool
+    public function register(string $passport, $password = '', $role_name = PamRole::FE_USER, $platform = ''): bool
     {
         // 组织数据 -> 根据数据库字段来组织
         $passport = strtolower($passport);
@@ -434,7 +432,7 @@ class Pam
         }
 
         //发送验证码
-        $actUtil->genCaptcha($newMobile, $type = SysCaptcha::CON_LOGIN);
+        $actUtil->genCaptcha($newMobile);
 
         return true;
     }

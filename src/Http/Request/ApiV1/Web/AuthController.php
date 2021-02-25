@@ -208,12 +208,6 @@ class AuthController extends WebApiController
         }
         $pam = $Pam->getPam();
 
-        if ($pam->is_enable === SysConfig::NO) {
-            return Resp::error(
-                '用户被禁用, 原因 : ' . $pam->disable_reason . ', 解禁时间 : ' . $pam->disable_end_at
-            );
-        }
-
         if (!$token = app('tymon.jwt.auth')->fromUser($pam)) {
             return Resp::error('获取 Token 失败');
         }

@@ -54,7 +54,6 @@ class Verification
      */
     public function genCaptcha(string $passport, $expired_min = 5, $length = 6): bool
     {
-
         if (!$this->checkPassport($passport)) {
             return false;
         }
@@ -78,7 +77,7 @@ class Verification
     }
 
     /**
-     * 验证验证码
+     * 验证验证码, 验证码验证成功仅有一次机会
      * @param string $passport 通行证
      * @param string $captcha  验证码
      * @return bool
@@ -139,7 +138,7 @@ class Verification
      */
     public function genOnceVerifyCode($expired_min = 10, $hidden_str = ''): string
     {
-        $randStr = Str::random(16);
+        $randStr = Str::random();
         if (!$hidden_str) {
             $hidden_str = Str::random(6);
         }
@@ -158,7 +157,7 @@ class Verification
      * @param bool   $forget 是否删除验证码
      * @return bool
      */
-    public function verifyOnceCode(string $code, $forget = true)
+    public function verifyOnceCode(string $code, $forget = true): bool
     {
         if ($data = self::$db->get(self::CK_ONCE . ':' . $code, true)) {
             $this->hiddenStr = $data['hidden'];
@@ -170,7 +169,7 @@ class Verification
         return $this->setError(trans('py-system::action.verification.verify_code_error'));
     }
 
-    public function removeOnceCode($code)
+    public function removeOnceCode($code): bool
     {
         self::$db->del(self::CK_ONCE . ':' . $code);
         return true;
@@ -192,7 +191,7 @@ class Verification
         return $this->captcha;
     }
 
-    private function checkPassport($passport)
+    private function checkPassport($passport): bool
     {
         // 验证数据格式
         if (UtilHelper::isEmail($passport)) {
