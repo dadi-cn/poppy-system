@@ -7,7 +7,6 @@
 use Poppy\System\Action\Pam;
 use Poppy\System\Action\Verification;
 use Poppy\System\Models\PamAccount;
-use Poppy\System\Models\SysCaptcha;
 use Poppy\System\Tests\Base\SystemTestCase;
 
 class PamTest extends SystemTestCase
@@ -52,7 +51,6 @@ class PamTest extends SystemTestCase
         // 一个虚拟手机号
         $mobile = $this->faker()->phoneNumber;
 
-        /** @var Pam $Pam */
         $Pam = new Pam();
         if ($Pam->register($mobile)) {
             $this->assertTrue(true);

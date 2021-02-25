@@ -11,7 +11,7 @@ class CoreController extends WebApiController
     use ThrottlesLogins;
 
     /**
-     * @api                    {post} api_v1/system/core/info [Core]系统信息
+     * @api                    {post} api_v1/system/core/info 系统信息
      * @apiVersion             1.0.0
      * @apiName                SystemInfo
      * @apiGroup               System
@@ -27,7 +27,7 @@ class CoreController extends WebApiController
 
 
     /**
-     * @api                    {post} api_v1/system/core/translate [Core]多语言
+     * @api                    {post} api_v1/system/core/translate 多语言包
      * @apiVersion             1.0.0
      * @apiName                SystemTranslate
      * @apiGroup               System

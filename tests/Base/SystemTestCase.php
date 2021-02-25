@@ -14,7 +14,6 @@ use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\System\Classes\Contracts\ApiSignContract;
 use Poppy\System\Models\PamAccount;
-use Poppy\System\Models\SysCaptcha;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -58,13 +57,6 @@ class SystemTestCase extends TestCase
     {
         parent::setUp();
         DB::enableQueryLog();
-        DB::beginTransaction();
-    }
-
-    public function tearDown(): void
-    {
-        DB::rollBack();
-        parent::tearDown();
     }
 
     /**
@@ -348,7 +340,7 @@ class SystemTestCase extends TestCase
      * @param array           $columnStyles
      * @return void
      */
-    protected function table($headers, $rows, $tableStyle = 'default', array $columnStyles = []): void
+    protected function table(array $headers, $rows, $tableStyle = 'default', array $columnStyles = []): void
     {
         $table = new Table(new ConsoleOutput());
 
@@ -367,7 +359,7 @@ class SystemTestCase extends TestCase
 
     /**
      * 输出变量
-     * @param array $var
+     * @param array|string $var
      */
     protected function export($var): void
     {
