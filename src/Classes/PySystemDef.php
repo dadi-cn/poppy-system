@@ -20,6 +20,7 @@ class PySystemDef
     {
         return 'setting';
     }
+
     /**
      * 设置
      * @return string
@@ -27,5 +28,23 @@ class PySystemDef
     public static function ckPamRelParent(): string
     {
         return 'pam-rel-parent';
+    }
+
+    /**
+     * 一次验证码
+     * @return string
+     */
+    public static function ckVerificationOnce(): string
+    {
+        return 'verification-once_code';
+    }
+
+    /**
+     * 验证码
+     * @return string
+     */
+    public static function ckVerificationCaptcha(): string
+    {
+        return 'verification-captcha';
     }
 }

@@ -1,12 +1,14 @@
-<?php namespace Poppy\System\Action;
+<?php
+
+namespace Poppy\System\Action;
 
 use Auth;
 use Carbon\Carbon;
 use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use PHPUnit\Runner\Exception;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
@@ -85,7 +87,7 @@ class Pam
         }
 
         // 检测权限, 是否被禁用
-        if (!$this->checkPamPermission($this->pam)) {
+        if (!$this->checkIsEnable($this->pam)) {
             return false;
         }
 
@@ -288,7 +290,7 @@ class Pam
             }
             $this->pam = $pam;
 
-            if (!$this->checkPamPermission($this->pam)) {
+            if (!$this->checkIsEnable($this->pam)) {
                 return false;
             }
 
@@ -309,43 +311,6 @@ class Pam
         event(new LoginFailedEvent($credentials));
 
         return $this->setError(trans('py-system::action.pam.login_fail_again'));
-    }
-
-    /**
-     * 找回手机号
-     * @param string $passport passport
-     * @return bool
-     */
-    public function findMobile($passport)
-    {
-        $type   = $this->passportType($passport);
-        $initDb = [
-            $type => (string) $passport,
-        ];
-        $rule   = [
-            Rule::required(),
-            Rule::exists($this->pamTable, $type),
-            Rule::string(),
-        ];
-
-        // 完善主账号类型规则
-        if ($type === PamAccount::REG_TYPE_MOBILE) {
-            $rule[$type][] = Rule::mobile();
-        }
-        elseif ($type === PamAccount::REG_TYPE_EMAIL) {
-            $rule[$type][] = Rule::email();
-        }
-        else {
-            if (preg_match('/\s+/', $passport)) {
-                return $this->setError(trans('py-system::action.pam.account_disable_not_login'));
-            }
-            $rule[$type][] = 'regex:/[a-zA-Z\x{4e00}-\x{9fa5}][a-zA-Z0-9_\x{4e00}-\x{9fa5}]/u';
-        }
-
-        $validator = Validator::make($initDb, $rule);
-        if ($validator->fails()) {
-            return $this->setError($validator->messages());
-        }
     }
 
     /**
@@ -392,111 +357,6 @@ class Pam
         $pam->roles()->attach($role->pluck('id'));
 
         return true;
-    }
-
-    /**
-     * 新手机号发送验证码
-     * @param string $verify_code 验证码
-     * @param string $newMobile   手机号
-     * @return bool
-     */
-    public function newSendCaptcha($verify_code, $newMobile)
-    {
-        $data      = [
-            'verify_code' => $verify_code,
-            'mobile'      => $newMobile,
-        ];
-        $validator = Validator::make($data, [
-            'verify_code' => [
-                Rule::required(),
-                Rule::string(),
-            ],
-            'mobile'      => [
-                Rule::required(),
-                Rule::mobile(),
-            ], [], [
-                'verify_code' => '验证串码',
-                'mobile'      => '手机号',
-            ],
-        ]);
-        if ($validator->fails()) {
-            return $this->setError($validator->messages());
-        }
-        $actUtil = new Verification();
-        if (!$actUtil->verifyOnceCode($verify_code)) {
-            return $this->setError($actUtil->getError()->getMessage());
-        }
-        //验证新手机号是否已经注册
-        if (PamAccount::where('mobile', $newMobile)->exists()) {
-            return $this->setError(trans('py-system::action.pam.mobile_already_registered'));
-        }
-
-        //发送验证码
-        $actUtil->genCaptcha($newMobile);
-
-        return true;
-    }
-
-    /**
-     * 新的手机号验证
-     * @param string $verify_code 验证码
-     * @param string $passport    passport
-     * @param string $captcha     验证码
-     * @return bool
-     */
-    public function newPassport($verify_code, $passport, $captcha)
-    {
-        if (!$this->checkPam()) {
-            return false;
-        }
-
-        $data      = [
-            'verify_code' => $verify_code,
-            'mobile'      => $passport,
-            'captcha'     => $captcha,
-        ];
-        $validator = Validator::make($data, [
-            'verify_code' => [
-                Rule::required(),
-                Rule::string(),
-            ],
-            'mobile'      => [
-                Rule::required(),
-                Rule::mobile(),
-            ],
-            'captcha'     => [
-                Rule::required(),
-            ], [], [
-                'verify_code' => '验证串码',
-                'mobile'      => '手机号',
-                'captcha'     => '验证码',
-            ],
-        ]);
-        if ($validator->fails()) {
-            return $this->setError($validator->messages());
-        }
-
-        $Captcha = new Verification();
-        // 验证验证码
-        if (!$Captcha->checkCaptcha($passport, $captcha)) {
-            return $this->setError($Captcha->getError()->getMessage());
-        }
-        $Captcha->delete($passport);
-
-        // 验证一次码
-        if (!$Captcha->verifyOnceCode($verify_code)) {
-            return $this->setError($Captcha->getError()->getMessage());
-        }
-
-        try {
-            $this->pam->update([
-                'mobile' => $passport,
-            ]);
-
-            return true;
-        } catch (\Exception $e) {
-            return $this->setError($e->getMessage());
-        }
     }
 
     /**
@@ -615,12 +475,11 @@ class Pam
 
     /**
      * 后台用户启用
-     * @param int    $id       用户Id
-     * @param string $reason   原因
-     * @param array  $pictures 图片
+     * @param int    $id     用户Id
+     * @param string $reason 原因
      * @return bool
      */
-    public function enable($id, $reason = '', $pictures = []): bool
+    public function enable($id, $reason = ''): bool
     {
         if (PamAccount::where('id', $id)->where('is_enable', 1)->exists()) {
             return $this->setError(trans('py-system::action.pam.account_enabled'));
@@ -701,7 +560,7 @@ class Pam
      * @param PamAccount $pam 用户
      * @return bool
      */
-    private function checkPamPermission($pam): bool
+    private function checkIsEnable($pam): bool
     {
         if ($pam->is_enable === SysConfig::NO) {
             // 账户被禁用

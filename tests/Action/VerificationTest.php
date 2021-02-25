@@ -4,7 +4,7 @@ use Poppy\Framework\Exceptions\FakerException;
 use Poppy\System\Action\Verification;
 use Poppy\System\Tests\Base\SystemTestCase;
 
-class CaptchaTest extends SystemTestCase
+class VerificationTest extends SystemTestCase
 {
 
     protected $verification;
@@ -24,11 +24,6 @@ class CaptchaTest extends SystemTestCase
         $Verification = new Verification();
         $mobile       = $this->faker()->phoneNumber;
         if ($Verification->genCaptcha($mobile)) {
-
-            // re generate
-            $false = $Verification->genCaptcha($mobile);
-            $this->assertFalse($false);
-
             $captcha = $Verification->getCaptcha();
             $this->assertTrue($Verification->checkCaptcha($mobile, $captcha));
         }

@@ -31,11 +31,9 @@ class UploadTest extends TestCase
             if ($content = file_get_contents($url)) {
                 $this->assertTrue(true);
                 $path = base_path('public/' . $Upload->getDestination());
-                $this->outputVariables([
-                    'path' => $path,
-                ]);
+                $this->outputVariables($path);
                 $result = app('files')->delete(base_path('public/' . $Upload->getDestination()));
-                // dump($result);
+                $this->assertTrue($result);
             }
             else {
                 $this->assertTrue(false, "Url {$url} 不可访问!");

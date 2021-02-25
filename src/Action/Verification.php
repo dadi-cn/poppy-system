@@ -7,6 +7,7 @@ use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Helper\EnvHelper;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
+use Poppy\System\Classes\PySystemDef;
 
 /**
  * 系统校验
@@ -14,9 +15,6 @@ use Poppy\Framework\Helper\UtilHelper;
 class Verification
 {
     use AppTrait;
-
-    const CK_ONCE    = 'py-system:verification-once_code';
-    const CK_CAPTCHA = 'py-system:verification-captcha';
 
     const TYPE_MAIL   = 'mail';
     const TYPE_MOBILE = 'mobile';
@@ -58,7 +56,8 @@ class Verification
             return false;
         }
         $key = $this->passportKey;
-        if ($data = self::$db->get(self::CK_CAPTCHA . ':' . $key)) {
+
+        if ($data = self::$db->get($this->ckCaptcha() . ':' . $key)) {
             if ($data['silence'] > Carbon::now()->timestamp) {
                 $captcha = $data['captcha'];
             }
@@ -70,7 +69,7 @@ class Verification
             'captcha' => $captcha,
             'silence' => Carbon::now()->timestamp + 60,
         ];
-        self::$db->set(self::CK_CAPTCHA . ':' . $key, $data, 'ex', $expired_min * 60);
+        self::$db->set($this->ckCaptcha() . ':' . $key, $data, 'ex', $expired_min * 60);
 
         $this->captcha = $captcha;
         return true;
@@ -117,9 +116,9 @@ class Verification
             }
         }
 
-        if ($data = self::$db->get(self::CK_CAPTCHA . ':' . $key)) {
+        if ($data = self::$db->get($this->ckCaptcha() . ':' . $key)) {
             if ((string) $data['captcha'] === (string) $captcha) {
-                self::$db->del(self::CK_CAPTCHA . ':' . $key);
+                self::$db->del($this->ckCaptcha() . ':' . $key);
                 return true;
             }
         }
@@ -147,7 +146,7 @@ class Verification
             'random' => $randStr . '@' . Carbon::now()->timestamp,
         ];
         $code = md5(json_encode($str));
-        self::$db->set(self::CK_ONCE . ':' . $code, $str, 'ex', $expired_min * 60);
+        self::$db->set($this->ckOnce() . ':' . $code, $str, 'ex', $expired_min * 60);
         return $code;
     }
 
@@ -159,10 +158,10 @@ class Verification
      */
     public function verifyOnceCode(string $code, $forget = true): bool
     {
-        if ($data = self::$db->get(self::CK_ONCE . ':' . $code, true)) {
+        if ($data = self::$db->get($this->ckOnce() . ':' . $code, true)) {
             $this->hiddenStr = $data['hidden'];
             if ($forget) {
-                self::$db->del(self::CK_ONCE);
+                self::$db->del($this->ckOnce() . ':' . $code);
             }
             return true;
         }
@@ -171,7 +170,7 @@ class Verification
 
     public function removeOnceCode($code): bool
     {
-        self::$db->del(self::CK_ONCE . ':' . $code);
+        self::$db->del($this->ckOnce() . ':' . $code);
         return true;
     }
 
@@ -189,6 +188,22 @@ class Verification
     public function getCaptcha(): string
     {
         return $this->captcha;
+    }
+
+    /**
+     * @return string CaptchaKey
+     */
+    private function ckCaptcha(): string
+    {
+        return "py-system:" . PySystemDef::ckVerificationCaptcha();
+    }
+
+    /**
+     * @return string OnceKey
+     */
+    private function ckOnce(): string
+    {
+        return "py-system:" . PySystemDef::ckVerificationOnce();
     }
 
     private function checkPassport($passport): bool

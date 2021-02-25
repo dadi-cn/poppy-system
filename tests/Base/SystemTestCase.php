@@ -16,6 +16,7 @@ use Poppy\System\Classes\Contracts\ApiSignContract;
 use Poppy\System\Models\PamAccount;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Tymon\JWTAuth\JWTAuth;
 
 class SystemTestCase extends TestCase
 {
@@ -92,9 +93,10 @@ class SystemTestCase extends TestCase
      * @param string $version
      * @return string
      */
-    protected function apiUrl($url, $version = 'v1'): string
+    protected function apiUrl(string $url, $version = 'v1'): string
     {
-        return $this->request = "/api_{$version}/" . $url;
+        $version = $version ? "_{$version}" : '';
+        return $this->request = "/api{$version}/" . $url;
     }
 
     /**
@@ -145,7 +147,7 @@ class SystemTestCase extends TestCase
         $token                     = str_replace('Bearer ', '', $this->headers['Authorization'] ?? '');
         $this->params['token']     = $token;
         /** @var ApiSignContract $Sign */
-        $Sign                 = app('poppy.system.api_sign');
+        $Sign                 = app(ApiSignContract::class);
         $this->params['sign'] = $Sign->sign($this->params);
         $resp                 = $this->json('POST', $this->request, $this->params, $this->headers);
         $resp->assertStatus(200);
@@ -159,7 +161,9 @@ class SystemTestCase extends TestCase
         $pam      = PamAccount::passport($username);
         $this->assertNotNull($pam, 'Testing user pam is not exist');
         $this->pam = $pam;
-        $token     = auth('jwt')->fromUser($pam);
+        /** @var JWTAuth $auth */
+        $auth  = auth('jwt');
+        $token = $auth->fromUser($pam);
         $this->headers($token);
     }
 
@@ -185,16 +189,6 @@ class SystemTestCase extends TestCase
         $this->assertNotSame($json['status'], 0, 'This request need fail, but successed!');
 
         return $response;
-    }
-
-    /**
-     * 数据值获取
-     * @param string $key
-     * @return mixed
-     */
-    protected function dataGet($key)
-    {
-        return data_get($this->data, $key);
     }
 
     /**
