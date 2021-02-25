@@ -10,7 +10,8 @@ Route::group([
     'prefix'     => 'system',
     'namespace'  => 'Poppy\System\Http\Request\ApiV1\Web',
 ], function (Illuminate\Routing\Router $route) {
-    $route->post('auth/login', 'AuthController@login');
+    $route->post('auth/login', 'AuthController@login')
+    ->name('py-system:pam.auth.login');
     $route->post('auth/access', 'AuthController@access')
         ->name('py-system:pam.auth.access');
     $route->post('auth/token/{guard}', 'AuthController@token')

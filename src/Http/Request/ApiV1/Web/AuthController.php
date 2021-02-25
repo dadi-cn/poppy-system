@@ -197,6 +197,17 @@ class AuthController extends WebApiController
             return Resp::error('登录密码或者验证码必须填写');
         }
 
+        /** @var ResponseFactory $response */
+        $response  = app(ResponseFactory::class);
+        if ($this->hasTooManyLoginAttempts($this->pyRequest())) {
+            $seconds = $this->limiter()->availableIn($this->throttleKey($this->pyRequest()));
+            $message = $this->pyTranslator()->get('auth.throttle', ['seconds' => $seconds]);
+
+            return $response->json([
+                'message' => $message,
+            ], 401, [], JSON_UNESCAPED_UNICODE);
+        }
+
         $Pam = new Pam();
         if ($captcha) {
             if (!$Pam->captchaLogin($passport, $captcha, $platform)) {
@@ -206,6 +217,8 @@ class AuthController extends WebApiController
         elseif (!$Pam->loginCheck($passport, $password, PamAccount::GUARD_JWT_WEB)) {
             return Resp::error($Pam->getError());
         }
+
+        $this->clearLoginAttempts($this->pyRequest());
         $pam = $Pam->getPam();
 
         if (!$token = app('tymon.jwt.auth')->fromUser($pam)) {
