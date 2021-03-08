@@ -141,7 +141,7 @@ class ServiceProvider extends PoppyServiceProvider
         /* 文件上传提供者
          * ---------------------------------------- */
         $this->app->bind('poppy.system.uploader', function ($app) {
-            $uploadType = sys_setting('py-system::oss.save_type');
+            $uploadType = sys_setting('py-system::picture.save_type');
             $hooks      = sys_hook('poppy.system.upload_type');
             if (!$uploadType) {
                 $uploadType = 'default';
