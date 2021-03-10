@@ -6,13 +6,6 @@ class Image extends Field
 {
 
     /**
-     *  Validation rules.
-     *
-     * @var string
-     */
-    protected $rules = ['image'];
-
-    /**
      * @var string Token For Upload
      */
     protected $token;
