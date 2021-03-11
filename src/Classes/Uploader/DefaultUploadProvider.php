@@ -6,7 +6,6 @@ use Illuminate\Support\Str;
 use Intervention\Image\Constraint;
 use Intervention\Image\Image;
 use Poppy\Framework\Classes\Traits\AppTrait;
-use Poppy\Framework\Helper\ImgHelper;
 use Poppy\System\Classes\Contracts\UploadContract;
 use Psr\Http\Message\StreamInterface;
 use Storage;
@@ -180,7 +179,7 @@ class DefaultUploadProvider implements UploadContract
 				// bmp 处理
 				$type = mime_content_type($file->getRealPath());
 				if ($type === 'image/x-ms-bmp') {
-					$img = ImgHelper::imageCreateFromBmp($file->getRealPath());
+					$img = imagecreatefrombmp($file->getRealPath());
 					if ($img) {
 						ob_start();
 						imagepng($img);

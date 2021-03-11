@@ -8,7 +8,6 @@
 	<div class="{{$viewClass['field']}}">
 		<div class="layui-form-auto-field">
 			<div class="layui-field-display">
-				{!! dump($value) !!}
 				{!! $value !!}&nbsp;
 			</div>
 		</div>
