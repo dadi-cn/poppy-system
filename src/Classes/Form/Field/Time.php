@@ -4,7 +4,7 @@ class Time extends Date
 {
 
     protected $options = [
-        'type' => 'time',
+        'layui-type' => 'time',
     ];
 
     public function render()

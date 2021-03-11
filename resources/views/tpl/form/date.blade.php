@@ -8,8 +8,7 @@
 	<div class="{{$viewClass['field']}}">
 		<div class="layui-form-auto-field">
 			<div class="layui-inline">
-				{!! app('form')->text($name, old($column, $value), $attributes + [
-					'class' => 'layui-input',
+				{!! app('form')->datePicker($name, old($column, $value), $attributes + [
 					'id' => $id,
 					'placeholder' => $placeholder,
 				]) !!}
