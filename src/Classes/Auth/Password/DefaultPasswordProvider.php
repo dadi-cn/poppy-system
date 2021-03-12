@@ -11,7 +11,7 @@ class DefaultPasswordProvider implements PasswordContract
     /**
      * @inheritdoc
      */
-    public function check(PamAccount $pam, string $password, $type = 'plain')
+    public function check(PamAccount $pam, string $password, $type = 'plain'): bool
     {
         return $this->genPassword($password, $pam->created_at, $pam->password_key) === $pam->password;
     }
@@ -19,7 +19,7 @@ class DefaultPasswordProvider implements PasswordContract
     /**
      * @inheritdoc
      */
-    public function genPassword(string $password, string $reg_datetime, string $password_key)
+    public function genPassword(string $password, string $reg_datetime, string $password_key): string
     {
         return md5(sha1($password . $reg_datetime) . $password_key);
     }

@@ -7,7 +7,7 @@
 	</div>
 	<div class="{{$viewClass['field']}}">
 		<div class="layui-form-auto-field">
-			{!! app('poppy.mgr-page.form')->textarea($name, $value, $attributes) !!}
+			{!! app('poppy.mgr-page.form')->code($name, $value) !!}
 		</div>
 		@include('py-system::tpl.form.help-block')
 		@include('py-system::tpl.form.error')
