@@ -3,7 +3,7 @@
 class Year extends Date
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected $query = 'whereYear';
 

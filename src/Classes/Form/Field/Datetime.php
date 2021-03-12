@@ -2,7 +2,7 @@
 
 class Datetime extends Date
 {
-	protected $options = [
-		'type' => 'datetime',
-	];
+    protected $options = [
+        'layui-type' => 'datetime',
+    ];
 }

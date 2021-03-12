@@ -26,14 +26,14 @@ class Hidden extends AbstractFilter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function condition($inputs)
     {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render()
     {

@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 class CsvExporter extends AbstractExporter
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function export()
     {

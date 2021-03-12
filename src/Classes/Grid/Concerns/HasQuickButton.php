@@ -10,17 +10,15 @@ trait HasQuickButton
      * Get create url.
      *
      * @param BaseButton[]|BaseButton $buttons
+     * @return array
      */
-    public function appendQuickButton($buttons): array
+    public function appendQuickButton(array $buttons): array
     {
 
         if (is_array($buttons) && count($buttons)) {
             foreach ($buttons as $button) {
-                $this->appendQuickButton($button);
+                $this->quickButtons[] = $button;
             }
-        }
-        else {
-            $this->quickButtons[] = $buttons;
         }
         return $this->quickButtons;
     }

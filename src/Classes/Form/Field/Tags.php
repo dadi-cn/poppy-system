@@ -32,7 +32,7 @@ class Tags extends Field
     protected $max = 1;
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function fill($data)
     {
@@ -66,7 +66,7 @@ class Tags extends Field
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function prepare($value)
     {
@@ -98,7 +98,7 @@ class Tags extends Field
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render()
     {

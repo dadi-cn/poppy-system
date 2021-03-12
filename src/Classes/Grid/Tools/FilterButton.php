@@ -18,7 +18,7 @@ class FilterButton extends AbstractTool
     protected $btnClassName;
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render()
     {

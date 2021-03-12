@@ -3,7 +3,7 @@
 class Month extends Date
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected $query = 'whereMonth';
 

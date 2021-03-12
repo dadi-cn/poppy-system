@@ -26,7 +26,7 @@ class Textarea extends Field
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @inheritDoc
 	 */
 	public function render()
 	{

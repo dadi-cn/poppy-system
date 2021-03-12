@@ -1,15 +1,16 @@
 <?php namespace Poppy\System\Classes\Form\Field;
 
-class DatetimeRange extends Datetime
+class DatetimeRange extends Date
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function render()
-	{
-		$this->options([
-			'range' => true,
-		]);
-		return parent::render();
-	}
+    /**
+     * @inheritDoc
+     */
+    public function render()
+    {
+        $this->options([
+            'layui-range' => true,
+            'layui-type'  => 'datetime',
+        ]);
+        return parent::render();
+    }
 }

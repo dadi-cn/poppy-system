@@ -37,7 +37,7 @@ class Footer extends AbstractTool
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render()
     {

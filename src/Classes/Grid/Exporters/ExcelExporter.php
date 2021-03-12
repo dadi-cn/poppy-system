@@ -57,7 +57,7 @@ abstract class ExcelExporter extends AbstractExporter implements FromQuery, With
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function export()
     {

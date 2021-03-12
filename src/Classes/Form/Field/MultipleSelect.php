@@ -14,7 +14,7 @@ class MultipleSelect extends Select
     protected $otherKey;
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function fill($data)
     {
@@ -48,7 +48,7 @@ class MultipleSelect extends Select
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setOriginal($data)
     {

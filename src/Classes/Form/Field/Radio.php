@@ -47,7 +47,7 @@ class Radio extends Field
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render()
     {

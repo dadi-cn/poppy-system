@@ -5,7 +5,7 @@ use Illuminate\Support\Arr;
 class NotEqual extends AbstractFilter
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function condition($inputs)
     {

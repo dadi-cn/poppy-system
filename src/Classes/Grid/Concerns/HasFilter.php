@@ -80,7 +80,7 @@ trait HasFilter
      *
      * @return $this
      */
-    public function expandFilter()
+    public function expandFilter():self
     {
         $this->filter->expand();
 

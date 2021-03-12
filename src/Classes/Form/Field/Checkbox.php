@@ -50,7 +50,7 @@ class Checkbox extends MultipleSelect
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @inheritDoc
 	 */
 	public function render()
 	{

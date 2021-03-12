@@ -3,7 +3,7 @@
 class ContextMenuActions extends DropdownActions
 {
 	/**
-	 * {@inheritdoc}
+	 * @inheritDoc
 	 */
 	protected function addScript()
 	{
@@ -47,7 +47,7 @@ SCRIPT;
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @inheritDoc
 	 */
 	public function display($callback = null)
 	{

@@ -8,7 +8,7 @@ class MultipleImage extends MultipleFile
     use ImageField;
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected $view = 'py-system::tpl.form.multiplefile';
 

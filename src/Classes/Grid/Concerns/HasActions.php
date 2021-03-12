@@ -106,19 +106,4 @@ trait HasActions
 
         return $this->option('show_row_selector', !$disable);
     }
-
-    /**
-     * 添加操作列
-     *
-     * @return void
-     */
-    protected function appendActionsColumn()
-    {
-        if (!$this->option('show_actions')) {
-            return;
-        }
-
-        $this->addColumn(Grid\Column::ACTION_COLUMN_NAME, '操作')
-            ->displayUsing($this->getActionClass(), [$this->actionsCallback]);
-    }
 }

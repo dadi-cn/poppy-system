@@ -5,7 +5,7 @@ use Illuminate\Support\Arr;
 class Between extends AbstractFilter
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected $view = 'py-system::tpl.filter.between';
 

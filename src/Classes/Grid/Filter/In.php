@@ -5,7 +5,7 @@ use Illuminate\Support\Arr;
 class In extends AbstractFilter
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected $query = 'whereIn';
 

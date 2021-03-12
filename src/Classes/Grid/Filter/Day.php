@@ -3,7 +3,7 @@
 class Day extends Date
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected $query = 'whereDay';
 

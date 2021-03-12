@@ -37,7 +37,7 @@ class Header extends AbstractTool
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render()
     {

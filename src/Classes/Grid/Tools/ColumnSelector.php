@@ -31,7 +31,7 @@ class ColumnSelector extends AbstractTool
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * @return string
      */

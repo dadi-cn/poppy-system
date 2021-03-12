@@ -3,6 +3,6 @@
 class Month extends Date
 {
     protected $options = [
-        'type' => 'month',
+        'layui-type' => 'month',
     ];
 }

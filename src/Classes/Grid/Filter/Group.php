@@ -256,7 +256,7 @@ class Group extends AbstractFilter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function condition($inputs)
     {
@@ -278,7 +278,7 @@ class Group extends AbstractFilter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function variables()
     {
@@ -293,7 +293,7 @@ class Group extends AbstractFilter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render()
     {

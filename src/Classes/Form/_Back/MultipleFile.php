@@ -34,7 +34,7 @@ class MultipleFile extends Field
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getValidator(array $input)
     {

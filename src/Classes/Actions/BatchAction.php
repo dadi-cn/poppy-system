@@ -4,19 +4,19 @@ use Illuminate\Http\Request;
 
 abstract class BatchAction extends GridAction
 {
-	/**
-	 * @var string
-	 */
-	public $selectorPrefix = '.grid-batch-action-';
+    /**
+     * @var string
+     */
+    public $selectorPrefix = '.grid-batch-action-';
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function actionScript()
-	{
-		$warning = __('No data selected!');
+    /**
+     * @inheritDoc
+     */
+    public function actionScript()
+    {
+        $warning = __('No data selected!');
 
-		return <<<SCRIPT
+        return <<<SCRIPT
         var key = $.admin.grid.selected();
         
         if (key.length === 0) {
@@ -26,54 +26,54 @@ abstract class BatchAction extends GridAction
         
         Object.assign(data, {_key:key});
 SCRIPT;
-	}
+    }
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return mixed
-	 */
-	public function retrieveModel(Request $request)
-	{
-		if (!$key = $request->get('_key')) {
-			return false;
-		}
+    /**
+     * @param Request $request
+     *
+     * @return mixed
+     */
+    public function retrieveModel(Request $request)
+    {
+        if (!$key = $request->get('_key')) {
+            return false;
+        }
 
-		$modelClass = str_replace('_', '\\', $request->get('_model'));
+        $modelClass = str_replace('_', '\\', $request->get('_model'));
 
-		if (is_string($key)) {
-			$key = explode(',', $key);
-		}
+        if (is_string($key)) {
+            $key = explode(',', $key);
+        }
 
-		if ($this->modelUseSoftDeletes($modelClass)) {
-			return $modelClass::withTrashed()->findOrFail($key);
-		}
+        if ($this->modelUseSoftDeletes($modelClass)) {
+            return $modelClass::withTrashed()->findOrFail($key);
+        }
 
-		return $modelClass::findOrFail($key);
-	}
+        return $modelClass::findOrFail($key);
+    }
 
-	/**
-	 * @return string
-	 */
-	public function render()
-	{
-		$this->addScript();
+    /**
+     * @return string
+     */
+    public function render()
+    {
+        $this->addScript();
 
-		$modalId = '';
+        $modalId = '';
 
-		if ($this->interactor instanceof Interactor\Form) {
-			$modalId = $this->interactor->getModalId();
+        if ($this->interactor instanceof Interactor\Form) {
+            $modalId = $this->interactor->getModalId();
 
-			if ($content = $this->html()) {
-				return $this->interactor->addElementAttr($content, $this->selector);
-			}
-		}
+            if ($content = $this->html()) {
+                return $this->interactor->addElementAttr($content, $this->selector);
+            }
+        }
 
-		return sprintf(
-			"<a href='javascript:void(0);' class='%s' %s>%s</a>",
-			$this->getElementClass(),
-			$modalId ? "modal='{$modalId}'" : '',
-			$this->name()
-		);
-	}
+        return sprintf(
+            "<a href='javascript:void(0);' class='%s' %s>%s</a>",
+            $this->getElementClass(),
+            $modalId ? "modal='{$modalId}'" : '',
+            $this->name()
+        );
+    }
 }

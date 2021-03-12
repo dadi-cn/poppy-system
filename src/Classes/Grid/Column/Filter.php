@@ -88,7 +88,7 @@ class Filter implements Renderable
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render()
     {

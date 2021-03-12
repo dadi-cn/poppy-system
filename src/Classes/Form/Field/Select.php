@@ -45,7 +45,7 @@ class Select extends Field
      */
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render()
     {

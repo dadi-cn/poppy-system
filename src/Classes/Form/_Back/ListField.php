@@ -69,7 +69,7 @@ class ListField extends Field
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getValidator(array $input)
     {
@@ -110,7 +110,7 @@ class ListField extends Field
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function prepare($value)
     {
@@ -118,7 +118,7 @@ class ListField extends Field
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render()
     {

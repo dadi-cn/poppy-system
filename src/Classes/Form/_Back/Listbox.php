@@ -30,7 +30,7 @@ class Listbox extends MultipleSelect
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {

@@ -2,20 +2,18 @@
 
 use Closure;
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Macroable;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\System\Classes\Grid\Column;
 use Poppy\System\Classes\Grid\Concerns;
 use Poppy\System\Classes\Grid\Model;
 use Poppy\System\Classes\Grid\Row;
+use Poppy\System\Http\Lists\ListBase;
 use Response;
 use Throwable;
 
@@ -34,10 +32,7 @@ class Grid
         Concerns\CanHidesColumns,
         Concerns\CanFixColumns,
         Concerns\LayDefines,
-        Concerns\HasQuickButton,
-        Macroable {
-        __call as macroCall;
-    }
+        Concerns\HasQuickButton;
 
     /**
      * All column names of the grid.
@@ -234,6 +229,30 @@ class Grid
         }
     }
 
+    /**
+     * @param string $grid_class
+     * @param string $field
+     * @param string $order
+     * @throws ApplicationException
+     */
+    public function setLists(string $grid_class, $field = 'id', $order = 'desc')
+    {
+        if (!class_exists($grid_class)) {
+            throw new ApplicationException('Grid Class `' . $grid_class . '` Not Exists.');
+        }
+
+        /** @var ListBase $List */
+        $List = new $grid_class($this);
+        $List->columns();
+        $List->actions();
+        $this->columns = $List->getColumns();
+        if (method_exists($this->model(), 'orderBy')) {
+            $this->model()->orderBy($field, $order);
+        }
+
+        $this->filter($List->seek());
+        $this->appendQuickButton($List->quickButtons());
+    }
 
     /**
      * Get or set option for grid.
@@ -264,134 +283,6 @@ class Grid
         return $this->keyName ?: 'id';
     }
 
-    /**
-     * Add a column to Grid.
-     *
-     * @param string $name
-     * @param string $label
-     *
-     * @return Column
-     */
-    public function column($name, $label = '')
-    {
-        if (Str::contains($name, '.')) {
-            return $this->addRelationColumn($name, $label);
-        }
-
-        if (Str::contains($name, '->')) {
-            return $this->addJsonColumn($name, $label);
-        }
-
-        return $this->__call($name, array_filter([$label]));
-    }
-
-    /**
-     * Batch add column to grid.
-     *
-     * @param array $columns
-     *
-     * @return Collection|null
-     * @example
-     * 1.$grid->columns(['name' => 'Name', 'email' => 'Email' ...]);
-     * 2.$grid->columns('name', 'email' ...)
-     *
-     */
-    public function columns($columns = [])
-    {
-        if (func_num_args() == 0) {
-            return $this->columns;
-        }
-
-        if (func_num_args() == 1 && is_array($columns)) {
-            foreach ($columns as $column => $label) {
-                $this->column($column, $label);
-            }
-
-            return;
-        }
-
-        foreach (func_get_args() as $column) {
-            $this->column($column);
-        }
-    }
-
-    /**
-     * Add column to grid.
-     *
-     * @param string $column
-     * @param string $label
-     *
-     * @return Column
-     */
-    protected function addColumn($column = '', $label = '')
-    {
-        $column = new Column($column, $label);
-        $column->setGrid($this);
-
-        return tap($column, function ($value) {
-            $this->columns->push($value);
-        });
-    }
-
-    /**
-     * Add a relation column to grid.
-     *
-     * @param string $name
-     * @param string $label
-     * @return $this|bool|Column
-     */
-    protected function addRelationColumn($name, $label = '')
-    {
-        [$relation, $column] = explode('.', $name);
-
-        $model = $this->model()->eloquent();
-
-        if (!method_exists($model, $relation) || !$model->{$relation}() instanceof Relations\Relation) {
-            $class = get_class($model);
-            throw new ApplicationException("Call to undefined relationship [{$relation}] on model [{$class}].");
-        }
-
-        $name = Str::snake($relation) . '.' . $column;
-
-        $this->model()->with($relation);
-
-        return $this->addColumn($name, $label)->setRelation($relation, $column);
-    }
-
-    /**
-     * Add a json type column to grid.
-     *
-     * @param string $name
-     * @param string $label
-     *
-     * @return Column
-     */
-    protected function addJsonColumn($name, $label = '')
-    {
-        $column = substr($name, strrpos($name, '->') + 2);
-
-        $name = str_replace('->', '.', $name);
-
-        return $this->addColumn($name, $label ?: ucfirst($column));
-    }
-
-    /**
-     * Prepend column to grid.
-     *
-     * @param string $column
-     * @param string $label
-     *
-     * @return Column
-     */
-    protected function prependColumn($column = '', $label = '')
-    {
-        $column = new Column($column, $label);
-        $column->setGrid($this);
-
-        return tap($column, function ($value) {
-            $this->columns->prepend($value);
-        });
-    }
 
     /**
      * Paginate the grid.
@@ -425,6 +316,7 @@ class Grid
     /**
      * Disable grid pagination.
      *
+     * @param bool $disable
      * @return $this
      */
     public function disablePagination(bool $disable = true)
@@ -522,8 +414,6 @@ class Grid
     protected function addDefaultColumns()
     {
         $this->prependRowSelectorColumn();
-
-        $this->appendActionsColumn();
     }
 
     /**
@@ -650,96 +540,6 @@ class Grid
     }
 
     /**
-     * Handle get mutator column for grid.
-     *
-     * @param string $method
-     * @param string $label
-     *
-     * @return bool|Column
-     */
-    protected function handleGetMutatorColumn($method, $label)
-    {
-        if ($this->model()->eloquent()->hasGetMutator($method)) {
-            return $this->addColumn($method, $label);
-        }
-
-        return false;
-    }
-
-    /**
-     * Handle relation column for grid.
-     *
-     * @param string $method
-     * @param string $label
-     *
-     * @return bool|Column
-     */
-    protected function handleRelationColumn($method, $label)
-    {
-        $model = $this->model()->eloquent();
-
-        if (!method_exists($model, $method)) {
-            return false;
-        }
-
-        if (!($relation = $model->$method()) instanceof Relations\Relation) {
-            return false;
-        }
-
-        if ($relation instanceof Relations\HasOne ||
-            $relation instanceof Relations\BelongsTo ||
-            $relation instanceof Relations\MorphOne
-        ) {
-            $this->model()->with($method);
-
-            return $this->addColumn($method, $label)->setRelation(Str::snake($method));
-        }
-
-        if ($relation instanceof Relations\HasMany
-            || $relation instanceof Relations\BelongsToMany
-            || $relation instanceof Relations\MorphToMany
-            || $relation instanceof Relations\HasManyThrough
-        ) {
-            $this->model()->with($method);
-
-            return $this->addColumn(Str::snake($method), $label);
-        }
-
-        return false;
-    }
-
-    /**
-     * Dynamically add columns to the grid view.
-     *
-     * @param $method
-     * @param $arguments
-     *
-     * @return Column
-     */
-    public function __call($method, $arguments)
-    {
-        if (static::hasMacro($method)) {
-            return $this->macroCall($method, $arguments);
-        }
-
-        $label = $arguments[0] ?? null;
-
-        if ($this->model()->eloquent()) {
-            return $this->addColumn($method, $label);
-        }
-
-        if ($column = $this->handleGetMutatorColumn($method, $label)) {
-            return $column;
-        }
-
-        if ($column = $this->handleRelationColumn($method, $label)) {
-            return $column;
-        }
-
-        return $this->addColumn($method, $label);
-    }
-
-    /**
      * Add variables to grid view.
      *
      * @param array $variables
@@ -790,26 +590,13 @@ class Grid
      *
      * @return $this
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->variables['title'] = $title;
 
         return $this;
     }
 
-    /**
-     * Set relation for grid.
-     *
-     * @param Relations\Relation $relation
-     *
-     * @return $this
-     */
-    public function setRelation(Relations\Relation $relation)
-    {
-        $this->model()->setRelation($relation);
-
-        return $this;
-    }
 
     /**
      * Set resource path for grid.

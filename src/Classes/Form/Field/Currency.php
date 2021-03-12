@@ -4,7 +4,7 @@ class Currency extends Text
 {
 
 	/**
-	 * {@inheritdoc}
+	 * @inheritDoc
 	 */
 	public function prepare($value)
 	{
@@ -12,7 +12,7 @@ class Currency extends Text
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @inheritDoc
 	 */
 	public function render()
 	{

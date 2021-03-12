@@ -2,14 +2,14 @@
 
 class DateRange extends Date
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function render()
-	{
-		$this->options([
-			'range' => true,
-		]);
-		return parent::render();
-	}
+    /**
+     * @inheritDoc
+     */
+    public function render()
+    {
+        $this->options([
+            'layui-range' => true,
+        ]);
+        return parent::render();
+    }
 }

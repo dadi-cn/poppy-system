@@ -5,7 +5,7 @@ use Illuminate\Support\Arr;
 class Gt extends AbstractFilter
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected $view = 'py-system::tpl.filter.gt';
 

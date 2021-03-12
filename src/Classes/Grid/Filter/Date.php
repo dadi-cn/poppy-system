@@ -3,7 +3,7 @@
 class Date extends AbstractFilter
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected $query = 'whereDate';
 
@@ -13,7 +13,7 @@ class Date extends AbstractFilter
     protected $fieldName = 'date';
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function __construct($column, $label = '')
     {

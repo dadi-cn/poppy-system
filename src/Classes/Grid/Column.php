@@ -29,7 +29,7 @@ use Poppy\System\Classes\Grid\Displayers\AbstractDisplayer;
  * @method $this progress($style = 'primary', $size = 'sm', $max = 100)
  * @method $this radio($options = [])
  * @method $this checkbox($options = [])
- * @method $this orderable($column, $label = '')
+ * @method $this orderAble($column, $label = '')
  * @method $this table($titles = [])
  * @method $this expand($callback = null)
  * @method $this modal($callback = null)

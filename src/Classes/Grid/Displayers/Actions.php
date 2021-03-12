@@ -48,7 +48,7 @@ class Actions extends AbstractDisplayer
 
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function display($callback = null)
     {
