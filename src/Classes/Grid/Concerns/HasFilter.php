@@ -5,6 +5,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Poppy\System\Classes\Grid\Filter;
+use Throwable;
 
 /**
  * 是否开启筛选
@@ -65,6 +66,7 @@ trait HasFilter
      * Render the grid filter.
      *
      * @return Factory|View|string
+     * @throws Throwable
      */
     public function renderFilter()
     {
@@ -80,7 +82,7 @@ trait HasFilter
      *
      * @return $this
      */
-    public function expandFilter():self
+    public function expandFilter(): self
     {
         $this->filter->expand();
 

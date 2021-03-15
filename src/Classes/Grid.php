@@ -563,6 +563,7 @@ class Grid
         $this->variables['grid']      = $this;
         $this->variables['id']        = $this->tableId;
         $this->variables['filter_id'] = $this->getFilter()->getFilterId();
+        $this->variables['scopes']    = $this->getFilter()->getScopes();
         $this->variables['lay']       = $this->layDefine();
 
         return $this->variables;

@@ -14,12 +14,29 @@
             @endif
         </div>
     @endif
-    {{--  显示查询条件  --}}
-    {!! $grid->renderFilter() !!}
+
+    <div class="layui-card-body">
+
+        {{-- 首选范围 --}}
+        @if($scopes->count())
+            <div class="layui-tab" style="margin-bottom: 10px;">
+                <ul class="layui-tab-title">
+                    @foreach($scopes as $scope)
+                        {!! $scope->render() !!}
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        {{--  显示查询条件  --}}
+        {!! $grid->renderFilter() !!}
+
+        {{-- Layui Table--}}
+        <table class="layui-hide" id="{!! $id !!}" lay-filter="{!! $id !!}-filter"></table>
+    </div>
 </div>
 
-{{-- Layui Table--}}
-<table class="layui-hide" id="{!! $id !!}" lay-filter="{!! $id !!}-filter"></table>
+
 <script>
 layui.table.render($.extend({!! $lay !!}, {
     // 返回的数据去做解析

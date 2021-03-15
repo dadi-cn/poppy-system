@@ -11,6 +11,7 @@ use Poppy\System\Classes\Grid\Filter\AbstractFilter;
 use Poppy\System\Classes\Grid\Filter\Layout\Layout;
 use Poppy\System\Classes\Grid\Filter\Scope;
 use Poppy\System\Classes\Grid\Tools\FilterButton;
+use Throwable;
 
 /**
  * 筛选器
@@ -463,6 +464,7 @@ class Filter extends FilterButton
     /**
      * Get the string contents of the filter view.
      * @return View|string
+     * @throws Throwable
      */
     public function render()
     {

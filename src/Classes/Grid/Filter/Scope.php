@@ -42,7 +42,7 @@ class Scope implements Renderable
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->label;
     }
@@ -52,7 +52,7 @@ class Scope implements Renderable
      *
      * @return array
      */
-    public function condition()
+    public function condition(): array
     {
         return $this->queries->map(function ($query) {
             return [$query['method'] => $query['arguments']];
@@ -62,11 +62,11 @@ class Scope implements Renderable
     /**
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $url = request()->fullUrlWithQuery([static::QUERY_NAME => $this->key]);
-
-        return "<li><a href=\"{$url}\">{$this->label}</a></li>";
+        $className = input(static::QUERY_NAME) === $this->key ? 'class="layui-this"' : '';
+        return "<li {$className}><a href=\"{$url}\">{$this->label}</a></li>";
     }
 
     /**
