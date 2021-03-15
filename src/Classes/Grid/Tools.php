@@ -112,22 +112,8 @@ class Tools extends AbstractFilter implements Renderable
     public function disableBatchActions(bool $disable = true)
     {
         $this->tools = $this->tools->map(function ($tool) use ($disable) {
-            if ($tool instanceof BatchActions) {
-                return $tool->disable($disable);
-            }
-
             return $tool;
         });
-    }
-
-    /**
-     * @param Closure $closure
-     */
-    public function batch(Closure $closure)
-    {
-        call_user_func($closure, $this->tools->first(function ($tool) {
-            return $tool instanceof BatchActions;
-        }));
     }
 
     /**
@@ -163,7 +149,6 @@ class Tools extends AbstractFilter implements Renderable
      */
     protected function appendDefaultTools()
     {
-        $this->append(new BatchActions())
-            ->append(new FilterButton());
+        $this->append(new FilterButton());
     }
 }

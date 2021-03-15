@@ -14,6 +14,18 @@ class FormPamPassword extends FormWidget
 
     private $id;
 
+
+    /**
+     * Width for label and submit field.
+     *
+     * @var array
+     */
+    protected $width = [
+        'label' => 3,
+        'field' => 9,
+    ];
+
+
     /**
      * @var PamAccount
      */

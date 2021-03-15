@@ -30,7 +30,6 @@ class Grid
         Concerns\HasActions,
         Concerns\HasSelector,
         Concerns\CanHidesColumns,
-        Concerns\CanFixColumns,
         Concerns\LayDefines,
         Concerns\HasQuickButton;
 
@@ -152,8 +151,6 @@ class Grid
         'show_exporter'        => true,
         'show_actions'         => true,
         'show_row_selector'    => true,
-        'show_create_btn'      => true,
-        'show_column_selector' => true,
     ];
     /**
      * Initialization closure array.

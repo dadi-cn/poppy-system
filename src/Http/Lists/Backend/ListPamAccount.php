@@ -80,7 +80,7 @@ class ListPamAccount extends ListBase
     public function quickButtons(): array
     {
         return [
-            $this->create(input('_scope_')),
+            $this->create(input(Filter\Scope::QUERY_NAME)),
         ];
     }
 
