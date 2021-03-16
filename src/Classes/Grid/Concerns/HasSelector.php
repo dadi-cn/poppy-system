@@ -5,12 +5,8 @@ namespace Poppy\System\Classes\Grid\Concerns;
 use Closure;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
-use Poppy\System\Classes\Grid;
 use Poppy\System\Classes\Grid\Tools\Selector;
 
-/**
- * @mixin Grid
- */
 trait HasSelector
 {
     /**

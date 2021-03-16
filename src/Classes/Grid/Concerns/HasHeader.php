@@ -6,9 +6,6 @@ use Closure;
 use Poppy\System\Classes\Grid;
 use Poppy\System\Classes\Grid\Tools\Header;
 
-/**
- * @mixin Grid
- */
 trait HasHeader
 {
     /**

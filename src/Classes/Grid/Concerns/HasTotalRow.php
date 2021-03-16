@@ -3,6 +3,8 @@
 namespace Poppy\System\Classes\Grid\Concerns;
 
 use Closure;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 use Poppy\System\Classes\Grid\Tools\TotalRow;
 
 trait HasTotalRow
@@ -26,7 +28,7 @@ trait HasTotalRow
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     * @return Factory|View|string
      */
     public function renderTotalRow($columns = null)
     {

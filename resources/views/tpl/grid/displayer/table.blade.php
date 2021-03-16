@@ -1,4 +1,4 @@
-<table class="table table-hover" style="margin-bottom: 0;">
+<table class="layui-table" style="margin-bottom: 0;">
 	<thead>
 	<tr>
 		@foreach($titles as $column => $title)

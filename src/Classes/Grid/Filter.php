@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use InvalidArgumentException;
+use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\System\Classes\Grid\Filter\AbstractFilter;
 use Poppy\System\Classes\Grid\Filter\Layout\Layout;
 use Poppy\System\Classes\Grid\Filter\Scope;
@@ -57,20 +58,6 @@ class Filter extends FilterButton
      * @var array
      */
     protected $filters = [];
-
-    /**
-     * If use id filter.
-     *
-     * @var bool
-     */
-    protected $useIdFilter = true;
-
-    /**
-     * Id filter was removed.
-     *
-     * @var bool
-     */
-    protected $idFilterRemoved = false;
 
     /**
      * 搜索表单的筛选条件
@@ -131,7 +118,6 @@ class Filter extends FilterButton
     protected static $supports = [
         'equal'      => Filter\Equal::class,
         'notEqual'   => Filter\NotEqual::class,
-        'ilike'      => Filter\Ilike::class,
         'like'       => Filter\Like::class,
         'gt'         => Filter\Gt::class,
         'lt'         => Filter\Lt::class,
@@ -242,33 +228,6 @@ class Filter extends FilterButton
     }
 
     /**
-     * Disable Id filter.
-     *
-     * @param bool $disable
-     * @return $this
-     */
-    public function disableIdFilter(bool $disable = true): self
-    {
-        $this->useIdFilter = !$disable;
-
-        return $this;
-    }
-
-    /**
-     * Remove ID filter if needed.
-     */
-    public function removeIDFilterIfNeeded()
-    {
-        if (!$this->useIdFilter && !$this->idFilterRemoved) {
-            $this->removeDefaultIDFilter();
-
-            $this->layout->removeDefaultIDFilter();
-
-            $this->idFilterRemoved = true;
-        }
-    }
-
-    /**
      * Remove filter by filter id.
      *
      * @param mixed $id
@@ -285,7 +244,7 @@ class Filter extends FilterButton
      *
      * @return array
      */
-    public function conditions()
+    public function conditions(): array
     {
         $inputs = Arr::dot(request()->all());
 
@@ -306,8 +265,6 @@ class Filter extends FilterButton
         }
 
         $conditions = [];
-
-        $this->removeIDFilterIfNeeded();
 
         foreach ($this->filters() as $filter) {
             if (in_array($column = $filter->getColumn(), $this->layoutOnlyFilterColumns)) {
@@ -377,7 +334,7 @@ class Filter extends FilterButton
      *
      * @return Collection
      */
-    public function getScopes()
+    public function getScopes(): Collection
     {
         return $this->scopes;
     }
@@ -435,7 +392,7 @@ class Filter extends FilterButton
     public function execute($toArray = true)
     {
         if (method_exists($this->model->eloquent(), 'paginate')) {
-            $this->model->usePaginate(true);
+            $this->model->usePaginate();
 
             return $this->model->buildData($toArray);
         }
@@ -470,8 +427,6 @@ class Filter extends FilterButton
      */
     public function render()
     {
-        $this->removeIDFilterIfNeeded();
-
         if (empty($this->filters)) {
             return '';
         }
@@ -528,12 +483,14 @@ class Filter extends FilterButton
      * @param array  $arguments
      *
      * @return AbstractFilter
+     * @throws ApplicationException
      */
-    public function resolveFilter($abstract, $arguments)
+    public function resolveFilter(string $abstract, array $arguments): AbstractFilter
     {
-        if (isset(static::$supports[$abstract])) {
-            return new static::$supports[$abstract](...$arguments);
+        if (!isset(static::$supports[$abstract])) {
+            throw new ApplicationException('Abstract Class `' . $abstract . '` Not Exists');
         }
+        return new static::$supports[$abstract](...$arguments);
     }
 
     /**
@@ -543,8 +500,9 @@ class Filter extends FilterButton
      * @param array  $arguments
      *
      * @return AbstractFilter|$this
+     * @throws ApplicationException
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments)
     {
         if ($filter = $this->resolveFilter($method, $arguments)) {
             return $this->addFilter($filter);
@@ -572,14 +530,6 @@ class Filter extends FilterButton
     protected function initLayout()
     {
         $this->layout = new Filter\Layout\Layout($this);
-    }
-
-    /**
-     * Remove the default ID filter.
-     */
-    protected function removeDefaultIDFilter()
-    {
-        array_shift($this->filters);
     }
 
     /**
@@ -627,7 +577,7 @@ class Filter extends FilterButton
      *
      * @return array
      */
-    protected function scopeConditions():array
+    protected function scopeConditions(): array
     {
         if ($scope = $this->getCurrentScope()) {
             return $scope->condition();

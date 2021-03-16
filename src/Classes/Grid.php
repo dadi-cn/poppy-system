@@ -139,11 +139,9 @@ class Grid
      * @var array
      */
     protected $options = [
-        'show_pagination'   => true,
         'show_tools'        => true,
         'show_filter'       => true,
         'show_exporter'     => true,
-        'show_actions'      => true,
         'show_row_selector' => true,
     ];
     /**
@@ -180,44 +178,6 @@ class Grid
     public function model()
     {
         return $this->model;
-    }
-
-    /**
-     * Initialize.
-     */
-    protected function initialize()
-    {
-        $this->tableId = uniqid('grid-table');
-
-        $this->columns = Collection::make();
-        $this->rows    = Collection::make();
-
-        $this->initTools($this);
-        $this->initFilter();
-    }
-
-    /**
-     * Initialize with user pre-defined default disables and exporter, etc.
-     *
-     * @param Closure|null $callback
-     */
-    public static function init(Closure $callback = null)
-    {
-        static::$initCallbacks[] = $callback;
-    }
-
-    /**
-     * Call the initialization closure array in sequence.
-     */
-    protected function callInitCallbacks()
-    {
-        if (empty(static::$initCallbacks)) {
-            return;
-        }
-
-        foreach (static::$initCallbacks as $callback) {
-            call_user_func($callback, $this);
-        }
     }
 
     /**
@@ -274,7 +234,6 @@ class Grid
         return $this->keyName ?: 'id';
     }
 
-
     /**
      * Paginate the grid.
      *
@@ -305,29 +264,6 @@ class Grid
     }
 
     /**
-     * Disable grid pagination.
-     *
-     * @param bool $disable
-     * @return $this
-     */
-    public function disablePagination(bool $disable = true)
-    {
-        $this->model->usePaginate(!$disable);
-
-        return $this->option('show_pagination', !$disable);
-    }
-
-    /**
-     * If this grid use pagination.
-     *
-     * @return bool
-     */
-    public function showPagination()
-    {
-        return $this->option('show_pagination');
-    }
-
-    /**
      * 设置分页的可选条目数
      *
      * @param array $perPages
@@ -346,6 +282,212 @@ class Grid
     public function disableRowSelector(bool $disable = true): self
     {
         return $this->disableBatchActions($disable);
+    }
+
+    /**
+     * Build the grid.
+     *
+     * @return void
+     */
+    public function build()
+    {
+        if ($this->builded) {
+            return;
+        }
+
+        $this->addDefaultColumns();
+
+        $this->builded = true;
+    }
+
+    /**
+     * 查询并返回数据
+     * @param int $pagesize
+     * @return array|JsonResponse|RedirectResponse|\Illuminate\Http\Response|Redirector|Resp|Response
+     */
+    public function inquire($pagesize = 15)
+    {
+        $this->paginate($pagesize);
+        /**
+         * 获取到的模型数据
+         */
+        $collection = $this->applyQuery();
+
+        $this->build();
+
+        Column::setOriginalGridModels($collection);
+
+        $data = $collection->toArray();
+        $this->columns->map(function (Column $column) use (&$data) {
+            $data = $column->fill($data);
+
+            $this->columnNames[] = $column->getName();
+        });
+
+        $this->buildRows($data);
+
+        $rows = [];
+        foreach ($this->rows() as $row) {
+            $item = [];
+            foreach ($this->visibleColumnNames() as $name) {
+                $item[$name] = $row->column($name);
+            }
+            $rows[] = $item;
+        }
+
+        $paginator = $this->paginator();
+
+        return Resp::success('获取成功', [
+            'list'       => $rows,
+            'pagination' => [
+                'total' => $paginator->total(),
+                'page'  => $paginator->currentPage(),
+                'size'  => $paginator->perPage(),
+                'pages' => $paginator->lastPage(),
+            ],
+            '_json'      => 1,
+        ]);
+    }
+
+    /**
+     * Set grid row callback function.
+     *
+     * @param Closure|null $callable
+     *
+     * @return Collection|null
+     */
+    public function rows(Closure $callable = null)
+    {
+        if (is_null($callable)) {
+            return $this->rows;
+        }
+
+        $this->rowsCallback = $callable;
+    }
+
+    /**
+     * Get current resource url.
+     * @return string
+     */
+    public function resource(): string
+    {
+        return url(app('request')->getPathInfo());
+    }
+
+    /**
+     * Add variables to grid view.
+     *
+     * @param array $variables
+     *
+     * @return $this
+     */
+    public function with($variables = [])
+    {
+        $this->variables = $variables;
+
+        return $this;
+    }
+
+    /**
+     * Set a view to render.
+     *
+     * @param string $view
+     * @param array  $variables
+     */
+    public function setView($view, $variables = [])
+    {
+        if (!empty($variables)) {
+            $this->with($variables);
+        }
+
+        $this->view = $view;
+    }
+
+    /**
+     * Set grid title.
+     *
+     * @param string $title
+     *
+     * @return $this
+     */
+    public function setTitle(string $title): self
+    {
+        $this->variables['title'] = $title;
+
+        return $this;
+    }
+
+    /**
+     * Set rendering callback.
+     *
+     * @param callable $callback
+     *
+     * @return $this
+     */
+    public function rendering(callable $callback)
+    {
+        $this->renderingCallbacks[] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Get the string contents of the grid view.
+     *
+     * @return string
+     * @throws Throwable
+     */
+    public function render()
+    {
+        $this->handleExportRequest(true);
+
+        $this->build();
+
+        $this->callRenderingCallback();
+
+        $this->layFormat();
+
+        $variables = $this->variables();
+
+        return view($this->view, $variables)->render();
+    }
+
+    /**
+     * Initialize with user pre-defined default disables and exporter, etc.
+     *
+     * @param Closure|null $callback
+     */
+    public static function init(Closure $callback = null)
+    {
+        static::$initCallbacks[] = $callback;
+    }
+
+    /**
+     * Initialize.
+     */
+    protected function initialize()
+    {
+        $this->tableId = uniqid('grid-table');
+
+        $this->columns = Collection::make();
+        $this->rows    = Collection::make();
+
+        $this->initTools($this);
+        $this->initFilter();
+    }
+
+    /**
+     * Call the initialization closure array in sequence.
+     */
+    protected function callInitCallbacks()
+    {
+        if (empty(static::$initCallbacks)) {
+            return;
+        }
+
+        foreach (static::$initCallbacks as $callback) {
+            call_user_func($callback, $this);
+        }
     }
 
     /**
@@ -408,72 +550,6 @@ class Grid
     }
 
     /**
-     * Build the grid.
-     *
-     * @return void
-     */
-    public function build()
-    {
-        if ($this->builded) {
-            return;
-        }
-
-        $this->addDefaultColumns();
-
-        $this->builded = true;
-    }
-
-
-    /**
-     * 查询并返回数据
-     * @param int $pagesize
-     * @return array|JsonResponse|RedirectResponse|\Illuminate\Http\Response|Redirector|Resp|Response
-     */
-    public function inquire($pagesize = 15)
-    {
-        $this->paginate($pagesize);
-        /**
-         * 获取到的模型数据
-         */
-        $collection = $this->applyQuery();
-
-        $this->build();
-
-        Column::setOriginalGridModels($collection);
-
-        $data = $collection->toArray();
-        $this->columns->map(function (Column $column) use (&$data) {
-            $data = $column->fill($data);
-
-            $this->columnNames[] = $column->getName();
-        });
-
-        $this->buildRows($data);
-
-        $rows = [];
-        foreach ($this->rows() as $row) {
-            $item = [];
-            foreach ($this->visibleColumnNames() as $name) {
-                $item[$name] = $row->column($name);
-            }
-            $rows[] = $item;
-        }
-
-        $paginator = $this->paginator();
-
-        return Resp::success('获取成功', [
-            'list'       => $rows,
-            'pagination' => [
-                'total' => $paginator->total(),
-                'page'  => $paginator->currentPage(),
-                'size'  => $paginator->perPage(),
-                'pages' => $paginator->lastPage(),
-            ],
-            '_json'      => 1,
-        ]);
-    }
-
-    /**
      * Build the grid rows.
      *
      * @param array $data
@@ -492,51 +568,11 @@ class Grid
     }
 
     /**
-     * Set grid row callback function.
-     *
-     * @param Closure|null $callable
-     *
-     * @return Collection|null
-     */
-    public function rows(Closure $callable = null)
-    {
-        if (is_null($callable)) {
-            return $this->rows;
-        }
-
-        $this->rowsCallback = $callable;
-    }
-
-
-    /**
-     * Get current resource url.
-     * @return string
-     */
-    public function resource():string
-    {
-        return url(app('request')->getPathInfo());
-    }
-
-    /**
-     * Add variables to grid view.
-     *
-     * @param array $variables
-     *
-     * @return $this
-     */
-    public function with($variables = [])
-    {
-        $this->variables = $variables;
-
-        return $this;
-    }
-
-    /**
      * Get all variables will used in grid view.
      *
      * @return array
      */
-    protected function variables()
+    protected function variables(): array
     {
         $this->variables['grid']      = $this;
         $this->variables['id']        = $this->tableId;
@@ -545,64 +581,6 @@ class Grid
         $this->variables['lay']       = $this->layDefine();
 
         return $this->variables;
-    }
-
-    /**
-     * Set a view to render.
-     *
-     * @param string $view
-     * @param array  $variables
-     */
-    public function setView($view, $variables = [])
-    {
-        if (!empty($variables)) {
-            $this->with($variables);
-        }
-
-        $this->view = $view;
-    }
-
-    /**
-     * Set grid title.
-     *
-     * @param string $title
-     *
-     * @return $this
-     */
-    public function setTitle(string $title): self
-    {
-        $this->variables['title'] = $title;
-
-        return $this;
-    }
-
-
-    /**
-     * Set resource path for grid.
-     *
-     * @param string $path
-     *
-     * @return $this
-     */
-    public function setResource($path)
-    {
-        $this->resourcePath = $path;
-
-        return $this;
-    }
-
-    /**
-     * Set rendering callback.
-     *
-     * @param callable $callback
-     *
-     * @return $this
-     */
-    public function rendering(callable $callback)
-    {
-        $this->renderingCallbacks[] = $callback;
-
-        return $this;
     }
 
     /**
@@ -615,26 +593,5 @@ class Grid
         foreach ($this->renderingCallbacks as $callback) {
             call_user_func($callback, $this);
         }
-    }
-
-    /**
-     * Get the string contents of the grid view.
-     *
-     * @return string
-     * @throws Throwable
-     */
-    public function render()
-    {
-        $this->handleExportRequest(true);
-
-        $this->build();
-
-        $this->callRenderingCallback();
-
-        $this->layFormat();
-
-        $variables = $this->variables();
-
-        return view($this->view, $variables)->render();
     }
 }

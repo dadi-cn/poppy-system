@@ -71,17 +71,6 @@ trait HasActions
     }
 
     /**
-     * Disable all actions.
-     *
-     * @param bool $disable
-     * @return $this
-     */
-    public function disableActions(bool $disable = true)
-    {
-        return $this->option('show_actions', !$disable);
-    }
-
-    /**
      * Set grid batch-action callback.
      *
      * @param Closure $closure
