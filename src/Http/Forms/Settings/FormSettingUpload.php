@@ -2,7 +2,6 @@
 
 use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\Framework\Validation\Rule;
-use Poppy\System\Exceptions\FormException;
 
 class FormSettingUpload extends FormSettingBase
 {
@@ -15,7 +14,7 @@ class FormSettingUpload extends FormSettingBase
 
     /**
      * Build a form here.
-     * @throws FormException|ApplicationException
+     * @throws ApplicationException
      */
     public function form()
     {

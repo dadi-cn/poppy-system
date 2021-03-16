@@ -5,7 +5,6 @@ use Mail;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Classes\Widgets\FormWidget;
-use Poppy\System\Exceptions\FormException;
 use Poppy\System\Mail\TestMail;
 use Throwable;
 
@@ -29,7 +28,6 @@ class FormMailTest extends FormWidget
 
     /**
      * Build a form here.
-     * @throws FormException
      */
     public function form()
     {

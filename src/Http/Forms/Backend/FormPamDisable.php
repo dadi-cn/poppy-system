@@ -55,7 +55,7 @@ class FormPamDisable extends FormDialogWidget
 
     }
 
-    public function data()
+    public function data(): array
     {
         if ($this->id) {
             return [

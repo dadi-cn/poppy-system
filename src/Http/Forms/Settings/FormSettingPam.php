@@ -1,7 +1,6 @@
 <?php namespace Poppy\System\Http\Forms\Settings;
 
 use Poppy\Framework\Validation\Rule;
-use Poppy\System\Exceptions\FormException;
 
 class FormSettingPam extends FormSettingBase
 {
@@ -11,7 +10,6 @@ class FormSettingPam extends FormSettingBase
 
     /**
      * Build a form here.
-     * @throws FormException
      */
     public function form()
     {

@@ -5,7 +5,6 @@ use Poppy\Framework\Validation\Rule;
 use Poppy\System\Action\Pam;
 use Poppy\System\Classes\Contracts\PasswordContract;
 use Poppy\System\Classes\Widgets\FormWidget;
-use Poppy\System\Exceptions\FormException;
 use Poppy\System\Models\PamAccount;
 
 class FormPassword extends FormWidget
@@ -54,7 +53,7 @@ class FormPassword extends FormWidget
 
     }
 
-    public function data()
+    public function data(): array
     {
         return [
             'account_id' => data_get($this->pam, 'id'),
@@ -63,7 +62,6 @@ class FormPassword extends FormWidget
 
     /**
      * Build a form here.
-     * @throws FormException
      */
     public function form()
     {

@@ -3,7 +3,7 @@
 use Closure;
 use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\System\Classes\Grid\Column;
-use Poppy\System\Classes\Grid\Displayers\Actions;
+use Poppy\System\Classes\Grid\Displayer\Actions;
 use Poppy\System\Classes\Grid\Filter;
 use Poppy\System\Classes\Grid\Tools\BaseButton;
 use Poppy\System\Http\Lists\ListBase;

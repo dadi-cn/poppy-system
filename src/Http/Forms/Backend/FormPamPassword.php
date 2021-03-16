@@ -11,10 +11,6 @@ use Poppy\System\Models\PamAccount;
 class FormPamPassword extends FormWidget
 {
     public $ajax = true;
-
-    private $id;
-
-
     /**
      * Width for label and submit field.
      *
@@ -24,8 +20,7 @@ class FormPamPassword extends FormWidget
         'label' => 3,
         'field' => 9,
     ];
-
-
+    private $id;
     /**
      * @var PamAccount
      */
@@ -82,7 +77,7 @@ class FormPamPassword extends FormWidget
 
     }
 
-    public function data()
+    public function data(): array
     {
         if ($this->id) {
             return [

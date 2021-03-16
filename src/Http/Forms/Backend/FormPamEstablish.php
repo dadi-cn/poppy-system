@@ -27,7 +27,7 @@ class FormPamEstablish extends FormDialogWidget
      * @return $this
      * @throws ApplicationException
      */
-    public function setId($id)
+    public function setId($id): self
     {
         $this->id = $id;
 
@@ -80,7 +80,7 @@ class FormPamEstablish extends FormDialogWidget
         return Resp::error($Pam->getError());
     }
 
-    public function data()
+    public function data(): array
     {
         if ($this->id) {
             return [

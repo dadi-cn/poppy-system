@@ -3,7 +3,6 @@
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Classes\Form\Field\Link;
-use Poppy\System\Exceptions\FormException;
 use Poppy\System\Http\Forms\Settings\FormSettingBase;
 
 class FormMailStore extends FormSettingBase
@@ -20,7 +19,6 @@ class FormMailStore extends FormSettingBase
 
     /**
      * Build a form here.
-     * @throws FormException
      */
     public function form()
     {

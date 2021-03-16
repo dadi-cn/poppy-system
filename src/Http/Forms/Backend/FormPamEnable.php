@@ -25,7 +25,7 @@ class FormPamEnable extends FormDialogWidget
      * @return $this
      * @throws ApplicationException
      */
-    public function setId($id)
+    public function setId($id): self
     {
         $this->id = $id;
         if ($id) {
@@ -53,8 +53,7 @@ class FormPamEnable extends FormDialogWidget
         $this->setId($id);
         $Pam      = (new Pam())->setPam($this->pam);
         $reason   = input('reason', '');
-        $pictures = input('pictures', []);
-        if (!$Pam->enable($id, $reason, $pictures)) {
+        if (!$Pam->enable($id, $reason)) {
             return Resp::error($Pam->getError());
         }
 
@@ -62,7 +61,7 @@ class FormPamEnable extends FormDialogWidget
 
     }
 
-    public function data()
+    public function data(): array
     {
         if ($this->id) {
             return [
