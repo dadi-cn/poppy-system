@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Contracts;
+<?php
+
+namespace Poppy\System\Classes\Contracts;
 
 use Poppy\System\Models\PamAccount;
 

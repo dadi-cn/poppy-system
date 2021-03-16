@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Setting\Repository;
+<?php
+
+namespace Poppy\System\Setting\Repository;
 
 use DB;
 use Exception;

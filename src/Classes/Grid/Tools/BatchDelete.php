@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Tools;
+<?php
+
+namespace Poppy\System\Classes\Grid\Tools;
 
 class BatchDelete extends BatchAction
 {

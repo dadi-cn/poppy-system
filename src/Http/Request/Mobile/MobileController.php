@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Request\Mobile;
+<?php
+
+namespace Poppy\System\Http\Request\Mobile;
 
 use Auth;
 use Poppy\Framework\Application\Controller;

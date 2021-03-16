@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Filter;
+<?php
+
+namespace Poppy\System\Classes\Grid\Filter;
 
 class Hidden extends AbstractFilter
 {
@@ -28,7 +30,7 @@ class Hidden extends AbstractFilter
     /**
      * @inheritDoc
      */
-    public function condition($inputs)
+    public function condition(array $inputs)
     {
     }
 

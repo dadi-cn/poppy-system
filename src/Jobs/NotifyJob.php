@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Jobs;
+<?php
+
+namespace Poppy\System\Jobs;
 
 use Curl\Curl;
 use ErrorException;

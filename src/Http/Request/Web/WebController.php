@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Request\Web;
+<?php
+
+namespace Poppy\System\Http\Request\Web;
 
 use Auth;
 use Illuminate\Contracts\Auth\Authenticatable;

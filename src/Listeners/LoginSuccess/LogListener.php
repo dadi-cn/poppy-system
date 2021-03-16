@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Listeners\LoginSuccess;
+<?php
+
+namespace Poppy\System\Listeners\LoginSuccess;
 
 use Poppy\Framework\Helper\EnvHelper;
 use Poppy\System\Events\LoginSuccessEvent;

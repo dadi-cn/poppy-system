@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form\Field;
+<?php
+
+namespace Poppy\System\Classes\Form\Field;
 
 class Time extends Date
 {

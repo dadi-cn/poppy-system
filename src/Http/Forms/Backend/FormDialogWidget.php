@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Forms\Backend;
+<?php
+
+namespace Poppy\System\Http\Forms\Backend;
 
 use Poppy\System\Classes\Widgets\FormWidget;
 

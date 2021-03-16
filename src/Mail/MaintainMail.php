@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Mail;
+<?php
+
+namespace Poppy\System\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;

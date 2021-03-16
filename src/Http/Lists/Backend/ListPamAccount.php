@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Lists\Backend;
+<?php
+
+namespace Poppy\System\Http\Lists\Backend;
 
 use Closure;
 use Poppy\Framework\Exceptions\ApplicationException;

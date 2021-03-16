@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form\Field;
+<?php
+
+namespace Poppy\System\Classes\Form\Field;
 
 use Exception;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;

@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Tools;
+<?php
+
+namespace Poppy\System\Classes\Grid\Tools;
 
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Arr;

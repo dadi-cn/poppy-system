@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Tools;
+<?php
+
+namespace Poppy\System\Classes\Grid\Tools;
 
 use Illuminate\Support\Collection;
 use Poppy\System\Classes\Grid;

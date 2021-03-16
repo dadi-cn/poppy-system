@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Filter\Layout;
+<?php
+
+namespace Poppy\System\Classes\Grid\Filter\Layout;
 
 use Illuminate\Support\Collection;
 use Poppy\System\Classes\Grid\Filter\AbstractFilter;

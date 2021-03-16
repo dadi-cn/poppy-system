@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Tests\Base;
+<?php
+
+namespace Poppy\System\Tests\Base;
 
 use EloquentFilter\ServiceProvider;
 use Faker\Provider\Base;

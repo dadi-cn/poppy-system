@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Exporters;
+<?php
+
+namespace Poppy\System\Classes\Grid\Exporters;
 
 interface ExporterInterface
 {

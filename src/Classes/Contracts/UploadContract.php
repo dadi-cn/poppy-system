@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Contracts;
+<?php
+
+namespace Poppy\System\Classes\Contracts;
 
 use Intervention\Image\Image;
 use Psr\Http\Message\StreamInterface;

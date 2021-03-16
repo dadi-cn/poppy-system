@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Tests\Support;
+<?php
+
+namespace Poppy\System\Tests\Support;
 
 use Poppy\Core\Classes\PyCoreDef;
 use Poppy\Framework\Application\TestCase;

@@ -1,11 +1,16 @@
-<?php namespace Poppy\System\Classes\Grid\Exporters;
+<?php
 
+namespace Poppy\System\Classes\Grid\Exporters;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Poppy\System\Classes\Grid;
 
 abstract class AbstractExporter implements ExporterInterface
 {
     /**
-     * @var \Poppy\System\Classes\Grid
+     * @var Grid
      */
     protected $grid;
 
@@ -55,7 +60,7 @@ abstract class AbstractExporter implements ExporterInterface
      *
      * @param bool $toArray
      *
-     * @return array|\Illuminate\Support\Collection|mixed
+     * @return array|Collection|mixed
      */
     public function getData($toArray = true)
     {
@@ -74,7 +79,7 @@ abstract class AbstractExporter implements ExporterInterface
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getCollection()
     {
@@ -82,7 +87,7 @@ abstract class AbstractExporter implements ExporterInterface
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * @return Builder|Model
      */
     public function getQuery()
     {

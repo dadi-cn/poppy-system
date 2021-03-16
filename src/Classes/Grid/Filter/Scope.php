@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Filter;
+<?php
+
+namespace Poppy\System\Classes\Grid\Filter;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;

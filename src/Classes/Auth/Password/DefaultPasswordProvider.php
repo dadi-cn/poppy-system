@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Auth\Password;
+<?php
+
+namespace Poppy\System\Classes\Auth\Password;
 
 use Poppy\System\Classes\Contracts\PasswordContract;
 use Poppy\System\Models\PamAccount;

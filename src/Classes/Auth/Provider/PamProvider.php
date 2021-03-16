@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Auth\Provider;
+<?php
+
+namespace Poppy\System\Classes\Auth\Provider;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;

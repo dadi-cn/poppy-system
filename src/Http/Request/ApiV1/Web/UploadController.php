@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Request\ApiV1\Web;
+<?php
+
+namespace Poppy\System\Http\Request\ApiV1\Web;
 
 use Illuminate\Http\UploadedFile;
 use Poppy\Framework\Classes\Resp;

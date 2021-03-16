@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Events;
+<?php
+
+namespace Poppy\System\Events;
 
 /**
  * 登录失败事件

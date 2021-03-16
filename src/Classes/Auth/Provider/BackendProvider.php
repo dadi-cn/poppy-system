@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Auth\Provider;
+<?php
+
+namespace Poppy\System\Classes\Auth\Provider;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;

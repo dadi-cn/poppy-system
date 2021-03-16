@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Tests\Base;
+<?php
+
+namespace Poppy\System\Tests\Base;
 
 use Carbon\Carbon;
 use DB;

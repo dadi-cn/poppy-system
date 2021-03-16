@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Tests\Testing\Request;
+<?php
+
+namespace Poppy\System\Tests\Testing\Request;
 
 use Carbon\Carbon;
 use Curl\Curl;

@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Middlewares;
+<?php
+
+namespace Poppy\System\Http\Middlewares;
 
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Foundation\Application;

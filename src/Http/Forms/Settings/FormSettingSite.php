@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Forms\Settings;
+<?php
+
+namespace Poppy\System\Http\Forms\Settings;
 
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Models\PamAccount;

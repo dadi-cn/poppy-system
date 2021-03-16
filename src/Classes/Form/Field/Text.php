@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form\Field;
+<?php
+
+namespace Poppy\System\Classes\Form\Field;
 
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;

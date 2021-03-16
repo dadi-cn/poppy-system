@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Contracts;
+<?php
+
+namespace Poppy\System\Classes\Contracts;
 
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;

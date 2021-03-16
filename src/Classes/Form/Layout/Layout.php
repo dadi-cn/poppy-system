@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form\Layout;
+<?php
+
+namespace Poppy\System\Classes\Form\Layout;
 
 use Illuminate\Support\Collection;
 use Poppy\System\Classes\Form;

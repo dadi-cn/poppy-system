@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Payment;
+<?php
+
+namespace Poppy\System\Classes\Payment;
 
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Exceptions\ApplicationException;

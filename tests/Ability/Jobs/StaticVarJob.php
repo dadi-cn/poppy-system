@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Tests\Ability\Jobs;
+<?php
+
+namespace Poppy\System\Tests\Ability\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

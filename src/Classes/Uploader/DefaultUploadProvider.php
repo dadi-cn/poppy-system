@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Uploader;
+<?php
+
+namespace Poppy\System\Classes\Uploader;
 
 use Carbon\Carbon;
 use Exception;

@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Action;
+<?php
+
+namespace Poppy\System\Action;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;

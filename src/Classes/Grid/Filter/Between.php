@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Filter;
+<?php
+
+namespace Poppy\System\Classes\Grid\Filter;
 
 use Illuminate\Support\Arr;
 
@@ -55,7 +57,7 @@ class Between extends AbstractFilter
      *
      * @return mixed
      */
-    public function condition($inputs)
+    public function condition(array $inputs)
     {
         if (!Arr::has($inputs, $this->column)) {
             return;

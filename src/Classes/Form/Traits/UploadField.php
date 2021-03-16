@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form\Traits;
+<?php
+
+namespace Poppy\System\Classes\Form\Traits;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;

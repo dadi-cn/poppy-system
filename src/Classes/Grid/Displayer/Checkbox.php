@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Displayer;
+<?php
+
+namespace Poppy\System\Classes\Grid\Displayer;
 
 use Illuminate\Contracts\Support\Arrayable;
 

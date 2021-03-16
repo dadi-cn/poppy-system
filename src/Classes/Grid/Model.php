@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid;
+<?php
+
+namespace Poppy\System\Classes\Grid;
 
 use Closure;
 use Exception;

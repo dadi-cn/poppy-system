@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Traits;
+<?php
+
+namespace Poppy\System\Classes\Traits;
 
 
 /**

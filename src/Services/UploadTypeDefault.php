@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Services;
+<?php
+
+namespace Poppy\System\Services;
 
 use Poppy\Core\Services\Contracts\ServiceArray;
 use Poppy\System\Classes\Uploader\DefaultUploadProvider;

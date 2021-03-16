@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Widgets;
+<?php
+
+namespace Poppy\System\Classes\Widgets;
 
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;

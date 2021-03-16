@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Filter;
+<?php
+
+namespace Poppy\System\Classes\Grid\Filter;
 
 class NotIn extends In
 {

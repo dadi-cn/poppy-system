@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Listeners\LoginSuccess;
+<?php
+
+namespace Poppy\System\Listeners\LoginSuccess;
 
 use Illuminate\Auth\SessionGuard;
 use Poppy\Framework\Classes\Traits\PoppyTrait;

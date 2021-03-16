@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid;
+<?php
+
+namespace Poppy\System\Classes\Grid;
 
 use Poppy\System\Classes\Grid;
 use Poppy\System\Classes\Grid\Exporters\CsvExporter;

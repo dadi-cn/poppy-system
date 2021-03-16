@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Tests\Models;
+<?php
+
+namespace Poppy\System\Tests\Models;
 
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Tests\Base\SystemTestCase;

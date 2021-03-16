@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Commands;
+<?php
+
+namespace Poppy\System\Commands;
 
 use Illuminate\Console\Command;
 use Poppy\System\Models\PamRole;

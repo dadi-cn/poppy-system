@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Exporters;
+<?php
+
+namespace Poppy\System\Classes\Grid\Exporters;
 
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\Exportable;

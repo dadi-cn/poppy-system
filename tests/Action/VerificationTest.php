@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Tests\Action;
+<?php
+
+namespace Poppy\System\Tests\Action;
 
 use Poppy\Framework\Exceptions\FakerException;
 use Poppy\System\Action\Verification;

@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form\Traits;
+<?php
+
+namespace Poppy\System\Classes\Form\Traits;
 
 trait PlainInput
 {

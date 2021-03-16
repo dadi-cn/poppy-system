@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Filter\Presenter;
+<?php
+
+namespace Poppy\System\Classes\Grid\Filter\Presenter;
 
 use Poppy\System\Classes\Grid\Filter\AbstractFilter;
 use ReflectionClass;
@@ -41,7 +43,7 @@ abstract class Presenter
      *
      * @return $this
      */
-    public function default($default)
+    public function default($default): self
     {
         $this->filter->default($default);
 

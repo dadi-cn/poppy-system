@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Middlewares;
+<?php
+
+namespace Poppy\System\Http\Middlewares;
 
 use Closure;
 use Illuminate\Auth\AuthenticationException;

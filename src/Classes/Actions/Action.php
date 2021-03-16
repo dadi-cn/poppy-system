@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Actions;
+<?php
+
+namespace Poppy\System\Classes\Actions;
 
 use Encore\Admin\Admin;
 use Encore\Admin\Form\Field;

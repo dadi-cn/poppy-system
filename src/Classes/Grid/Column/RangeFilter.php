@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Column;
+<?php
+
+namespace Poppy\System\Classes\Grid\Column;
 
 use Poppy\System\Classes\Grid\Model;
 

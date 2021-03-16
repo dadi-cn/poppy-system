@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Actions;
+<?php
+
+namespace Poppy\System\Classes\Actions;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;

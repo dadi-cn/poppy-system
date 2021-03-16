@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Middlewares;
+<?php
+
+namespace Poppy\System\Http\Middlewares;
 
 use Closure;
 use Illuminate\Auth\AuthenticationException;
@@ -17,7 +19,7 @@ class Authenticate extends IlluminateAuthenticate
      * @param $guards
      * @return string
      */
-    public static function detectLocation($guards)
+    public static function detectLocation($guards): string
     {
         $location = '/';
         // develop

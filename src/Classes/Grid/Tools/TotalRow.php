@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Tools;
+<?php
+
+namespace Poppy\System\Classes\Grid\Tools;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;

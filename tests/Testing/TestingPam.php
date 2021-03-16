@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Tests\Testing;
+<?php
+
+namespace Poppy\System\Tests\Testing;
 
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\System\Models\PamAccount;

@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form;
+<?php
+
+namespace Poppy\System\Classes\Form;
 
 use Closure;
 use Illuminate\Support\Arr;

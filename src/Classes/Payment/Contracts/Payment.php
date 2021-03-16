@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Payment\Contracts;
+<?php
+
+namespace Poppy\System\Classes\Payment\Contracts;
 
 /**
  * 支付接口

@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Exception;
+<?php
+
+namespace Poppy\System\Http\Exception;
 
 use Exception;
 use Illuminate\Auth\AuthenticationException;

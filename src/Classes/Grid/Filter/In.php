@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Filter;
+<?php
+
+namespace Poppy\System\Classes\Grid\Filter;
 
 use Illuminate\Support\Arr;
 
@@ -16,7 +18,7 @@ class In extends AbstractFilter
      *
      * @return mixed
      */
-    public function condition($inputs)
+    public function condition(array $inputs)
     {
         $value = Arr::get($inputs, $this->column);
 

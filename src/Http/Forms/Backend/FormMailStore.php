@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Forms\Backend;
+<?php
+
+namespace Poppy\System\Http\Forms\Backend;
 
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
 use Poppy\Framework\Validation\Rule;

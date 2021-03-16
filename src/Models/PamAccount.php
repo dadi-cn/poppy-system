@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Models;
+<?php
+
+namespace Poppy\System\Models;
 
 use Carbon\Carbon;
 use Eloquent;

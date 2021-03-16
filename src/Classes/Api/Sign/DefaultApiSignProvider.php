@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Api\Sign;
+<?php
+
+namespace Poppy\System\Classes\Api\Sign;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;

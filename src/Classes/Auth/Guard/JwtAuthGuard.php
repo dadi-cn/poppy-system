@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Auth\Guard;
+<?php
+
+namespace Poppy\System\Classes\Auth\Guard;
 
 use BadMethodCallException;
 use Illuminate\Auth\GuardHelpers;

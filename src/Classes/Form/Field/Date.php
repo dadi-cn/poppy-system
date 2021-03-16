@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form\Field;
+<?php
+
+namespace Poppy\System\Classes\Form\Field;
 
 use Poppy\System\Classes\Form\Field;
 use Poppy\System\Classes\Form\Traits\PlainInput;

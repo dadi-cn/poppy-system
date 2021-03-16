@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Layout;
+<?php
+
+namespace Poppy\System\Classes\Layout;
 
 interface Buildable
 {

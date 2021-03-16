@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form\Traits;
+<?php
+
+namespace Poppy\System\Classes\Form\Traits;
 
 use Intervention\Image\Constraint;
 use Intervention\Image\Facades\Image as InterventionImage;

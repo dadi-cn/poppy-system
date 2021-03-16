@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Lists;
+<?php
+
+namespace Poppy\System\Http\Lists;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;

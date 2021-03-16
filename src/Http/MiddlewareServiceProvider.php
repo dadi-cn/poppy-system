@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http;
+<?php
+
+namespace Poppy\System\Http;
 
 use Illuminate\Contracts\Http\Kernel as KernelContract;
 use Illuminate\Routing\Router;

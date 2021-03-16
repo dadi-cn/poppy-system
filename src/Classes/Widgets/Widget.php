@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Widgets;
+<?php
+
+namespace Poppy\System\Classes\Widgets;
 
 use Illuminate\Support\Fluent;
 

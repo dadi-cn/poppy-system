@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Contracts;
+<?php
+
+namespace Poppy\System\Classes\Contracts;
 
 /**
  * 数据库更新数据

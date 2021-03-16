@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Models\Policies;
+<?php
+
+namespace Poppy\System\Models\Policies;
 
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\SysConfig;

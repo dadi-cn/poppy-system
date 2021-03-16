@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Filter\Presenter;
+<?php
+
+namespace Poppy\System\Classes\Grid\Filter\Presenter;
 
 class Text extends Presenter
 {

@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form\Field;
+<?php
+
+namespace Poppy\System\Classes\Form\Field;
 
 use Illuminate\Database\Eloquent\Relations\HasMany as Relation;
 use Illuminate\Database\Eloquent\Relations\MorphMany;

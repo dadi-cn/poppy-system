@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Http\Forms\Settings;
+<?php
+
+namespace Poppy\System\Http\Forms\Settings;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;

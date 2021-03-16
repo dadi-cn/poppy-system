@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Displayer;
+<?php
+
+namespace Poppy\System\Classes\Grid\Displayer;
 
 class Orderable extends AbstractDisplayer
 {

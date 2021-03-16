@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Traits;
+<?php
+
+namespace Poppy\System\Classes\Traits;
 
 use Auth;
 use Poppy\System\Models\PamAccount;

@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Listeners\AuthLogout;
+<?php
+
+namespace Poppy\System\Listeners\AuthLogout;
 
 use Poppy\Framework\Helper\EnvHelper;
 use Poppy\System\Models\PamAccount;

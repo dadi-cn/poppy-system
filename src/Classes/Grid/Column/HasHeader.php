@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Column;
+<?php
+
+namespace Poppy\System\Classes\Grid\Column;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;

@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form\Field;
+<?php
+
+namespace Poppy\System\Classes\Form\Field;
 
 use Illuminate\Support\Arr;
 use Poppy\System\Classes\Form\Field;

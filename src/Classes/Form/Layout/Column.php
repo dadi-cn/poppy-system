@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Form\Layout;
+<?php
+
+namespace Poppy\System\Classes\Form\Layout;
 /**
  * Copyright (c) 2019. Mallto.Co.Ltd.<mall-to.com> All rights reserved.
  */

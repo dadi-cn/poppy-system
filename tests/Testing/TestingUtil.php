@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Tests\Testing;
+<?php
+
+namespace Poppy\System\Tests\Testing;
 
 /**
  * 随机获取数据

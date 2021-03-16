@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Listeners\AuthFailed;
+<?php
+
+namespace Poppy\System\Listeners\AuthFailed;
 
 use Poppy\Framework\Helper\EnvHelper;
 use Poppy\System\Models\PamAccount;

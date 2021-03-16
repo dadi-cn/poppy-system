@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid;
+<?php
+
+namespace Poppy\System\Classes\Grid;
 
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
@@ -171,7 +173,7 @@ class Filter extends FilterButton
      *
      * @return $this
      */
-    public function setAction($action)
+    public function setAction(string $action): self
     {
         $this->action = $action;
 
@@ -625,7 +627,7 @@ class Filter extends FilterButton
      *
      * @return array
      */
-    protected function scopeConditions()
+    protected function scopeConditions():array
     {
         if ($scope = $this->getCurrentScope()) {
             return $scope->condition();
@@ -641,7 +643,7 @@ class Filter extends FilterButton
      *
      * @return string
      */
-    protected function fullUrlWithoutQuery($keys)
+    protected function fullUrlWithoutQuery($keys): string
     {
         if ($keys instanceof Arrayable) {
             $keys = $keys->toArray();

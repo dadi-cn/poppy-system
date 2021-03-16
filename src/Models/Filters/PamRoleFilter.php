@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Models\Filters;
+<?php
+
+namespace Poppy\System\Models\Filters;
 
 use EloquentFilter\ModelFilter;
 

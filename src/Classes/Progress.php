@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes;
+<?php
+
+namespace Poppy\System\Classes;
 
 use Illuminate\Support\Str;
 use Poppy\Framework\Helper\FileHelper;

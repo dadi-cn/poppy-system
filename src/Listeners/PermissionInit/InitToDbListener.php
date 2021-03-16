@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Listeners\PermissionInit;
+<?php
+
+namespace Poppy\System\Listeners\PermissionInit;
 
 use Exception;
 use Poppy\Core\Events\PermissionInitEvent;

@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes;
+<?php
+
+namespace Poppy\System\Classes;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model as Eloquent;

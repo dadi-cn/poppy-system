@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Abstracts;
+<?php
+
+namespace Poppy\System\Classes\Abstracts;
 
 /**
  * Copyright (C) Update For IDE

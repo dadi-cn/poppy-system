@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Filter;
+<?php
+
+namespace Poppy\System\Classes\Grid\Filter;
 
 use Exception;
 use Illuminate\Support\Arr;
@@ -153,7 +155,7 @@ abstract class AbstractFilter extends Filter
      *
      * @return array|mixed|null
      */
-    public function condition($inputs)
+    public function condition(array $inputs)
     {
         $value = Arr::get($inputs, $this->column);
 
@@ -231,16 +233,6 @@ abstract class AbstractFilter extends Filter
     }
 
     /**
-     * Time filter.
-     *
-     * @return DateTime
-     */
-    public function time()
-    {
-        return $this->datetime(['type' => 'time']);
-    }
-
-    /**
      * Day filter.
      *
      * @return DateTime
@@ -268,6 +260,53 @@ abstract class AbstractFilter extends Filter
     public function year()
     {
         return $this->datetime(['type' => 'year']);
+    }
+
+    /**
+     * Render this filter.
+     *
+     * @return View|string
+     */
+    public function render()
+    {
+        return view($this->view, $this->variables());
+    }
+
+    /**
+     * Render this filter.
+     *
+     * @return View|string
+     */
+    public function __toString()
+    {
+        return $this->render();
+    }
+
+    /**
+     * @param $method
+     * @param $params
+     *
+     * @return mixed
+     * @throws Exception
+     *
+     */
+    public function __call($method, $params)
+    {
+        if (method_exists($this->presenter, $method)) {
+            return $this->presenter()->{$method}(...$params);
+        }
+
+        throw new Exception('Method "' . $method . '" not exists.');
+    }
+
+    /**
+     * Time filter.
+     *
+     * @return DateTime
+     */
+    public function time()
+    {
+        return $this->datetime(['type' => 'time']);
     }
 
     /**
@@ -330,43 +369,6 @@ abstract class AbstractFilter extends Filter
     public function getValue()
     {
         return $this->value;
-    }
-
-    /**
-     * Render this filter.
-     *
-     * @return View|string
-     */
-    public function render()
-    {
-        return view($this->view, $this->variables());
-    }
-
-    /**
-     * Render this filter.
-     *
-     * @return View|string
-     */
-    public function __toString()
-    {
-        return $this->render();
-    }
-
-    /**
-     * @param $method
-     * @param $params
-     *
-     * @return mixed
-     * @throws Exception
-     *
-     */
-    public function __call($method, $params)
-    {
-        if (method_exists($this->presenter, $method)) {
-            return $this->presenter()->{$method}(...$params);
-        }
-
-        throw new Exception('Method "' . $method . '" not exists.');
     }
 
     /**

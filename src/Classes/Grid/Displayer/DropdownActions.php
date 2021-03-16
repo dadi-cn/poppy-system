@@ -1,4 +1,6 @@
-<?php namespace Poppy\System\Classes\Grid\Displayer;
+<?php
+
+namespace Poppy\System\Classes\Grid\Displayer;
 
 use Poppy\Framework\Helper\ArrayHelper;
 use Poppy\System\Classes\Actions\RowAction;
