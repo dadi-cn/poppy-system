@@ -1,5 +1,8 @@
 <?php namespace Poppy\System\Classes\Grid\Concerns;
 
+use Closure;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 use Poppy\System\Classes\Grid;
 use Poppy\System\Classes\Grid\Tools\Selector;
 
@@ -14,11 +17,11 @@ trait HasSelector
     protected $selector;
 
     /**
-     * @param \Closure $closure
+     * @param Closure $closure
      *
      * @return $this
      */
-    public function selector(\Closure $closure)
+    public function selector(Closure $closure)
     {
         $this->selector = new Selector();
 
@@ -29,6 +32,16 @@ trait HasSelector
         });
 
         return $this;
+    }
+
+    /**
+     * Render grid selector.
+     *
+     * @return Factory|View|string
+     */
+    public function renderSelector()
+    {
+        return $this->selector->render();
     }
 
     /**
@@ -64,15 +77,5 @@ trait HasSelector
         });
 
         return $this;
-    }
-
-    /**
-     * Render grid selector.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
-     */
-    public function renderSelector()
-    {
-        return $this->selector->render();
     }
 }

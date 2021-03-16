@@ -140,7 +140,7 @@ class FormWidget implements Renderable
     /**
      * @return array
      */
-    public function data()
+    public function data(): array
     {
         return $this->data;
     }
@@ -558,7 +558,7 @@ class FormWidget implements Renderable
             if (!$this->pyPoppy()->exists('poppy.mgr-page')) {
                 throw new PoppyException('模块 `poppy.mgr-page` 不存在, 你需要安装才可以运行进行表单类型的提交');
             }
-            $this->method('POST');
+            $this->method();
             $this->action(route('py-mgr-page:backend.handle.form'));
             $this->hidden('_form_')->default(get_called_class());
         }

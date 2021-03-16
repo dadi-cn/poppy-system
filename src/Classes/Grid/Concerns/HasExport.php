@@ -18,7 +18,7 @@ trait HasExport
     /**
      * 是否显示导出按钮
      */
-    public function isShowExport()
+    public function isShowExporter(): bool
     {
         return $this->option('show_exporter');
     }
@@ -29,7 +29,7 @@ trait HasExport
      * @param bool $disable
      * @return $this
      */
-    public function disableExport(bool $disable = true)
+    public function disableExporter(bool $disable = true): self
     {
         return $this->option('show_exporter', !$disable);
     }
@@ -39,7 +39,7 @@ trait HasExport
      *
      * @return string
      */
-    public function renderExportButton()
+    public function renderExportButton(): string
     {
         return (new ExportButton($this))->render();
     }
@@ -52,7 +52,7 @@ trait HasExport
      *
      * @return $this
      */
-    public function exporter($exporter)
+    public function exporter($exporter): self
     {
         $this->exporter = $exporter;
 
@@ -67,7 +67,7 @@ trait HasExport
      *
      * @return string
      */
-    public function getExportUrl($scope = 1, $args = null)
+    public function getExportUrl($scope = 1, $args = null): string
     {
         $input = array_merge(request()->all(), Exporter::formatExportQuery($scope, $args));
 

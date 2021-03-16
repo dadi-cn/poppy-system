@@ -39,7 +39,7 @@ use Poppy\System\Classes\Form;
  * @method Field\SwitchField    switch ($column, $label = '')
  * @method Field\Display        display($column, $label = '')
  * @method Field\Rate           rate($column, $label = '')
- * @method Field\Divide         divider()
+ * @method Field\Divider        divider()
  * @method Field\Password       password($column, $label = '')
  * @method Field\Decimal        decimal($column, $label = '')
  * @method Field\Html           html($html, $label = '')
@@ -50,234 +50,234 @@ use Poppy\System\Classes\Form;
  */
 class EmbeddedForm
 {
-	/**
-	 * @var Form
-	 */
-	protected $parent = null;
+    /**
+     * @var Form
+     */
+    protected $parent = null;
 
-	/**
-	 * Fields in form.
-	 *
-	 * @var Collection
-	 */
-	protected $fields;
+    /**
+     * Fields in form.
+     *
+     * @var Collection
+     */
+    protected $fields;
 
-	/**
-	 * Original data for this field.
-	 *
-	 * @var array
-	 */
-	protected $original = [];
+    /**
+     * Original data for this field.
+     *
+     * @var array
+     */
+    protected $original = [];
 
-	/**
-	 * Column name for this form.
-	 *
-	 * @var string
-	 */
-	protected $column;
+    /**
+     * Column name for this form.
+     *
+     * @var string
+     */
+    protected $column;
 
-	/**
-	 * EmbeddedForm constructor.
-	 *
-	 * @param string $column
-	 */
-	public function __construct($column)
-	{
-		$this->column = $column;
+    /**
+     * EmbeddedForm constructor.
+     *
+     * @param string $column
+     */
+    public function __construct($column)
+    {
+        $this->column = $column;
 
-		$this->fields = new Collection();
-	}
+        $this->fields = new Collection();
+    }
 
-	/**
-	 * Get all fields in current form.
-	 *
-	 * @return Collection
-	 */
-	public function fields()
-	{
-		return $this->fields;
-	}
+    /**
+     * Get all fields in current form.
+     *
+     * @return Collection
+     */
+    public function fields()
+    {
+        return $this->fields;
+    }
 
-	/**
-	 * Set parent form for this form.
-	 *
-	 * @param Form $parent
-	 *
-	 * @return $this
-	 */
-	public function setParent(Form $parent)
-	{
-		$this->parent = $parent;
+    /**
+     * Set parent form for this form.
+     *
+     * @param Form $parent
+     *
+     * @return $this
+     */
+    public function setParent(Form $parent)
+    {
+        $this->parent = $parent;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Set original values for fields.
-	 *
-	 * @param array $data
-	 *
-	 * @return $this
-	 */
-	public function setOriginal($data)
-	{
-		if (empty($data)) {
-			return $this;
-		}
+    /**
+     * Set original values for fields.
+     *
+     * @param array $data
+     *
+     * @return $this
+     */
+    public function setOriginal($data)
+    {
+        if (empty($data)) {
+            return $this;
+        }
 
-		if (is_string($data)) {
-			$data = json_decode($data, true);
-		}
+        if (is_string($data)) {
+            $data = json_decode($data, true);
+        }
 
-		$this->original = $data;
+        $this->original = $data;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Prepare for insert or update.
-	 *
-	 * @param array $input
-	 *
-	 * @return mixed
-	 */
-	public function prepare($input)
-	{
-		foreach ($input as $key => $record) {
-			$this->setFieldOriginalValue($key);
-			$input[$key] = $this->prepareValue($key, $record);
-		}
+    /**
+     * Prepare for insert or update.
+     *
+     * @param array $input
+     *
+     * @return mixed
+     */
+    public function prepare($input)
+    {
+        foreach ($input as $key => $record) {
+            $this->setFieldOriginalValue($key);
+            $input[$key] = $this->prepareValue($key, $record);
+        }
 
-		return $input;
-	}
+        return $input;
+    }
 
-	/**
-	 * Do prepare work for each field.
-	 *
-	 * @param string $key
-	 * @param string $record
-	 *
-	 * @return mixed
-	 */
-	protected function prepareValue($key, $record)
-	{
-		$field = $this->fields->first(function (Field $field) use ($key) {
-			return in_array($key, (array) $field->column());
-		});
+    /**
+     * Fill data to all fields in form.
+     *
+     * @param array $data
+     *
+     * @return $this
+     */
+    public function fill(array $data)
+    {
+        $this->fields->each(function (Field $field) use ($data) {
+            $field->fill($data);
+        });
 
-		if (method_exists($field, 'prepare')) {
-			return $field->prepare($record);
-		}
+        return $this;
+    }
 
-		return $record;
-	}
+    /**
+     * Add a field to form.
+     *
+     * @param Field $field
+     *
+     * @return $this
+     */
+    public function pushField(Field $field)
+    {
+        $field = $this->formatField($field);
 
-	/**
-	 * Set original data for each field.
-	 *
-	 * @param string $key
-	 *
-	 * @return void
-	 */
-	protected function setFieldOriginalValue($key)
-	{
-		if (array_key_exists($key, $this->original)) {
-			$values = $this->original[$key];
+        $this->fields->push($field);
 
-			$this->fields->each(function (Field $field) use ($values) {
-				$field->setOriginal($values);
-			});
-		}
-	}
+        return $this;
+    }
 
-	/**
-	 * Fill data to all fields in form.
-	 *
-	 * @param array $data
-	 *
-	 * @return $this
-	 */
-	public function fill(array $data)
-	{
-		$this->fields->each(function (Field $field) use ($data) {
-			$field->fill($data);
-		});
+    /**
+     * Add nested-form fields dynamically.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return Field|$this
+     */
+    public function __call($method, $arguments)
+    {
+        if ($className = Form::findFieldClass($method)) {
+            $column = Arr::get($arguments, 0, '');
 
-		return $this;
-	}
+            /** @var Field $field */
+            $field = new $className($column, array_slice($arguments, 1));
 
-	/**
-	 * Format form, set `element name` `error key` and `element class`.
-	 *
-	 * @param Field $field
-	 *
-	 * @return Field
-	 */
-	protected function formatField(Field $field)
-	{
-		$jsonKey = $field->column();
+            $field->setForm($this->parent);
 
-		$elementName = $elementClass = $errorKey = [];
+            $this->pushField($field);
 
-		if (is_array($jsonKey)) {
-			foreach ($jsonKey as $index => $name) {
-				$elementName[$index]  = "{$this->column}[$name]";
-				$errorKey[$index]     = "{$this->column}.$name";
-				$elementClass[$index] = "{$this->column}_$name";
-			}
-		}
-		else {
-			$elementName  = "{$this->column}[$jsonKey]";
-			$errorKey     = "{$this->column}.$jsonKey";
-			$elementClass = "{$this->column}_$jsonKey";
-		}
+            return $field;
+        }
 
-		$field->setElementName($elementName)
-			->setErrorKey($errorKey)
-			->setElementClass($elementClass);
+        return $this;
+    }
 
-		return $field;
-	}
+    /**
+     * Do prepare work for each field.
+     *
+     * @param string $key
+     * @param string $record
+     *
+     * @return mixed
+     */
+    protected function prepareValue($key, $record)
+    {
+        $field = $this->fields->first(function (Field $field) use ($key) {
+            return in_array($key, (array) $field->column());
+        });
 
-	/**
-	 * Add a field to form.
-	 *
-	 * @param Field $field
-	 *
-	 * @return $this
-	 */
-	public function pushField(Field $field)
-	{
-		$field = $this->formatField($field);
+        if (method_exists($field, 'prepare')) {
+            return $field->prepare($record);
+        }
 
-		$this->fields->push($field);
+        return $record;
+    }
 
-		return $this;
-	}
+    /**
+     * Set original data for each field.
+     *
+     * @param string $key
+     *
+     * @return void
+     */
+    protected function setFieldOriginalValue($key)
+    {
+        if (array_key_exists($key, $this->original)) {
+            $values = $this->original[$key];
 
-	/**
-	 * Add nested-form fields dynamically.
-	 *
-	 * @param string $method
-	 * @param array  $arguments
-	 *
-	 * @return Field|$this
-	 */
-	public function __call($method, $arguments)
-	{
-		if ($className = Form::findFieldClass($method)) {
-			$column = Arr::get($arguments, 0, '');
+            $this->fields->each(function (Field $field) use ($values) {
+                $field->setOriginal($values);
+            });
+        }
+    }
 
-			/** @var Field $field */
-			$field = new $className($column, array_slice($arguments, 1));
+    /**
+     * Format form, set `element name` `error key` and `element class`.
+     *
+     * @param Field $field
+     *
+     * @return Field
+     */
+    protected function formatField(Field $field)
+    {
+        $jsonKey = $field->column();
 
-			$field->setForm($this->parent);
+        $elementName = $elementClass = $errorKey = [];
 
-			$this->pushField($field);
+        if (is_array($jsonKey)) {
+            foreach ($jsonKey as $index => $name) {
+                $elementName[$index]  = "{$this->column}[$name]";
+                $errorKey[$index]     = "{$this->column}.$name";
+                $elementClass[$index] = "{$this->column}_$name";
+            }
+        }
+        else {
+            $elementName  = "{$this->column}[$jsonKey]";
+            $errorKey     = "{$this->column}.$jsonKey";
+            $elementClass = "{$this->column}_$jsonKey";
+        }
 
-			return $field;
-		}
+        $field->setElementName($elementName)
+            ->setErrorKey($errorKey)
+            ->setElementClass($elementClass);
 
-		return $this;
-	}
+        return $field;
+    }
 }

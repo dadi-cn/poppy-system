@@ -51,7 +51,7 @@ abstract class FormSettingBase extends FormWidget
     /**
      * @return array
      */
-    public function data()
+    public function data(): array
     {
         $Setting = app(SettingContract::class);
         $data    = [];

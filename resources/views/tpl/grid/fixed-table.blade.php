@@ -5,7 +5,7 @@
 		</div>
 	@endif
 
-	@if ( $grid->showTools() || $grid->isShowExport() || $grid->showCreateBtn() )
+	@if ( $grid->showTools() || $grid->isShowExporter() || $grid->showCreateBtn() )
 		<div class="box-header with-border">
 			<div class="pull-right">
 				{!! $grid->renderColumnSelector() !!}

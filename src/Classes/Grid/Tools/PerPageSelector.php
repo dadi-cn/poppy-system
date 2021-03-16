@@ -27,24 +27,7 @@ class PerPageSelector extends AbstractTool
     }
 
     /**
-     * Do initialize work.
-     *
-     * @return void
-     */
-    protected function initialize()
-    {
-        $this->perPageName = $this->grid->model()->getPerPageName();
-
-        $this->perPage = (int) \request()->input(
-            $this->perPageName,
-            $this->grid->perPage
-        );
-    }
-
-    /**
      * Get options for selector.
-     *
-     * @return static
      */
     public function getOptions()
     {
@@ -90,18 +73,17 @@ EOT;
     }
 
     /**
-     * Script of PerPageSelector.
+     * Do initialize work.
      *
-     * @return string
+     * @return void
      */
-    protected function script()
+    protected function initialize()
     {
-        return <<<EOT
+        $this->perPageName = $this->grid->model()->getPerPageName();
 
-$('.{$this->grid->getPerPageName()}').on("change", function(e) {
-    $.pjax({url: this.value, container: '#pjax-container'});
-});
-
-EOT;
+        $this->perPage = (int) \request()->input(
+            $this->perPageName,
+            $this->grid->perPage
+        );
     }
 }

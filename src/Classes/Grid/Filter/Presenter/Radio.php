@@ -1,7 +1,6 @@
 <?php namespace Poppy\System\Classes\Grid\Filter\Presenter;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Poppy\System\Classes\Facades\Admin;
 
 class Radio extends Presenter
 {
@@ -45,18 +44,11 @@ class Radio extends Presenter
         return $this;
     }
 
-    protected function prepare()
-    {
-        $script = "$('.{$this->filter->getId()}').iCheck({radioClass:'iradio_minimal-blue'});";
-
-    }
-
     /**
      * @return array
      */
     public function variables(): array
     {
-        $this->prepare();
 
         return [
             'options' => $this->options,

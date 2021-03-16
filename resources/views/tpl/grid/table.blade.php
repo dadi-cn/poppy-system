@@ -9,7 +9,7 @@
             <div class="pull-right">
                 {!! $grid->renderQuickButton() !!}
             </div>
-            @if ( $grid->showTools() && $grid->isShowExport())
+            @if ( $grid->showTools() && $grid->isShowExporter())
                 {!! $grid->renderExportButton() !!}
             @endif
         </div>

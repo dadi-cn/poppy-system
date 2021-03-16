@@ -12,7 +12,7 @@ use InvalidArgumentException;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\System\Classes\Actions\RowAction;
 use Poppy\System\Classes\Grid;
-use Poppy\System\Classes\Grid\Displayers\AbstractDisplayer;
+use Poppy\System\Classes\Grid\Displayer\AbstractDisplayer;
 
 /**
  * Class Column.
@@ -33,7 +33,6 @@ use Poppy\System\Classes\Grid\Displayers\AbstractDisplayer;
  * @method $this table($titles = [])
  * @method $this expand($callback = null)
  * @method $this modal($callback = null)
- * @method $this carousel(int $width = 300, int $height = 200, $server = '')
  * @method $this downloadable($server = '')
  * @method $this copyable()
  * @method $this qrcode($formatter = null, $width = 150, $height = 150)
@@ -49,35 +48,34 @@ class Column
 
     const ACTION_COLUMN_NAME = '__actions__';
     /**
-     * Displayers for grid column.
+     * Displayer for grid column.
      *
      * @var array
      */
     public static $displayers = [
-        'editable'     => Displayers\Editable::class,
-        'switch'       => Displayers\SwitchDisplay::class,
-        'switchGroup'  => Displayers\SwitchGroup::class,
-        'select'       => Displayers\Select::class,
-        'image'        => Displayers\Image::class,
-        'label'        => Displayers\Label::class,
-        'button'       => Displayers\Button::class,
-        'link'         => Displayers\Link::class,
-        'badge'        => Displayers\Badge::class,
-        'progressBar'  => Displayers\ProgressBar::class,
-        'progress'     => Displayers\ProgressBar::class,
-        'radio'        => Displayers\Radio::class,
-        'checkbox'     => Displayers\Checkbox::class,
-        'orderable'    => Displayers\Orderable::class,
-        'table'        => Displayers\Table::class,
-        'expand'       => Displayers\Expand::class,
-        'modal'        => Displayers\Modal::class,
-        'carousel'     => Displayers\Carousel::class,
-        'downloadable' => Displayers\Downloadable::class,
-        'copyable'     => Displayers\Copyable::class,
-        'qrcode'       => Displayers\QRCode::class,
-        'prefix'       => Displayers\Prefix::class,
-        'suffix'       => Displayers\Suffix::class,
-        'secret'       => Displayers\Secret::class,
+        'editable'     => Displayer\Editable::class,
+        'switch'       => Displayer\SwitchDisplay::class,
+        'switchGroup'  => Displayer\SwitchGroup::class,
+        'select'       => Displayer\Select::class,
+        'image'        => Displayer\Image::class,
+        'label'        => Displayer\Label::class,
+        'button'       => Displayer\Button::class,
+        'link'         => Displayer\Link::class,
+        'badge'        => Displayer\Badge::class,
+        'progressBar'  => Displayer\ProgressBar::class,
+        'progress'     => Displayer\ProgressBar::class,
+        'radio'        => Displayer\Radio::class,
+        'checkbox'     => Displayer\Checkbox::class,
+        'orderable'    => Displayer\Orderable::class,
+        'table'        => Displayer\Table::class,
+        'expand'       => Displayer\Expand::class,
+        'modal'        => Displayer\Modal::class,
+        'downloadable' => Displayer\Downloadable::class,
+        'copyable'     => Displayer\Copyable::class,
+        'qrcode'       => Displayer\QRCode::class,
+        'prefix'       => Displayer\Prefix::class,
+        'suffix'       => Displayer\Suffix::class,
+        'secret'       => Displayer\Secret::class,
     ];
     /**
      * Defined columns.

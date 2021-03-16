@@ -1,5 +1,6 @@
 <?php namespace Poppy\System\Classes\Grid\Concerns;
 
+use Illuminate\Support\Collection;
 use Poppy\System\Classes\Grid;
 use Poppy\System\Classes\Grid\Column;
 use Poppy\System\Classes\Grid\Tools\ColumnSelector;
@@ -20,7 +21,7 @@ trait CanHidesColumns
      *
      * @return Grid|mixed
      */
-    public function disableColumnSelector(bool $disable = true)
+    public function disableColumnSelector(bool $disable = true): bool
     {
         return $this->option('show_column_selector', !$disable);
     }
@@ -28,7 +29,7 @@ trait CanHidesColumns
     /**
      * @return bool
      */
-    public function showColumnSelector()
+    public function showColumnSelector(): bool
     {
         return $this->option('show_column_selector');
     }
@@ -40,7 +41,7 @@ trait CanHidesColumns
      *
      * @return $this
      */
-    public function hideColumns($columns)
+    public function hideColumns($columns): self
     {
         if (func_num_args()) {
             $columns = (array) $columns;
@@ -57,9 +58,9 @@ trait CanHidesColumns
     /**
      * Get all visible column instances.
      *
-     * @return Column[]
+     * @return Column[]|Collection
      */
-    public function visibleColumns()
+    public function visibleColumns(): Collection
     {
         $visible = $this->getVisibleColumnsFromQuery();
 
@@ -79,7 +80,7 @@ trait CanHidesColumns
      *
      * @return array
      */
-    public function visibleColumnNames()
+    public function visibleColumnNames(): array
     {
         $visible = $this->getVisibleColumnsFromQuery();
 
@@ -99,7 +100,7 @@ trait CanHidesColumns
      *
      * @return array
      */
-    public function getDefaultVisibleColumnNames()
+    public function getDefaultVisibleColumnNames(): array
     {
         return array_values(
             array_diff(

@@ -277,43 +277,6 @@ HTML;
 	}
 
 	/**
-	 * Add a tool.
-	 *
-	 * @param string $tool
-	 *
-	 * @return $this
-	 *
-	 * @deprecated use append instead.
-	 */
-	public function add($tool)
-	{
-		return $this->append($tool);
-	}
-
-	/**
-	 * Disable back button.
-	 *
-	 * @return $this
-	 *
-	 * @deprecated
-	 */
-	public function disableBackButton()
-	{
-	}
-
-	/**
-	 * Disable list button.
-	 *
-	 * @return $this
-	 *
-	 * @deprecated Use disableList instead.
-	 */
-	public function disableListButton()
-	{
-		return $this->disableList();
-	}
-
-	/**
 	 * Render custom tools.
 	 *
 	 * @param Collection $tools

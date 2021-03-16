@@ -1,6 +1,8 @@
 <?php namespace Poppy\System\Classes\Grid\Tools;
 
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Arr;
+use Illuminate\View\View;
 use Poppy\System\Classes\Grid\Concerns\HasQuickSearch;
 
 class QuickSearch extends AbstractTool
@@ -30,7 +32,7 @@ class QuickSearch extends AbstractTool
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function render()
     {

@@ -35,7 +35,7 @@ class BaseButton
      *
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         return <<<EOT
     <a title="{$this->title}" class="{$this->pageClass}"     href="{$this->url}">
@@ -45,7 +45,7 @@ EOT;
     }
 
 
-    public function data()
+    public function data(): array
     {
         return [
             'title'  => $this->title,

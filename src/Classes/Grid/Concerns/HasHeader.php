@@ -1,8 +1,12 @@
 <?php namespace Poppy\System\Classes\Grid\Concerns;
 
 use Closure;
+use Poppy\System\Classes\Grid;
 use Poppy\System\Classes\Grid\Tools\Header;
 
+/**
+ * @mixin Grid
+ */
 trait HasHeader
 {
     /**
@@ -31,7 +35,7 @@ trait HasHeader
     /**
      * @return string
      */
-    public function renderHeader()
+    public function renderHeader(): string
     {
         if (!$this->header) {
             return '';

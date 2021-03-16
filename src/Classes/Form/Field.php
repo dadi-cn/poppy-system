@@ -374,13 +374,9 @@ class Field implements Renderable
      * @param array          $messages
      *
      * @return $this
-     * @throws FormException
      */
-    public function rules($rules = [], $messages = [])
+    public function rules(array $rules = [], $messages = [])
     {
-        if (is_string($rules)) {
-            throw new FormException('规则不能为字符串, 必须为数组');
-        }
         $this->rules = $this->mergeRules($rules, $this->rules);
 
         $this->setValidationMessages('default', $messages);

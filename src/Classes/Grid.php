@@ -26,7 +26,6 @@ class Grid
         Concerns\HasFilter,
         Concerns\HasTools,
         Concerns\HasTotalRow,
-        Concerns\HasHotKeys,
         Concerns\HasActions,
         Concerns\HasSelector,
         Concerns\CanHidesColumns,
@@ -114,13 +113,6 @@ class Grid
     protected $variables = [];
 
     /**
-     * Resource path of the grid.
-     *
-     * @var
-     */
-    protected $resourcePath;
-
-    /**
      * Default primary key name.
      *
      * @var string
@@ -145,12 +137,12 @@ class Grid
      * @var array
      */
     protected $options = [
-        'show_pagination'      => true,
-        'show_tools'           => true,
-        'show_filter'          => true,
-        'show_exporter'        => true,
-        'show_actions'         => true,
-        'show_row_selector'    => true,
+        'show_pagination'   => true,
+        'show_tools'        => true,
+        'show_filter'       => true,
+        'show_exporter'     => true,
+        'show_actions'      => true,
+        'show_row_selector' => true,
     ];
     /**
      * Initialization closure array.
@@ -259,7 +251,7 @@ class Grid
      *
      * @return $this|mixed
      */
-    public function option($key, $value = null)
+    public function option(string $key, $value = null)
     {
         if (is_null($value)) {
             return $this->options[$key];
@@ -516,23 +508,10 @@ class Grid
 
     /**
      * Get current resource url.
-     *
-     * @param string $path
-     *
      * @return string
      */
-    public function resource($path = null)
+    public function resource():string
     {
-        if (!empty($path)) {
-            $this->resourcePath = $path;
-
-            return $this;
-        }
-
-        if (!empty($this->resourcePath)) {
-            return $this->resourcePath;
-        }
-
         return url(app('request')->getPathInfo());
     }
 

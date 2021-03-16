@@ -48,30 +48,6 @@ class RangeFilter extends Filter
         }
     }
 
-    protected function addScript()
-    {
-        $options = [
-            'locale'           => config('app.locale'),
-            'allowInputToggle' => true,
-        ];
-
-        if ($this->type == 'date') {
-            $options['format'] = 'YYYY-MM-DD';
-        }
-        elseif ($this->type == 'time') {
-            $options['format'] = 'HH:mm:ss';
-        }
-        elseif ($this->type == 'datetime') {
-            $options['format'] = 'YYYY-MM-DD HH:mm:ss';
-        }
-        else {
-            return;
-        }
-
-        $options = json_encode($options);
-
-    }
-
     /**
      * Render this filter.
      *
@@ -114,5 +90,29 @@ SCRIPT;
     </form>
 </span>
 EOT;
+    }
+
+    protected function addScript()
+    {
+        $options = [
+            'locale'           => config('app.locale'),
+            'allowInputToggle' => true,
+        ];
+
+        if ($this->type == 'date') {
+            $options['format'] = 'YYYY-MM-DD';
+        }
+        elseif ($this->type == 'time') {
+            $options['format'] = 'HH:mm:ss';
+        }
+        elseif ($this->type == 'datetime') {
+            $options['format'] = 'YYYY-MM-DD HH:mm:ss';
+        }
+        else {
+            return;
+        }
+
+        $options = json_encode($options);
+
     }
 }

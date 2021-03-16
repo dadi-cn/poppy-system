@@ -1,9 +1,12 @@
 <?php namespace Poppy\System\Classes\Grid\Tools;
 
+use Closure;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Poppy\Framework\Helper\ArrayHelper;
 
 class Selector implements Renderable
@@ -27,10 +30,10 @@ class Selector implements Renderable
     }
 
     /**
-     * @param string         $column
-     * @param string|array   $label
-     * @param array|\Closure $options
-     * @param null|\Closure  $query
+     * @param string        $column
+     * @param string|array  $label
+     * @param array|Closure $options
+     * @param null|Closure  $query
      *
      * @return $this
      */
@@ -40,43 +43,16 @@ class Selector implements Renderable
     }
 
     /**
-     * @param string        $column
-     * @param string        $label
-     * @param array         $options
-     * @param null|\Closure $query
+     * @param string       $column
+     * @param string       $label
+     * @param array        $options
+     * @param null|Closure $query
      *
      * @return $this
      */
     public function selectOne($column, $label, $options = [], $query = null)
     {
         return $this->addSelector($column, $label, $options, $query, 'one');
-    }
-
-    /**
-     * @param string $column
-     * @param string $label
-     * @param array  $options
-     * @param null   $query
-     * @param string $type
-     *
-     * @return $this
-     */
-    protected function addSelector($column, $label, $options = [], $query = null, $type = 'many')
-    {
-        if (is_array($label)) {
-            if ($options instanceof \Closure) {
-                $query = $options;
-            }
-
-            $options = $label;
-            $label   = __(Str::title($column));
-        }
-
-        $this->selectors[$column] = compact(
-            'label', 'options', 'type', 'query'
-        );
-
-        return $this;
     }
 
     /**
@@ -87,6 +63,17 @@ class Selector implements Renderable
     public function getSelectors()
     {
         return $this->selectors;
+    }
+
+    /**
+     * @return Factory|View
+     */
+    public function render()
+    {
+        return view('py-system::tpl.grid.selector', [
+            'selectors' => $this->selectors,
+            'selected'  => static::parseSelected(),
+        ]);
     }
 
     /**
@@ -157,13 +144,29 @@ class Selector implements Renderable
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param string $column
+     * @param string $label
+     * @param array  $options
+     * @param null   $query
+     * @param string $type
+     *
+     * @return $this
      */
-    public function render()
+    protected function addSelector($column, $label, $options = [], $query = null, $type = 'many')
     {
-        return view('py-system::tpl.grid.selector', [
-            'selectors' => $this->selectors,
-            'selected'  => static::parseSelected(),
-        ]);
+        if (is_array($label)) {
+            if ($options instanceof Closure) {
+                $query = $options;
+            }
+
+            $options = $label;
+            $label   = __(Str::title($column));
+        }
+
+        $this->selectors[$column] = compact(
+            'label', 'options', 'type', 'query'
+        );
+
+        return $this;
     }
 }

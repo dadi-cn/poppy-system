@@ -26,7 +26,7 @@ class ExportButton extends AbstractTool
      */
     public function render()
     {
-        if (!$this->grid->isShowExport()) {
+        if (!$this->grid->isShowExporter()) {
             return '';
         }
 
