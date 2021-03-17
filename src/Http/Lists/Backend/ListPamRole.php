@@ -65,20 +65,19 @@ class ListPamRole extends ListBase
     public function quickButtons(): array
     {
         return [
-            $this->create(input(Filter\Scope::QUERY_NAME)),
+            $this->create(),
         ];
     }
 
 
     /**
      * 创建
-     * @param $type
      * @return BaseButton
      */
-    public function create($type): ?BaseButton
+    public function create(): ?BaseButton
     {
         if ($this->pam->can('create', PamRole::class)) {
-            return new BaseButton('<i class="fa fa-plus"></i> 新增', route_url('py-mgr-page:backend.role.establish', [], ['type' => $type,]), [
+            return new BaseButton('<i class="fa fa-plus"></i> 新增', route('py-mgr-page:backend.role.establish'), [
                 'class' => 'layui-btn layui-btn-sm J_iframe',
                 'title' => '新增',
             ]);

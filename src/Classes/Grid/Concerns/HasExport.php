@@ -98,12 +98,6 @@ trait HasExport
 
         $this->model()->usePaginate(false);
 
-        if ($this->builder) {
-            call_user_func($this->builder, $this);
-
-            $this->getExporter($scope)->export();
-        }
-
         if ($forceExport) {
             $this->getExporter($scope)->export();
         }

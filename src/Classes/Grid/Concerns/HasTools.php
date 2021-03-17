@@ -18,17 +18,6 @@ trait HasTools
     public $tools;
 
     /**
-     * Disable header tools.
-     *
-     * @param bool $disable
-     * @return $this
-     */
-    public function disableTools(bool $disable = true)
-    {
-        return $this->option('show_tools', !$disable);
-    }
-
-    /**
      * Setup grid tools.
      *
      * @param Closure $callback
@@ -45,17 +34,9 @@ trait HasTools
      *
      * @return string
      */
-    public function renderHeaderTools()
+    public function renderHeaderTools(): string
     {
         return $this->tools->render();
-    }
-
-    /**
-     * 是否显示头部工具栏
-     */
-    public function showTools(): bool
-    {
-        return $this->option('show_tools');
     }
 
     /**

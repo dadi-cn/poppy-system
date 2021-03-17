@@ -3,13 +3,12 @@
         <div class="layui-card-header">
             {{ $title }}
             {{--显示工具--}}
-            @if ( $grid->showTools() )
-                {!! $grid->renderHeaderTools() !!}
-            @endif
+            {!! $grid->renderHeaderTools() !!}
+
             <div class="pull-right">
                 {!! $grid->renderQuickButton() !!}
             </div>
-            @if ( $grid->showTools() && $grid->isShowExporter())
+            @if ($grid->isShowExporter())
                 {!! $grid->renderExportButton() !!}
             @endif
         </div>

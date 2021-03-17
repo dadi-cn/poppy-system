@@ -15,7 +15,6 @@ use Poppy\System\Classes\Grid\Tools;
  * @property Collection $columns
  * @property Tools      $tools
  *
- * @method  Model model()
  */
 trait HasQuickSearch
 {
