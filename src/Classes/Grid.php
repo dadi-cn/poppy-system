@@ -20,7 +20,7 @@ use Poppy\System\Http\Lists\ListBase;
 use Response;
 use Throwable;
 
-final class Grid
+class Grid
 {
     use Concerns\HasElementNames,
         Concerns\HasHeader,
@@ -102,7 +102,7 @@ final class Grid
     protected $builder;
 
     /**
-     * Mark if the grid is build.
+     * Mark if the grid is builded.
      *
      * @var bool
      */
@@ -116,6 +116,21 @@ final class Grid
     protected $variables = [];
 
     /**
+     * Default primary key name.
+     *
+     * @var string
+     */
+    protected $keyName = 'id';
+
+
+    /**
+     * View for grid to render.
+     *
+     * @var string
+     */
+    protected $view = 'py-system::tpl.grid.table';
+
+    /**
      * @var []callable
      */
     protected $renderingCallbacks = [];
@@ -125,6 +140,7 @@ final class Grid
      * @var array
      */
     protected $options = [
+        'show_tools'        => true,
         'show_exporter'     => false,
         'show_row_selector' => true,
     ];
@@ -133,16 +149,19 @@ final class Grid
      *
      * @var []Closure
      */
-    private static $initCallbacks = [];
+    protected static $initCallbacks = [];
 
     /**
      * Create a new grid instance.
      *
      * @param Eloquent     $model
+     * @param Closure|null $builder
      */
-    public function __construct(Eloquent $model)
+    public function __construct(Eloquent $model, Closure $builder = null)
     {
         $this->model   = new Model($model, $this);
+        $this->keyName = $model->getKeyName();
+        $this->builder = $builder;
 
         $this->initialize();
 
@@ -167,7 +186,7 @@ final class Grid
      * @param string $order
      * @throws ApplicationException
      */
-    public function setLists(string $grid_class, $field = '', $order = '')
+    public function setLists(string $grid_class, $field = 'id', $order = 'desc')
     {
         if (!class_exists($grid_class)) {
             throw new ApplicationException('Grid Class `' . $grid_class . '` Not Exists.');
@@ -182,12 +201,6 @@ final class Grid
         $List->actions();
         $this->columns = $List->getColumns();
         if (is_callable([$this->model(), 'orderBy'])) {
-            if (!$field) {
-                $field = $this->model->eloquent()->getKeyName();
-            }
-            if (!$order) {
-                $order = 'desc';
-            }
             $this->model()->orderBy(
                 input('_field', $field),
                 input('_order', $order)
@@ -215,6 +228,16 @@ final class Grid
         $this->options[$key] = $value;
 
         return $this;
+    }
+
+    /**
+     * Get primary key name of model.
+     *
+     * @return string
+     */
+    public function getKeyName(): string
+    {
+        return $this->keyName ?: 'id';
     }
 
     /**
@@ -284,6 +307,55 @@ final class Grid
     }
 
     /**
+     * 查询并返回数据
+     * @param int $pagesize
+     * @return array|JsonResponse|RedirectResponse|\Illuminate\Http\Response|Redirector|Resp|Response
+     */
+    public function inquire($pagesize = 15)
+    {
+        $this->paginate($pagesize);
+        /**
+         * 获取到的模型数据
+         */
+        $collection = $this->applyQuery();
+
+        $this->build();
+
+        Column::setOriginalGridModels($collection);
+
+        $data = $collection->toArray();
+        $this->columns->map(function (Column $column) use (&$data) {
+            $data = $column->fill($data);
+
+            $this->columnNames[] = $column->getName();
+        });
+
+        $this->buildRows($data);
+
+        $rows = [];
+        foreach ($this->rows as $row) {
+            $item = [];
+            foreach ($this->visibleColumnNames() as $name) {
+                $item[$name] = $row->column($name);
+            }
+            $rows[] = $item;
+        }
+
+        $paginator = $this->paginator();
+
+        return Resp::success('获取成功', [
+            'list'       => $rows,
+            'pagination' => [
+                'total' => $paginator->total(),
+                'page'  => $paginator->currentPage(),
+                'size'  => $paginator->perPage(),
+                'pages' => $paginator->lastPage(),
+            ],
+            '_json'      => 1,
+        ]);
+    }
+
+    /**
      * Set grid row callback function.
      *
      * @param Closure|null $callable
@@ -314,6 +386,21 @@ final class Grid
         $this->variables = $variables;
 
         return $this;
+    }
+
+    /**
+     * Set a view to render.
+     *
+     * @param string $view
+     * @param array  $variables
+     */
+    public function setView(string $view, $variables = [])
+    {
+        if (!empty($variables)) {
+            $this->with($variables);
+        }
+
+        $this->view = $view;
     }
 
     /**
@@ -366,8 +453,9 @@ final class Grid
 
         $variables = $this->variables();
 
-        return view('py-system::tpl.grid.table', $variables)->render();
+        return view($this->view, $variables)->render();
     }
+
 
     /**
      * Initialize with user pre-defined default disables and exporter, etc.
@@ -376,7 +464,7 @@ final class Grid
      */
     public static function init(Closure $callback = null)
     {
-        self::$initCallbacks[] = $callback;
+        static::$initCallbacks[] = $callback;
     }
 
     /**
@@ -398,11 +486,11 @@ final class Grid
      */
     protected function callInitCallbacks()
     {
-        if (empty(self::$initCallbacks)) {
+        if (empty(static::$initCallbacks)) {
             return;
         }
 
-        foreach (self::$initCallbacks as $callback) {
+        foreach (static::$initCallbacks as $callback) {
             call_user_func($callback, $this);
         }
     }
@@ -480,7 +568,7 @@ final class Grid
     protected function buildRows(array $data)
     {
         $this->rows = collect($data)->map(function ($model, $number) {
-            return new Row($number, $model, $this->model->eloquent()->getKeyName());
+            return new Row($number, $model, $this->keyName);
         });
 
         if ($this->rowsCallback) {
@@ -514,54 +602,5 @@ final class Grid
         foreach ($this->renderingCallbacks as $callback) {
             call_user_func($callback, $this);
         }
-    }
-
-    /**
-     * 查询并返回数据
-     * @param int $pagesize
-     * @return array|JsonResponse|RedirectResponse|\Illuminate\Http\Response|Redirector|Resp|Response
-     */
-    private function inquire($pagesize = 15)
-    {
-        $this->paginate($pagesize);
-        /**
-         * 获取到的模型数据
-         */
-        $collection = $this->applyQuery();
-
-        $this->build();
-
-        Column::setOriginalGridModels($collection);
-
-        $data = $collection->toArray();
-        $this->columns->map(function (Column $column) use (&$data) {
-            $data = $column->fill($data);
-
-            $this->columnNames[] = $column->getName();
-        });
-
-        $this->buildRows($data);
-
-        $rows = [];
-        foreach ($this->rows as $row) {
-            $item = [];
-            foreach ($this->visibleColumnNames() as $name) {
-                $item[$name] = $row->column($name);
-            }
-            $rows[] = $item;
-        }
-
-        $paginator = $this->paginator();
-
-        return Resp::success('获取成功', [
-            'list'       => $rows,
-            'pagination' => [
-                'total' => $paginator->total(),
-                'page'  => $paginator->currentPage(),
-                'size'  => $paginator->perPage(),
-                'pages' => $paginator->lastPage(),
-            ],
-            '_json'      => 1,
-        ]);
     }
 }
