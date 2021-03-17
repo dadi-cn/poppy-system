@@ -20,19 +20,6 @@ trait HasFilter
     protected $filter;
 
     /**
-     * 禁用筛选
-     *
-     * @param bool $disable
-     * @return $this
-     */
-    public function disableFilter(bool $disable = true): self
-    {
-        $this->tools->disableFilterButton($disable);
-
-        return $this->option('show_filter', !$disable);
-    }
-
-    /**
      * 获取筛选
      *
      * @return Filter
@@ -72,23 +59,7 @@ trait HasFilter
      */
     public function renderFilter()
     {
-        if (!$this->option('show_filter')) {
-            return '';
-        }
-
         return $this->filter->render();
-    }
-
-    /**
-     * 显示筛选
-     *
-     * @return $this
-     */
-    public function expandFilter(): self
-    {
-        $this->filter->expand();
-
-        return $this;
     }
 
     /**

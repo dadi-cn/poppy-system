@@ -1,5 +1,4 @@
-<form action="{!! $action !!}" method="get" id="{{ $filter_id }}-form"
-    class="layui-form layui-form-sm" style="display: {!! $expand ? 'block': 'none' !!}">
+<form action="{!! $action !!}" method="get" id="{{ $filter_id }}-form" class="layui-form layui-form-sm">
     <div class="layui-row layui-col-space5">
         @foreach($layout->columns() as $column)
             <div class="layui-col-md{{ $column->width() }}">

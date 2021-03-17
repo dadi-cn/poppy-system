@@ -16,6 +16,8 @@ use Poppy\System\Models\PamRoleAccount;
 class ListPamAccount extends ListBase
 {
 
+    public $title = '账号管理';
+
     /**
      * @inheritDoc
      * @throws ApplicationException
@@ -31,15 +33,14 @@ class ListPamAccount extends ListBase
         $this->column('type', "账号类型");
     }
 
-
     /**
      * @inheritDoc
      * @return Closure
      */
-    public function seek(): Closure
+    public function filter(): Closure
     {
         return function (Filter $filter) {
-            $type  = input('_scope_', PamAccount::TYPE_BACKEND);
+            $type  = input('_scope', PamAccount::TYPE_BACKEND);
             $roles = PamRole::getLinear($type);
             $filter->column(1 / 12, function (Filter $column) {
                 $column->equal('passport', '手机/用户名/邮箱');
@@ -94,8 +95,10 @@ class ListPamAccount extends ListBase
      */
     public function create($type): BaseButton
     {
-        $url = route_url('py-mgr-page:backend.pam.establish', null, ['type' => $type]);
-        return new BaseButton('create', '新增', $url, '<i class="fa fa-plus"></i> 新增', 'J_iframe layui-btn layui-btn-sm layui-btn-normal');
+        return new BaseButton('<i class="fa fa-plus"></i> 新增', route_url('py-mgr-page:backend.pam.establish', null, ['type' => $type]), [
+            'title' => "修改密码",
+            'class' => 'J_iframe layui-btn layui-btn-sm',
+        ]);
     }
 
     /**
@@ -105,8 +108,10 @@ class ListPamAccount extends ListBase
      */
     public function password($item): BaseButton
     {
-        $url = route('py-mgr-page:backend.pam.password', [$item->id]);
-        return new BaseButton('password', '修改密码', $url, '<i class="fa fa-key"></i>', 'J_iframe J_tooltip');
+        return new BaseButton('<i class="fa fa-key"></i>', route('py-mgr-page:backend.pam.password', [$item->id]), [
+            'title' => "修改密码",
+            'class' => 'J_iframe',
+        ]);
     }
 
 
@@ -117,8 +122,10 @@ class ListPamAccount extends ListBase
      */
     public function edit($item): BaseButton
     {
-        $url = route('py-mgr-page:backend.pam.establish', [$item->id]);
-        return new BaseButton('edit', "编辑[{$item->username}]", $url, '<i class="fa fa-edit"></i>', 'J_iframe J_tooltip');
+        return new BaseButton('<i class="fa fa-edit"></i>', route('py-mgr-page:backend.pam.establish', [$item->id]), [
+            'title' => "编辑[{$item->username}]",
+            'class' => 'J_iframe',
+        ]);
     }
 
     /**
@@ -129,9 +136,10 @@ class ListPamAccount extends ListBase
     public function disable($item): ?BaseButton
     {
         if ($this->pam->can('disable', $item)) {
-            $url = route_url('py-mgr-page:backend.pam.disable', [$item->id]);
-            return new BaseButton('disable', '当前启用, 点击禁用', $url, '<i class="fa fa-unlock text-success"></i>', 'J_iframe J_tooltip');
-
+            return new BaseButton('<i class="fa fa-unlock text-success"></i>', route_url('py-mgr-page:backend.pam.disable', [$item->id]), [
+                'title' => '当前启用, 点击禁用',
+                'class' => 'J_iframe',
+            ]);
         }
         return null;
     }
@@ -144,8 +152,10 @@ class ListPamAccount extends ListBase
     public function enable($item): ?BaseButton
     {
         if ($this->pam->can('enable', $item)) {
-            $url = route_url('py-mgr-page:backend.pam.enable', [$item->id]);
-            return new BaseButton('enable', '当前禁用, 点击启用', $url, '<i class="fa fa-lock"></i>', 'J_iframe J_tooltip');
+            return new BaseButton('<i class="fa fa-lock"></i>', route_url('py-mgr-page:backend.pam.enable', [$item->id]), [
+                'title' => '当前禁用, 点击启用',
+                'class' => 'J_iframe',
+            ]);
         }
         return null;
     }

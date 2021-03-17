@@ -4,6 +4,7 @@ namespace Poppy\System\Classes\Layout;
 
 use Closure;
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\JsonResponse;
 use Poppy\Framework\Exceptions\PoppyException;
 use Throwable;
 
@@ -74,11 +75,12 @@ class Content implements Renderable
 	 * Alias of method row.
 	 *
 	 * @param mixed $content
-	 *
-	 * @return Content
 	 */
 	public function body($content)
 	{
+	    if ($content instanceof JsonResponse) {
+	        return $content;
+        }
 		return $this->row($content);
 	}
 

@@ -16,7 +16,7 @@ interface ListContract
      * 添加搜索项
      * @return Closure
      */
-    public function seek(): Closure;
+    public function filter(): Closure;
 
     /**
      * 添加操作项目

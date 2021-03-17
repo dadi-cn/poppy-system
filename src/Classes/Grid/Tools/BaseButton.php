@@ -2,11 +2,17 @@
 
 namespace Poppy\System\Classes\Grid\Tools;
 
+use Html;
+use Illuminate\Support\Str;
+
 /**
  * 创建按钮
  */
 class BaseButton
 {
+
+    const TYPE_PAGE    = 'page';    // 打开弹窗页面
+    const TYPE_REQUEST = 'request'; // 进行请求
 
     protected $title;
 
@@ -14,22 +20,38 @@ class BaseButton
     protected $url;
 
 
-    protected $pageBtn;
-
-
     protected $type;
 
 
     protected $pageClass;
 
+    /**
+     * @var array|mixed
+     */
+    private $attribute;
 
-    public function __construct($type, $title, $url, $page_btn, $page_class)
+
+    public function __construct($btn_text, $url, $attribute = [])
     {
-        $this->type      = $type;
-        $this->title     = $title;
+        $this->title     = $btn_text;
         $this->url       = $url;
-        $this->pageBtn   = $page_btn;
-        $this->pageClass = $page_class;
+        $this->attribute = $attribute;
+
+        $class = $this->attribute['class'] ?? '';
+
+        // 默认加入tooltip
+        if (!Str::contains($class, 'J_tooltip')) {
+            $class .= ' J_tooltip ';
+        }
+
+        if (Str::contains($class, 'J_iframe')) {
+            $this->type = self::TYPE_PAGE;
+        }
+        else {
+            $this->type = self::TYPE_REQUEST;
+        }
+
+        $this->attribute['class'] = $class;
     }
 
     /**
@@ -39,20 +61,16 @@ class BaseButton
      */
     public function render(): string
     {
-        return <<<EOT
-    <a title="{$this->title}" class="{$this->pageClass}"     href="{$this->url}">
-       {$this->pageBtn}
-    </a>
-EOT;
+        return ' ' . Html::link($this->url, $this->title, $this->attribute, null, false) . ' ';
     }
 
 
     public function data(): array
     {
         return [
-            'title'  => $this->title,
-            'url'    => $this->url,
-            'action' => $this->type,
+            'title' => $this->title,
+            'url'   => $this->url,
+            'type'  => $this->type,
         ];
     }
 }

@@ -3,7 +3,7 @@
 namespace Poppy\System\Classes;
 
 use Closure;
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Eloquent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -11,6 +11,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Exceptions\ApplicationException;
+use Poppy\Framework\Http\Pagination\PageInfo;
 use Poppy\System\Classes\Grid\Column;
 use Poppy\System\Classes\Grid\Concerns;
 use Poppy\System\Classes\Grid\Model;
@@ -87,7 +88,7 @@ class Grid
     protected $rows;
 
     /**
-     * Rows callable fucntion.
+     * Rows callable function.
      *
      * @var Closure
      */
@@ -140,8 +141,7 @@ class Grid
      */
     protected $options = [
         'show_tools'        => true,
-        'show_filter'       => true,
-        'show_exporter'     => true,
+        'show_exporter'     => false,
         'show_row_selector' => true,
     ];
     /**
@@ -194,14 +194,20 @@ class Grid
 
         /** @var ListBase $List */
         $List = new $grid_class($this);
+        if ($title = $List->title) {
+            $this->setTitle($title);
+        }
         $List->columns();
         $List->actions();
         $this->columns = $List->getColumns();
-        if (method_exists($this->model(), 'orderBy')) {
-            $this->model()->orderBy($field, $order);
+        if (is_callable([$this->model(), 'orderBy'])) {
+            $this->model()->orderBy(
+                input('_field', $field),
+                input('_order', $order)
+            );
         }
 
-        $this->filter($List->seek());
+        $this->filter($List->filter());
         $this->appendQuickButton($List->quickButtons());
     }
 
@@ -229,7 +235,7 @@ class Grid
      *
      * @return string
      */
-    public function getKeyName()
+    public function getKeyName(): string
     {
         return $this->keyName ?: 'id';
     }
@@ -327,7 +333,7 @@ class Grid
         $this->buildRows($data);
 
         $rows = [];
-        foreach ($this->rows() as $row) {
+        foreach ($this->rows as $row) {
             $item = [];
             foreach ($this->visibleColumnNames() as $name) {
                 $item[$name] = $row->column($name);
@@ -353,15 +359,9 @@ class Grid
      * Set grid row callback function.
      *
      * @param Closure|null $callable
-     *
-     * @return Collection|null
      */
     public function rows(Closure $callable = null)
     {
-        if (is_null($callable)) {
-            return $this->rows;
-        }
-
         $this->rowsCallback = $callable;
     }
 
@@ -381,7 +381,7 @@ class Grid
      *
      * @return $this
      */
-    public function with($variables = [])
+    public function with($variables = []): self
     {
         $this->variables = $variables;
 
@@ -394,7 +394,7 @@ class Grid
      * @param string $view
      * @param array  $variables
      */
-    public function setView($view, $variables = [])
+    public function setView(string $view, $variables = [])
     {
         if (!empty($variables)) {
             $this->with($variables);
@@ -424,7 +424,7 @@ class Grid
      *
      * @return $this
      */
-    public function rendering(callable $callback)
+    public function rendering(callable $callback): self
     {
         $this->renderingCallbacks[] = $callback;
 
@@ -441,6 +441,10 @@ class Grid
     {
         $this->handleExportRequest(true);
 
+        if (input('_query')) {
+            return $this->inquire(PageInfo::pagesize());
+        }
+
         $this->build();
 
         $this->callRenderingCallback();
@@ -451,6 +455,7 @@ class Grid
 
         return view($this->view, $variables)->render();
     }
+
 
     /**
      * Initialize with user pre-defined default disables and exporter, etc.
@@ -511,7 +516,9 @@ class Grid
      */
     protected function applyColumnFilter()
     {
-        $this->columns->each->bindFilterQuery($this->model());
+        $this->columns->each(function (Column $column) {
+            $column->bindFilterQuery($this->model());
+        });
     }
 
     /**
@@ -521,7 +528,9 @@ class Grid
      */
     protected function applyColumnSearch()
     {
-        $this->columns->each->bindSearchQuery($this->model());
+        $this->columns->each(function (Column $column) {
+            $column->bindSearchQuery($this->model());
+        });
     }
 
     /**

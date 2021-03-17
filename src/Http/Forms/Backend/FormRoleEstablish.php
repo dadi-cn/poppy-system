@@ -61,7 +61,7 @@ class FormRoleEstablish extends FormWidget
         $id && $Role->init($id) && $Role->share();
     }
 
-    public function data()
+    public function data(): array
     {
         if ($this->id) {
             return [
@@ -85,17 +85,17 @@ class FormRoleEstablish extends FormWidget
             ])->disable()->attribute([
                 'lay-ignore',
             ]);
-            $this->text('name', '角色标识')->disable()->readonly();
+            $this->text('name', '标识')->disable()->readonly()->help('角色标识在后台不进行显示, 如果需要进行项目内部约定');
         }
         else {
             $this->select('guard', '角色组')->options(PamAccount::kvType())->rules([
                 Rule::required(),
             ]);
-            $this->text('name', '角色标识');
+            $this->text('name', '标识')->help('角色标识在后台不进行显示, 如果需要进行项目内部约定');
         }
 
         $this->text('title', '角色名称')->rules([
             Rule::required(),
-        ]);
+        ])->help('显示的名称');
     }
 }

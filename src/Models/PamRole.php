@@ -3,13 +3,10 @@
 namespace Poppy\System\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Poppy\Core\Rbac\Contracts\RbacRoleContract;
 use Poppy\Core\Rbac\Traits\RbacRoleTrait;
 use Poppy\Framework\Helper\ArrayHelper;
-use Poppy\Framework\Http\Pagination\PageInfo;
-use Poppy\System\Classes\Traits\FilterTrait;
 
 /**
  * 用户角色
@@ -22,18 +19,11 @@ use Poppy\System\Classes\Traits\FilterTrait;
  * @property int                             $is_enable 是否可用
  * @property-read Collection|PamPermission[] $perms
  * @property-read Collection|PamAccount[]    $users
- * @method static Builder|PamRole filter($input = [], $filter = null)
- * @method static Builder|PamRole paginateFilter($perPage = null, $columns = [], $pageName = 'page', $page = null)
- * @method static Builder|PamRole simplePaginateFilter($perPage = null, $columns = [], $pageName = 'page')
- * @method static Builder|PamRole whereBeginsWith($column, $value, $boolean = 'and')
- * @method static Builder|PamRole whereEndsWith($column, $value, $boolean = 'and')
- * @method static Builder|PamRole whereLike($column, $value, $boolean = 'and')
- * @method static Builder|PamRole pageFilter(PageInfo $pageInfo, $columns = [], $pageName = 'page')
  * @mixin Eloquent
  */
 class PamRole extends Eloquent implements RbacRoleContract
 {
-    use RbacRoleTrait, FilterTrait;
+    use RbacRoleTrait;
 
     const BE_ROOT  = 'root';      // admin user
     const FE_USER  = 'user';      // web user

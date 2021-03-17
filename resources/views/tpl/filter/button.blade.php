@@ -1,5 +1,5 @@
 <span class="header-filter-switch" id="{!! $filter_id !!}">
-    <i class="fa {!! $expand ? 'fa-caret-down' : 'fa-caret-right' !!}" id="{!! $filter_id !!}-icon"></i>
+    <i class="fa fa-caret-down" id="{!! $filter_id !!}-icon"></i>
 </span>
 <script>
 $(function() {

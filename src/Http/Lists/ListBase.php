@@ -28,6 +28,8 @@ abstract class ListBase implements ListContract
     }
 
 
+    public $title = '';
+
     /**
      * @var Grid
      */
@@ -79,18 +81,18 @@ abstract class ListBase implements ListContract
     /**
      * Dynamically add columns to the grid view.
      *
-     * @param $method
-     * @param $arguments
+     * @param string $method
+     * @param array  $parameters
      *
      * @return Column
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $parameters)
     {
         if (static::hasMacro($method)) {
-            return $this->macroCall($method, $arguments);
+            return $this->macroCall($method, $parameters);
         }
 
-        $label = $arguments[0] ?? null;
+        $label = $parameters[0] ?? null;
 
         if ($this->model()->eloquent()) {
             return $this->addColumn($method, $label);
@@ -115,7 +117,7 @@ abstract class ListBase implements ListContract
         return $this->columns;
     }
 
-    public function seek(): Closure
+    public function filter(): Closure
     {
         return function (Filter $filter) {
         };

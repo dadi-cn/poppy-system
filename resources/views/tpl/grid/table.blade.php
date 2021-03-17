@@ -73,6 +73,7 @@ $('#{!! $filter_id !!}-reload').on('click', function() {
     );
     return false;
 });
+
 // 监听排序事件
 // https://www.layui.com/doc/modules/table.html#onsort
 layui.table.on('sort({!! $id !!}-filter)', function(obj) {

@@ -4,10 +4,7 @@ namespace Poppy\System\Models;
 
 use Carbon\Carbon;
 use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Poppy\Framework\Http\Pagination\PageInfo;
-use Poppy\System\Classes\Traits\FilterTrait;
 
 /**
  * 登录日志
@@ -23,21 +20,10 @@ use Poppy\System\Classes\Traits\FilterTrait;
  * @property Carbon          $created_at   创建时间
  * @property Carbon          $updated_at   修改时间
  * @property-read PamAccount $pam
- * @method static Builder|PamLog filter($input = [], $filter = null)
- * @method static Builder|PamLog newModelQuery()
- * @method static Builder|PamLog newQuery()
- * @method static Builder|PamLog pageFilter(PageInfo $pageInfo)
- * @method static Builder|PamLog paginateFilter($perPage = null, $columns = [], $pageName = 'page', $page = null)
- * @method static Builder|PamLog query()
- * @method static Builder|PamLog simplePaginateFilter($perPage = null, $columns = [], $pageName = 'page', $page = null)
- * @method static Builder|PamLog whereBeginsWith($column, $value, $boolean = 'and')
- * @method static Builder|PamLog whereEndsWith($column, $value, $boolean = 'and')
- * @method static Builder|PamLog whereLike($column, $value, $boolean = 'and')
  * @mixin Eloquent
  */
 class PamLog extends Eloquent
 {
-    use FilterTrait;
 
     protected $table = 'pam_log';
 

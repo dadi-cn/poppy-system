@@ -13,6 +13,8 @@ use Poppy\System\Http\Lists\ListBase;
 class ListPamLog extends ListBase
 {
 
+    public $title = '登录日志';
+
     /**
      * @throws ApplicationException
      */
@@ -27,7 +29,7 @@ class ListPamLog extends ListBase
     }
 
 
-    public function seek(): Closure
+    public function filter(): Closure
     {
         return function (Filter $filter) {
             $filter->column(1 / 12, function (Filter $column) {

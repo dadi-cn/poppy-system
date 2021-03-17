@@ -6,15 +6,12 @@ use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Auth\Authenticatable as TraitAuthenticatable;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Poppy\Core\Rbac\Traits\RbacUserTrait;
-use Poppy\Framework\Http\Pagination\PageInfo;
 use Poppy\System\Action\Pam;
-use Poppy\System\Classes\Traits\FilterTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
 
 /**
@@ -42,20 +39,13 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
  * @property string|null               $disable_end_at     禁用结束时间
  * @property int                       $message_num        短信条数
  * @property int                       $allow_ip           是否开启ip限制
- * @method static Builder|PamAccount filter($input = [], $filter = null)
- * @method static Builder|PamAccount pageFilter(PageInfo $pageInfo)
- * @method static Builder|PamAccount paginateFilter($perPage = null, $columns = [], $pageName = 'page', $page = null)
- * @method static Builder|PamAccount simplePaginateFilter($perPage = null, $columns = [], $pageName = 'page')
- * @method static Builder|PamAccount whereBeginsWith($column, $value, $boolean = 'and')
- * @method static Builder|PamAccount whereEndsWith($column, $value, $boolean = 'and')
- * @method static Builder|PamAccount whereLike($column, $value, $boolean = 'and')
  * @property-read PamRoleAccount       $role
  * @property-read Collection|PamRole[] $roles
  * @mixin Eloquent
  */
 class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenticatable
 {
-    use TraitAuthenticatable, RbacUserTrait, Authorizable, FilterTrait, Notifiable;
+    use TraitAuthenticatable, RbacUserTrait, Authorizable, Notifiable;
 
     /* Register Type
      -------------------------------------------- */

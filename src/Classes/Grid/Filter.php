@@ -371,18 +371,6 @@ class Filter extends FilterButton
     }
 
     /**
-     * Expand filter container.
-     *
-     * @return $this
-     */
-    public function expand()
-    {
-        $this->expand = true;
-
-        return $this;
-    }
-
-    /**
      * Execute the filter with conditions.
      *
      * @param bool $toArray
@@ -435,7 +423,6 @@ class Filter extends FilterButton
             'action'    => $this->action ?: $this->urlWithoutFilters(),
             'layout'    => $this->layout,
             'filter_id' => $this->filterID,
-            'expand'    => $this->expand,
         ])->render();
     }
 

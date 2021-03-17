@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class Scope implements Renderable
 {
-    const QUERY_NAME = '_scope_';
+    const QUERY_NAME = '_scope';
 
     /**
      * @var string
@@ -62,13 +62,15 @@ class Scope implements Renderable
     }
 
     /**
+     * Scope 因为涉及到刷新, 所以使用跳转的方式
+     * 这种方式和 layui 的监听tab 不同, 这种会在刷新页面, tab 不会保留刷新的参数
      * @return string
      */
     public function render(): string
     {
-        $url = request()->fullUrlWithQuery([static::QUERY_NAME => $this->key]);
+        $url       = request()->fullUrlWithQuery([static::QUERY_NAME => $this->key]);
         $className = input(static::QUERY_NAME) === $this->key ? 'class="layui-this"' : '';
-        return "<li {$className}><a href=\"{$url}\">{$this->label}</a></li>";
+        return "<li {$className}><a class=\"J_ignore\" href=\"{$url}\">{$this->label}</a></li>";
     }
 
     /**
@@ -77,7 +79,7 @@ class Scope implements Renderable
      *
      * @return $this
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments): self
     {
         $this->queries->push(compact('method', 'arguments'));
 

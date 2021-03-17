@@ -23,7 +23,6 @@ class FilterButton extends AbstractTool
     {
         $variables = [
             'url_no_scopes' => $this->filter()->urlWithoutScopes(),
-            'expand'        => $this->filter()->expand,
             'filter_id'     => $this->filter()->getFilterId(),
         ];
 

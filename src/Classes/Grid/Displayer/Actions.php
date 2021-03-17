@@ -2,6 +2,7 @@
 
 namespace Poppy\System\Classes\Grid\Displayer;
 
+use Closure;
 use Poppy\System\Classes\Grid\Tools\BaseButton;
 
 class Actions extends AbstractDisplayer
@@ -52,9 +53,9 @@ class Actions extends AbstractDisplayer
     /**
      * @inheritDoc
      */
-    public function display($callback = null)
+    public function display($callback = null): string
     {
-        if ($callback instanceof \Closure) {
+        if ($callback instanceof Closure) {
             $callback->call($this, $this);
         }
 
