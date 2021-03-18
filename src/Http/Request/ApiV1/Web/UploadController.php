@@ -23,8 +23,8 @@ class UploadController extends WebApiController
      * @apiName             SystemUploadImage
      * @apiGroup            System
      * @apiParam   {string} image         图片内容(支持多张/单张上传)
-     * @apiParam   {string} [type]        上传图片的类型(form,base64) [form|表单(默认)]
-     * @apiParam   {string} [image_type]  图片图片存储类型(default)默认default
+     * @apiParam   {string} [type]        上传图片的类型 [form|表单(默认),base64,url]
+     * @apiParam   {string} [image_type]  图片图片存储类型[default|默认]
      */
     public function image()
     {
@@ -40,7 +40,7 @@ class UploadController extends WebApiController
         }
 
         $validator = Validator::make($all, [
-            'type' => 'required|in:form,base64',
+            'type' => 'required|in:form,base64,url',
         ], [], [
             'type' => '上传图片的类型',
         ]);
@@ -119,6 +119,22 @@ class UploadController extends WebApiController
                 $content = base64_decode($_img);
                 try {
                     if ($Image->saveInput($content)) {
+                        $urls[] = $Image->getUrl();
+                    }
+                } catch (Throwable $e) {
+                    continue;
+                }
+            }
+        }
+        elseif ($type === 'url') {
+            $image = input('image');
+            if (!is_array($image)) {
+                $image = [$image];
+            }
+            $Image->setQuality(85);
+            foreach ($image as $_img) {
+                try {
+                    if ($Image->saveInput($_img)) {
                         $urls[] = $Image->getUrl();
                     }
                 } catch (Throwable $e) {
