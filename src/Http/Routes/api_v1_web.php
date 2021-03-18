@@ -14,8 +14,6 @@ Route::group([
     ->name('py-system:pam.auth.login');
     $route->post('auth/access', 'AuthController@access')
         ->name('py-system:pam.auth.access');
-    $route->post('auth/token/{guard}', 'AuthController@token')
-        ->name('py-system:pam.auth.token');
 
     $route->post('captcha/verify_code', 'CaptchaController@verifyCode');
 
