@@ -155,6 +155,7 @@ class AuthController extends WebApiController
         ]);
     }
 
+
     /**
      * @api                    {post} api_v1/system/auth/reset_password 重设密码
      * @apiVersion             1.0.0

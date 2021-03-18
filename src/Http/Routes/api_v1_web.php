@@ -11,11 +11,14 @@ Route::group([
     'namespace'  => 'Poppy\System\Http\Request\ApiV1\Web',
 ], function (Illuminate\Routing\Router $route) {
     $route->post('auth/login', 'AuthController@login')
-    ->name('py-system:pam.auth.login');
+        ->name('py-system:pam.auth.login');
     $route->post('auth/access', 'AuthController@access')
         ->name('py-system:pam.auth.access');
 
+    // captcha
     $route->post('captcha/verify_code', 'CaptchaController@verifyCode');
+    $route->post('captcha/send', 'CaptchaController@send');
+    $route->post('captcha/fetch', 'CaptchaController@fetch');
 
     // info
     $route->post('core/info', 'CoreController@info');

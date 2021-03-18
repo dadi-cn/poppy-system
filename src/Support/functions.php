@@ -67,7 +67,7 @@ if (!function_exists('sys_trans')) {
      * @param array  $replace
      * @return string
      */
-    function sys_trans($line, array $replace = [])
+    function sys_trans(string $line, array $replace = []): string
     {
         foreach ($replace as $key => $value) {
             $line = str_replace(
@@ -99,7 +99,7 @@ if (!function_exists('sys_str_unique')) {
      * @param string $add
      * @return string
      */
-    function sys_str_unique($current, $add)
+    function sys_str_unique(string $current, string $add): string
     {
         // 追加
         $current .= ',' . $add;
@@ -295,7 +295,7 @@ if (!function_exists('sys_key_trim')) {
      * @param string $key
      * @return string
      */
-    function sys_key_trim(string $key):string
+    function sys_key_trim(string $key): string
     {
         return StrHelper::trimSpace(preg_replace('/-----.*?-----/', '', $key));
     }
@@ -314,6 +314,20 @@ if (!function_exists('sys_container')) {
     }
 }
 
+if (!function_exists('sys_api_demo')) {
+    /**
+     * 是否是测试模式
+     */
+    function sys_api_demo(): bool
+    {
+        $input = input('_py_sys_secret');
+        if ($input) {
+            return $input === config('poppy.system.secret');
+        }
+        return false;
+    }
+}
+
 if (!function_exists('sys_content_trim')) {
     /**
      * 清空word 代码
@@ -321,7 +335,7 @@ if (!function_exists('sys_content_trim')) {
      * @param string $allowable_tags 允许保留的标签
      * @return string
      */
-    function sys_content_trim(string $content, $allowable_tags = 'p,img'):string
+    function sys_content_trim(string $content, $allowable_tags = 'p,img'): string
     {
         mb_regex_encoding('UTF-8');
         //replace MS special characters first

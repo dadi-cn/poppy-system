@@ -131,6 +131,26 @@ class Verification
         return $this->setError(trans('py-system::action.verification.check_captcha_error'));
     }
 
+
+    /**
+     * 获取通行证验证码
+     * @param string $passport 通行证
+     * @return bool
+     */
+    public function fetchCaptcha(string $passport): bool
+    {
+        if (!$this->checkPassport($passport)) {
+            return false;
+        }
+        $key = $this->passportKey;
+
+        if ($data = self::$db->get($this->ckCaptcha() . ':' . $key)) {
+            $this->captcha = $data['captcha'];
+            return true;
+        }
+        return $this->setError('验证码失效, 无法获取');
+    }
+
     /**
      * 生成一次验证码
      * @param int    $expired_min 过期时间
@@ -140,14 +160,11 @@ class Verification
     public function genOnceVerifyCode($expired_min = 10, $hidden_str = ''): string
     {
         $randStr = Str::random();
-        if (!$hidden_str) {
-            $hidden_str = Str::random(6);
-        }
-        $str  = [
+        $str     = [
             'hidden' => $hidden_str,
             'random' => $randStr . '@' . Carbon::now()->timestamp,
         ];
-        $code = md5(json_encode($str));
+        $code    = md5(json_encode($str) . microtime());
         self::$db->set($this->ckOnce() . ':' . $code, $str, 'ex', $expired_min * 60);
         return $code;
     }
@@ -181,7 +198,7 @@ class Verification
      */
     public function getHiddenStr(): string
     {
-        return $this->hiddenStr;
+        return (string) $this->hiddenStr;
     }
 
     /**
