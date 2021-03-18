@@ -153,11 +153,9 @@ class DefaultUploadProvider implements UploadContract
     }
 
     /**
-     * 使用文件/form 表单形式上传获取并且保存
-     * @param UploadedFile $file file 对象
-     * @return mixed
+     * @inheritDoc
      */
-    public function saveFile($file): bool
+    public function saveFile(UploadedFile $file): bool
     {
         if (!$file) {
             return $this->setError('没有上传任何文件');
@@ -208,7 +206,7 @@ class DefaultUploadProvider implements UploadContract
     /**
      * @inheritDoc
      */
-    public function resize($content, $width = 1920, $height = 1440, $crop = false)
+    public function resize($content, $width = 1920, $height = 1440, $crop = false): StreamInterface
     {
         if ($content instanceof Image) {
             $Image = $content;

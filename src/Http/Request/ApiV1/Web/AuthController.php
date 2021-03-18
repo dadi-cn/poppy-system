@@ -26,11 +26,11 @@ class AuthController extends WebApiController
     use PoppyTrait, ThrottlesLogins;
 
     /**
-     * @api                  {post} api_v1/system/auth/access 检测 Token 是否过期
+     * @api
      * @apiVersion           1.0.0
      * @apiName              PamAuthAccess
      * @apiGroup             System
-     * @apiParam {string}    token            Token
+     * @apiParam {string}
      * @apiSuccess {int}        id              ID
      * @apiSuccess {string}     username        用户名
      * @apiSuccess {string}     mobile          手机号
@@ -45,10 +45,37 @@ class AuthController extends WebApiController
      *     "email": "",
      *     "password": "34e6ffe64017f5ff509814f7106d3c0c",
      *     "type": "user",
-     *     "is_enable": 1,
+     *     "is_enable": 'Y',
      *     "disable_reason": "",
      *     "created_at": "2018-01-02 16:08:01",
      *     "updated_at": "2018-01-31 10:28:13"
+     * }
+     * @api              {post} api_v1/system/auth/access 检测 Token
+     * @apiVersion       1.0.0
+     * @apiName          PamAuthAccess
+     * @apiGroup         System
+     *
+     * @apiParam {int}   token            Token
+     *
+     * @apiSuccess {int}      id              ID
+     * @apiSuccess {string}   username        用户名
+     * @apiSuccess {string}   mobile          手机号
+     * @apiSuccess {string}   email           邮箱
+     * @apiSuccess {string}   type            类型
+     * @apiSuccess {string}   is_enable       是否启用[Y|N]
+     * @apiSuccess {string}   disable_reason  禁用原因
+     * @apiSuccess {string}   created_at      创建时间
+     * @apiSuccessExample {json} data:
+     * {
+     *     "id": 9,
+     *     "username": "user001",
+     *     "mobile": "",
+     *     "email": "",
+     *     "type": "user",
+     *     "is_enable": "Y",
+     *     "disable_reason": "",
+     *     "created_at": "2021-03-18 15:30:15",
+     *     "updated_at": "2021-03-18 16:38:06"
      * }
      */
     public function access(): JsonResponse
@@ -59,11 +86,13 @@ class AuthController extends WebApiController
             if (!$user = app('tymon.jwt.auth')->parseToken()->authenticate()) {
                 return $response->json([
                     'message' => '登录失效，请重新登录！',
+                    'status'  => 401,
                 ], 401, [], JSON_UNESCAPED_UNICODE);
             }
         } catch (JWTException $e) {
             return $response->json([
                 'message' => 'Token 错误',
+                'status'  => 401,
             ], 401, [], JSON_UNESCAPED_UNICODE);
         }
 
@@ -200,7 +229,7 @@ class AuthController extends WebApiController
         }
 
         /** @var ResponseFactory $response */
-        $response  = app(ResponseFactory::class);
+        $response = app(ResponseFactory::class);
         if ($this->hasTooManyLoginAttempts($this->pyRequest())) {
             $seconds = $this->limiter()->availableIn($this->throttleKey($this->pyRequest()));
             $message = $this->pyTranslator()->get('auth.throttle', ['seconds' => $seconds]);

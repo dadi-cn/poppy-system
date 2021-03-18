@@ -2,13 +2,15 @@
 
 namespace Poppy\System\Classes\Contracts;
 
+use Illuminate\Contracts\Support\Renderable;
+
 /**
  * 界面渲染
+ * @deprecated
+ * @see     Renderable
+ * @removed 4.0
  */
 interface UiContract
 {
-	/**
-	 * @return mixed 错误信息
-	 */
-	public function render();
+    public function render();
 }

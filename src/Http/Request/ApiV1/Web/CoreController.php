@@ -24,7 +24,7 @@ class CoreController extends WebApiController
         $hook   = sys_hook('poppy.system.api_info');
         $system = array_merge([], $hook);
 
-        return Resp::web(Resp::SUCCESS, '获取系统配置信息', $system);
+        return Resp::success('获取系统配置信息', $system);
     }
 
 

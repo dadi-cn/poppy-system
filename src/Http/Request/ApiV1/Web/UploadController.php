@@ -36,7 +36,7 @@ class UploadController extends WebApiController
         $all['type']       = $type;
 
         if (!isset($all['image']) || !$all['image']) {
-            return Resp::web(Resp::ERROR, '图片内容必须');
+            return Resp::error('图片内容必须');
         }
 
         $validator = Validator::make($all, [
@@ -45,7 +45,7 @@ class UploadController extends WebApiController
             'type' => '上传图片的类型',
         ]);
         if ($validator->fails()) {
-            return Resp::web(Resp::ERROR, $validator->messages());
+            return Resp::error($validator->messages());
         }
 
         if (sys_is_demo()) {
@@ -145,12 +145,12 @@ class UploadController extends WebApiController
 
         // 上传图
         if (count($urls)) {
-            return Resp::web(Resp::SUCCESS, '上传成功', [
+            return Resp::success('上传成功', [
                 'url' => $urls,
             ]);
         }
 
-        return Resp::web(Resp::ERROR, $Image->getError());
+        return Resp::error($Image->getError());
     }
 
     /**
@@ -176,7 +176,7 @@ class UploadController extends WebApiController
             'type' => '类型',
         ]);
         if ($validator->fails()) {
-            return Resp::web(Resp::ERROR, $validator->messages());
+            return Resp::error($validator->messages());
         }
 
         if (sys_is_demo()) {
@@ -218,16 +218,20 @@ class UploadController extends WebApiController
             ]);
         }
 
-        return Resp::web(Resp::ERROR, $Uploader->getError());
+        return Resp::error($Uploader->getError());
     }
 
 
     private function demo()
     {
-        return Resp::web(Resp::SUCCESS, '上传成功', [
-            'url' => [
-                'https://oss.wulicode.com/demo/480x640/0' . random_int(0, 6) . '.jpg',
-            ],
-        ]);
+        try {
+            return Resp::success('上传成功', [
+                'url' => [
+                    'https://oss.wulicode.com/demo/480x640/0' . random_int(0, 6) . '.jpg',
+                ],
+            ]);
+        } catch (Throwable $e) {
+            return Resp::error('操作失败');
+        }
     }
 }

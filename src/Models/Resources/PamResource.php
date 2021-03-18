@@ -2,20 +2,20 @@
 
 namespace Poppy\System\Models\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\Resource;
+use Poppy\System\Models\PamAccount;
+use Poppy\System\Models\SysConfig;
 
 /**
- * 用户resource
+ * @mixin PamAccount
  */
 class PamResource extends Resource
 {
+
     /**
-     * 将资源转换成数组。
-     * @param Request $request request
-     * @return array
+     * @inheritDoc
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id'             => $this->id,
@@ -23,10 +23,9 @@ class PamResource extends Resource
             'mobile'         => $this->mobile,
             'email'          => $this->email,
             'type'           => $this->type,
-            'is_enable'      => $this->is_enable,
+            'is_enable'      => $this->is_enable === SysConfig::YES ? 'Y' : 'N',
             'disable_reason' => $this->disable_reason,
             'created_at'     => $this->created_at->toDatetimeString(),
-            'updated_at'     => $this->updated_at->toDatetimeString(),
         ];
     }
 }

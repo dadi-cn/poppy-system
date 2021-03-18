@@ -2,7 +2,6 @@
 
 namespace Poppy\System\Classes\Contracts;
 
-use Intervention\Image\Image;
 use Psr\Http\Message\StreamInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -64,12 +63,12 @@ interface UploadContract
     /**
      * 裁剪和压缩
      * @param mixed $content 需要压缩的内容
-     * @param int         $width   宽度
-     * @param int         $height  高度
-     * @param bool        $crop    是否进行裁剪
+     * @param int   $width   宽度
+     * @param int   $height  高度
+     * @param bool  $crop    是否进行裁剪
      * @return StreamInterface
      */
-    public function resize($content, $width = 1920, $height = 1440, $crop = false);
+    public function resize($content, $width = 1920, $height = 1440, $crop = false): StreamInterface;
 
     /**
      * 保存内容或者流方式上传
