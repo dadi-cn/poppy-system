@@ -59,7 +59,8 @@ class DefaultApiSignProvider implements ApiSignContract
 
     public function check(Request $request): bool
     {
-        if (!config('poppy.system.api_enable_sign')) {
+        // 加密 debug, 不验证签名
+        if (config('poppy.system.secret') && $request->input('_py_sys_secret') === config('poppy.system.secret')) {
             return true;
         }
 
@@ -126,8 +127,14 @@ JS;
 
     private function except($params): array
     {
-        return Arr::except($params, [
-            'sign', 'image', 'token', '_token', 'file',
+        $excepts = [];
+        foreach ($params as $key => $param) {
+            if (!Str::startsWith($key, '_')) {
+                $excepts[$key] = $params;
+            }
+        }
+        return Arr::except($excepts, [
+            'sign', 'image', 'token', 'file',
         ]);
     }
 }
