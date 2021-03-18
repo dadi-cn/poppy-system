@@ -59,6 +59,12 @@ class DefaultApiSignProvider implements ApiSignContract
 
     public function check(Request $request): bool
     {
+        // check token
+        $timestamp = $request->input('timestamp');
+        if (!$timestamp) {
+            return $this->setError(new Resp(Resp::PARAM_ERROR, '未传递时间戳'));
+        }
+
         // 加密 debug, 不验证签名
         if (config('poppy.system.secret') && $request->input('_py_sys_secret') === config('poppy.system.secret')) {
             return true;
@@ -68,12 +74,6 @@ class DefaultApiSignProvider implements ApiSignContract
         $sign = $request->input('sign');
         if (!$sign) {
             return $this->setError(new Resp(Resp::PARAM_ERROR, '未进行签名'));
-        }
-
-        // check token
-        $timestamp = $request->input('timestamp');
-        if (!$timestamp) {
-            return $this->setError(new Resp(Resp::PARAM_ERROR, '未传递时间戳'));
         }
 
         // check sign
