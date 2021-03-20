@@ -6,12 +6,12 @@ use Poppy\System\Classes\Contracts\PasswordContract;
 use Poppy\System\Models\PamAccount;
 
 /**
- * 后台用户认证
+ * 用户认证
  */
 class DefaultPasswordProvider implements PasswordContract
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function check(PamAccount $pam, string $password, $type = 'plain'): bool
     {
@@ -19,7 +19,7 @@ class DefaultPasswordProvider implements PasswordContract
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function genPassword(string $password, string $reg_datetime, string $password_key): string
     {
