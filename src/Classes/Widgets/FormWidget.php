@@ -41,6 +41,7 @@ use Throwable;
  * @method Field\Slider         slider($name, $label = '')
  * @method Field\File           file($name, $label = '')
  * @method Field\Image          image($name, $label = '')
+ * @method Field\MultiImage     multiImage($name, $label = '')
  * @method Field\Date           date($name, $label = '')
  * @method Field\Datetime       datetime($name, $label = '')
  * @method Field\Time           time($name, $label = '')

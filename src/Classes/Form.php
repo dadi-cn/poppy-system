@@ -67,7 +67,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Embeds         embeds($column, $label = '', $callback)
- * @method Field\MultipleImage  multipleImage($column, $label = '')
+ * @method Field\MultiImage  multipleImage($column, $label = '')
  * @method Field\MultipleFile   multipleFile($column, $label = '')
  * @method Field\Captcha        captcha($column, $label = '')
  * @method Field\Listbox        listbox($column, $label = '')
@@ -119,6 +119,7 @@ class Form implements Renderable
         'hidden'         => Field\Hidden::class,
         'id'             => Field\Id::class,
         'image'          => Field\Image::class,
+        'multiImage'     => Field\MultiImage::class,
         'ip'             => Field\Ip::class,
         'mobile'         => Field\Mobile::class,
         'month'          => Field\Month::class,
@@ -140,7 +141,6 @@ class Form implements Renderable
         'tags'           => Field\Tags::class,
         'icon'           => Field\Icon::class,
         'multipleFile'   => Field\MultipleFile::class,
-        'multipleImage'  => Field\MultipleImage::class,
         'captcha'        => Field\Captcha::class,
         'listbox'        => Field\Listbox::class,
         'table'          => Field\Table::class,

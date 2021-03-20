@@ -130,11 +130,11 @@ JS;
         $excepts = [];
         foreach ($params as $key => $param) {
             if (!Str::startsWith($key, '_')) {
-                $excepts[$key] = $params;
+                $excepts[$key] = $param;
             }
         }
         return Arr::except($excepts, [
-            'sign', 'image', 'token', 'file',
+            'sign', 'image', 'file', 'token',
         ]);
     }
 }
