@@ -19,7 +19,7 @@ class CaptchaController extends WebApiController
      * @apiName          CaptchaSend
      * @apiGroup         System
      *
-     * @apiParam {int}   passport            通行证
+     * @apiParam {string}  passport            通行证
      */
     public function send()
     {
