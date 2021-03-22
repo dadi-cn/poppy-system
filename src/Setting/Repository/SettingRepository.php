@@ -78,7 +78,7 @@ class SettingRepository implements SettingContract
 
     /**
      * Returns a setting value by the module (or plugin) name and setting name.
-     * @param string $key     Specifies the setting key value, for example 'system:updates.check'
+     * @param string $key     Specifies the setting key value, for example 'system::updates.check'
      * @param mixed  $default the default value to return if the setting doesn't exist in the DB
      * @return mixed returns the setting value loaded from the database or the default value
      */
@@ -101,6 +101,7 @@ class SettingRepository implements SettingContract
         if (!$this->hasTable) {
             return '';
         }
+
         $record = $this->findRecord($key);
         if (!$record) {
             // get default by setting.yaml
