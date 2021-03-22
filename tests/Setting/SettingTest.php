@@ -2,6 +2,7 @@
 
 namespace Poppy\System\Tests\Setting;
 
+use Exception;
 use Poppy\Framework\Application\TestCase;
 use Poppy\Framework\Exceptions\FakerException;
 use Poppy\System\Models\SysConfig;
@@ -26,6 +27,9 @@ class SettingTest extends TestCase
         $this->assertEquals('testing', $item);
     }
 
+    /**
+     * @throws Exception
+     */
     public function tearDown(): void
     {
         SysConfig::where('namespace', 'testing')->delete();
