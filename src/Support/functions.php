@@ -85,9 +85,11 @@ if (!function_exists('sys_seo')) {
     function sys_seo(...$args)
     {
         [$title, $description] = parse_seo($args);
+        $title       = $title ? $title . '-' . config('poppy.framework.title') : config('poppy.framework.title');
+        $description = $description ?: config('poppy.framework.description');
         View::share([
-            '_title'       => $title ?: sys_setting('py-system::site.title'),
-            '_description' => $description ?: sys_setting('py-system::site.description'),
+            '_title'       => $title,
+            '_description' => $description,
         ]);
     }
 }
