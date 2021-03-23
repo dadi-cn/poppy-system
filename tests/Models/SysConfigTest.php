@@ -10,9 +10,8 @@ class SysConfigTest extends SystemTestCase
 {
     public function testTableExist()
     {
-        // $exist = SysConfig::tableExists((new PamAccount())->getTable());
-        // $this->assertTrue($exist);
-
+        $exist = SysConfig::tableExists((new PamAccount())->getTable());
+        $this->assertTrue($exist);
 
         $tbExists = SysConfig::tableExists($this->faker()->lexify());
         $this->assertFalse($tbExists);
