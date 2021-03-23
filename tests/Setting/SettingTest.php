@@ -21,8 +21,21 @@ class SettingTest extends TestCase
     public function testGetGn()
     {
         app('poppy.system.setting')->removeNG('testing::set');
-        app('poppy.system.setting')->set($this->randKey('set'), $this->faker()->lexify());
-        app('poppy.system.setting')->set($this->randKey('set'), $this->faker()->lexify());
+
+        // A : Str
+        $keyA = $this->randKey('set');
+        $valA = $this->faker()->lexify();
+        app('poppy.system.setting')->set($keyA, $valA);
+        $valGetA = sys_setting($keyA);
+        $this->assertEquals($valA, $valGetA);
+
+        // B : Array
+        $keyB = $this->randKey('set');
+        $valB = $this->faker()->words();
+        app('poppy.system.setting')->set($keyB, $valB);
+        $valGetB = sys_setting($keyB);
+        $this->assertEquals($valB, $valGetB);
+
         $gn = app('poppy.system.setting')->getNG('testing::set');
         $this->assertCount(2, $gn);
     }

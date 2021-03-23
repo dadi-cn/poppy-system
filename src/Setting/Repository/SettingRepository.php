@@ -54,12 +54,10 @@ class SettingRepository implements SettingContract
     }
 
     /**
-     * Resets a setting value by deleting the record.
-     * @param string $key specifies the setting key value
-     * @return bool
+     * @inheritDoc
      * @throws Exception
      */
-    public function delete($key): bool
+    public function delete(string $key): bool
     {
         if (!$this->keyParserMatch($key)) {
             return $this->setError(trans('py-system::util.setting.key_not_match', [
@@ -79,12 +77,9 @@ class SettingRepository implements SettingContract
     }
 
     /**
-     * Returns a setting value by the module (or plugin) name and setting name.
-     * @param string $key     Specifies the setting key value, for example 'system::updates.check'
-     * @param mixed  $default the default value to return if the setting doesn't exist in the DB
-     * @return mixed returns the setting value loaded from the database or the default value
+     * @inheritDoc
      */
-    public function get($key, $default = '')
+    public function get(string $key, $default = '')
     {
         if ($this->reRead) {
             static::$cache = (array) sys_cache('py-system')->get(PySystemDef::ckSetting());
@@ -142,10 +137,7 @@ class SettingRepository implements SettingContract
     }
 
     /**
-     * Stores a setting value to the database.
-     * @param mixed $key   Specifies the setting key value, for example 'system:updates.check'
-     * @param mixed $value the setting value to store, serializable
-     * @return bool
+     * @inheritDoc
      */
     public function set($key, $value = ''): bool
     {
@@ -254,7 +246,7 @@ class SettingRepository implements SettingContract
      * @param string $key 获取的key
      * @return SysConfig|null
      */
-    private function findRecord(string $key)
+    private function findRecord(string $key): ?SysConfig
     {
         /** @var SysConfig $record */
         $record = SysConfig::query();
