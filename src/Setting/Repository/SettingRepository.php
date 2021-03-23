@@ -4,12 +4,14 @@ namespace Poppy\System\Setting\Repository;
 
 use DB;
 use Exception;
+use Illuminate\Support\Str;
 use Poppy\Core\Classes\Contracts\SettingContract;
 use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
 use Poppy\System\Classes\PySystemDef;
 use Poppy\System\Models\SysConfig;
+use Throwable;
 
 /**
  * system config
@@ -181,12 +183,12 @@ class SettingRepository implements SettingContract
 
     /**
      * 根据命名空间从数据库中获取数据
-     * @param string $namespace_with_group 命名空间和分组
+     * @param string $ng 命名空间和分组
      * @return array
      */
-    public function getNG($namespace_with_group): array
+    public function getNG(string $ng): array
     {
-        [$ns, $group] = explode('::', $namespace_with_group);
+        [$ns, $group] = explode('::', $ng);
         if (!$ns || !$group) {
             return [];
         }
@@ -197,6 +199,37 @@ class SettingRepository implements SettingContract
         });
 
         return $data->toArray();
+    }
+
+    /**
+     * 删除命名空间以及分组
+     * @param string $ng
+     * @return bool
+     */
+    public function removeNG(string $ng): bool
+    {
+        if (!Str::contains($ng, '::')) {
+            return false;
+        }
+        [$ns, $group] = explode('::', $ng);
+        if (!$ns && !$group) {
+            return false;
+        }
+        $Db     = SysConfig::where('namespace', $ns)->where('group', $group);
+        $values = (clone $Db)->pluck('item');
+        if ($values->count()) {
+            $values->each(function ($item) use ($ns, $group) {
+                unset(static::$cache["{$ns}::{$group}.{$item}"]);
+            });
+            $this->save();
+            try {
+                $Db->delete();
+                return true;
+            } catch (Throwable $e) {
+                return false;
+            }
+        }
+        return false;
     }
 
     /**

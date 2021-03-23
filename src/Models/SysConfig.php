@@ -118,7 +118,6 @@ class SysConfig extends Eloquent
         return kv($desc, $key);
     }
 
-
     /**
      * 检测表是否存在
      * @param string $table 检测的表的名称

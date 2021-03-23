@@ -16,4 +16,11 @@ class SysConfigTest extends SystemTestCase
         $tbExists = SysConfig::tableExists($this->faker()->lexify());
         $this->assertFalse($tbExists);
     }
+
+    public function tearDown(): void
+    {
+        SysConfig::where([
+
+        ]);
+    }
 }
