@@ -2,11 +2,10 @@
 
 namespace Poppy\System\Jobs;
 
+use Carbon\Carbon;
 use Curl\Curl;
-use ErrorException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Log;
 use Poppy\Framework\Application\Job;
 use Poppy\Framework\Helper\ArrayHelper;
 use Poppy\System\Classes\Traits\ListenerTrait;
@@ -46,7 +45,7 @@ class NotifyJob extends Job implements ShouldQueue
      * @param array  $params   请求的参数
      * @param int    $exec_num 请求次数
      */
-    public function __construct($url, $method, $params = [], $exec_num = 0)
+    public function __construct(string $url, string $method, $params = [], $exec_num = 0)
     {
         $this->url     = $url;
         $this->method  = $method;
@@ -56,7 +55,6 @@ class NotifyJob extends Job implements ShouldQueue
 
     /**
      * 执行
-     * @throws ErrorException
      */
     public function handle()
     {
@@ -75,16 +73,6 @@ class NotifyJob extends Job implements ShouldQueue
             ];
         }
 
-        $log = function ($result) {
-            if ($result instanceof stdClass) {
-                $result = json_decode(json_encode($result), true);
-                $result = ArrayHelper::toKvStr($result);
-            }
-            $kvParams = ArrayHelper::toKvStr($this->params);
-
-            return ($this->execNum + 1) . '\'s Request:' . "url : {$this->url}, method : {$this->method}, params : {$kvParams}, result : " . $result;
-        };
-
         $curl = new Curl();
         $curl->setTimeout(10);
         if ($this->method === 'post') {
@@ -96,15 +84,36 @@ class NotifyJob extends Job implements ShouldQueue
 
         if ($curl->errorCode) {
             if ($this->execNum < count($timeMap)) {
-                Log::info(sys_mark('system', self::class, $log($curl->errorMessage)));
+                $delayDesc = 'next will exec at (' . Carbon::now()->addSeconds($timeMap[$this->execNum])->toDateTimeString() . ')(' . $timeMap[$this->execNum] . 's)';
+                sys_error('py-system', self::class, $this->log($curl->errorMessage, $delayDesc));
                 dispatch((new self($this->url, $this->method, $this->params, $this->execNum + 1))->delay($timeMap[$this->execNum]));
             }
             else {
-                Log::error(sys_mark('system', self::class, $log($curl->errorMessage)));
+                sys_error('py-system', self::class, $this->log($curl->errorMessage));
             }
         }
         else {
-            Log::info(sys_mark('system', self::class, $log($resp)));
+            sys_info('py-system', self::class, $this->log($resp));
         }
+    }
+
+    /**
+     * 生成记录日志
+     * @param mixed  $result
+     * @param string $append
+     * @return string
+     */
+    private function log($result, $append = ''): string
+    {
+        if ($result instanceof stdClass) {
+            $result = json_decode(json_encode($result), true);
+            $result = ArrayHelper::toKvStr($result);
+        }
+        $kvParams = ArrayHelper::toKvStr($this->params);
+
+        return ($this->execNum + 1) . '\'s Request:' .
+            "url : {$this->url}, method : {$this->method}" .
+            ", params : {$kvParams}, result : {$result} " .
+            ($append ? ", tip : {$append}" : '');
     }
 }

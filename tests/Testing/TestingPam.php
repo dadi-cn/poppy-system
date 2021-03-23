@@ -52,7 +52,7 @@ class TestingPam
      */
     public static function exclude(): array
     {
-        $users = StrHelper::separate(PHP_EOL, sys_setting('py-system::testing.users'));
+        $users = StrHelper::separate(PHP_EOL, (string) sys_setting('py-system::testing.users'));
         if (!$users) {
             return [];
         }

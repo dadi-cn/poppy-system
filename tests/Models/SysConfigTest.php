@@ -19,8 +19,6 @@ class SysConfigTest extends SystemTestCase
 
     public function tearDown(): void
     {
-        SysConfig::where([
-
-        ]);
+        app('poppy.system.setting')->removeNG('py-system::db');
     }
 }

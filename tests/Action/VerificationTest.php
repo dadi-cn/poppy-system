@@ -18,9 +18,6 @@ class VerificationTest extends SystemTestCase
         $this->verification = new Verification();
     }
 
-    /**
-     * @throws FakerException
-     */
     public function testCaptcha()
     {
         $Verification = new Verification();

@@ -58,7 +58,6 @@ class EnvironmentTest extends SystemTestCase
             'mysqlnd',
             'mbstring',
             'bcmath',
-            'mcrypt',
         ];
 
         foreach ($env as $_env) {

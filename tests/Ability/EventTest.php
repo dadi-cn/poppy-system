@@ -2,10 +2,7 @@
 
 namespace Poppy\System\Tests\Ability;
 
-/**
- * Copyright (C) Update For IDE
- */
-
+use Carbon\Carbon;
 use Poppy\System\Events\PamDisableEvent;
 use Poppy\System\Tests\Base\SystemTestCase;
 
@@ -19,6 +16,7 @@ class EventTest extends SystemTestCase
 
     public function testPamDisable(): void
     {
-        event(new PamDisableEvent($this->pam));
+        event(new PamDisableEvent($this->pam, $this->pam, 'Testing Event dispatched @ ' . Carbon::now()));
+        $this->assertTrue(true);
     }
 }

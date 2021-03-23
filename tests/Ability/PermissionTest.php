@@ -56,8 +56,12 @@ class PermissionTest extends SystemTestCase
         /** @var Permission $permission */
         $permission = $this->corePermission()->permissions()->offsetGet($key);
 
+
         if ($permission) {
             $dbPerm = PamPermission::where('name', $key)->first();
+            if ($role->hasPermission($key)) {
+                $role->detachPermission($dbPerm);
+            }
             $role->attachPermission($dbPerm);
             $role->save();
             if ($this->pam->capable($permission->key())) {

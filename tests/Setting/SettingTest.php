@@ -32,7 +32,7 @@ class SettingTest extends TestCase
      */
     public function tearDown(): void
     {
-        app('poppy.system.setting')->removeNG('testing:set');
+        app('poppy.system.setting')->removeNG('testing::set');
     }
 
     private function randKey($group = ''): string
