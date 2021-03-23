@@ -4,11 +4,8 @@ namespace Poppy\System\Tests\Base;
 
 use DB;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Foundation\Application;
 use Log;
-use Poppy\Faker\Generator;
 use Poppy\Framework\Application\TestCase;
-use Poppy\Framework\Exceptions\FakerException;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\System\Classes\Traits\DbTrait;
@@ -72,15 +69,6 @@ class SystemTestCase extends TestCase
         $pam      = PamAccount::passport($username);
         $this->assertNotNull($pam, 'Testing user pam is not exist');
         $this->pam = $pam;
-    }
-
-    /**
-     * @return Generator|Application|mixed
-     * @throws FakerException
-     */
-    protected function faker()
-    {
-        return py_faker();
     }
 
     /**

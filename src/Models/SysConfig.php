@@ -2,6 +2,8 @@
 
 namespace Poppy\System\Models;
 
+use Carbon\Carbon;
+use DB;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
@@ -21,6 +23,9 @@ class SysConfig extends Eloquent
 {
     use KeyParserTrait;
 
+    public const STR_YES = 'Y';
+    public const STR_NO  = 'N';
+
     // 数据库使用 0/1 来代表关/开
     public const YES = 1;
     public const NO  = 0;
@@ -38,9 +43,12 @@ class SysConfig extends Eloquent
     public const MIN_HALF_WEEK = 5040;
     public const MIN_ONE_WEEK  = 10080;
     public const MIN_ONE_MONTH = 43200;
-    public    $timestamps = false;
-    protected $table      = 'sys_config';
-    protected $fillable   = [
+
+    public $timestamps = false;
+
+    protected $table = 'sys_config';
+
+    protected $fillable = [
         'namespace',
         'group',
         'item',
@@ -78,5 +86,65 @@ class SysConfig extends Eloquent
         ];
 
         return kv($desc, $key);
+    }
+
+    /**
+     * 字符来标识 YN
+     * @param null $key
+     * @return array|bool|string
+     */
+    public static function kvStrYn($key = null)
+    {
+        $desc = [
+            self::STR_NO  => '否',
+            self::STR_YES => '是',
+        ];
+
+        return kv($desc, $key);
+    }
+
+    /**
+     * 禁用/启用
+     * @param null $key key
+     * @return array|string
+     */
+    public static function kvEnable($key = null)
+    {
+        $desc = [
+            self::DISABLE => '禁用',
+            self::ENABLE  => '启用',
+        ];
+
+        return kv($desc, $key);
+    }
+
+
+    /**
+     * 检测表是否存在
+     * @param string $table 检测的表的名称
+     * @return mixed
+     */
+    public static function tableExists(string $table)
+    {
+        $statusKey  = 'py-system::db.table_status';
+        $expiredKey = 'py-system::db.table_expired';
+
+        $tbStatus = (array) sys_setting($statusKey, []);
+        $expired  = (int) sys_setting($expiredKey, 0);
+
+        if (!$expired || $expired <= Carbon::now()->timestamp || !isset($tbStatus[$table])) {
+            app('poppy.system.setting')->set($expiredKey, Carbon::now()->addMinutes(600)->timestamp);
+
+            // 重新查询表格是否存在
+            $hasTable         = DB::getSchemaBuilder()->hasTable($table);
+            $tbStatus[$table] = $hasTable;
+            app('poppy.system.setting')->set($statusKey, $tbStatus);
+        }
+
+        if (isset($tbStatus[$table])) {
+            return $tbStatus[$table];
+        }
+
+        return $tbStatus[$table];
     }
 }
