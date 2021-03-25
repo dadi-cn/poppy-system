@@ -8,7 +8,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Classes\Traits\AppTrait;
-use Poppy\Framework\Helper\ArrayHelper;
 use Poppy\System\Classes\Contracts\ApiSignContract;
 
 /**
@@ -16,6 +15,8 @@ use Poppy\System\Classes\Contracts\ApiSignContract;
  */
 abstract class DefaultBaseApiSign implements ApiSignContract
 {
+    use AppTrait;
+
     /**
      * 默认时间戳
      * @return int
@@ -67,7 +68,33 @@ JS;
 
     }
 
-    private function except($params): array
+    public function check(Request $request): bool
+    {
+        // check token
+        $timestamp = $request->input('timestamp');
+        if (!$timestamp) {
+            return $this->setError(new Resp(Resp::PARAM_ERROR, '未传递时间戳'));
+        }
+
+        // 加密 debug, 不验证签名
+        if (config('poppy.system.secret') && $request->input('_py_sys_secret') === config('poppy.system.secret')) {
+            return true;
+        }
+
+        // check token
+        $sign = $request->input('sign');
+        if (!$sign) {
+            return $this->setError(new Resp(Resp::PARAM_ERROR, '未进行签名'));
+        }
+
+        // check sign
+        if ($sign !== $this->sign($request->all())) {
+            return $this->setError(new Resp(Resp::SIGN_ERROR, '签名错误'));
+        }
+        return true;
+    }
+
+    protected function except($params): array
     {
         $excepts = [];
         foreach ($params as $key => $param) {

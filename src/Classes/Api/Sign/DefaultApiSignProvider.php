@@ -3,9 +3,7 @@
 namespace Poppy\System\Classes\Api\Sign;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Helper\ArrayHelper;
 use Poppy\System\Classes\Contracts\ApiSignContract;
@@ -54,45 +52,5 @@ class DefaultApiSignProvider extends DefaultBaseApiSign implements ApiSignContra
         $kvStr    = ArrayHelper::toKvStr($params);
         $signLong = md5(md5($kvStr) . $token($dirtyParams));
         return $signLong[1] . $signLong[3] . $signLong[15] . $signLong[31];
-    }
-
-
-    public function check(Request $request): bool
-    {
-        // check token
-        $timestamp = $request->input('timestamp');
-        if (!$timestamp) {
-            return $this->setError(new Resp(Resp::PARAM_ERROR, '未传递时间戳'));
-        }
-
-        // 加密 debug, 不验证签名
-        if (config('poppy.system.secret') && $request->input('_py_sys_secret') === config('poppy.system.secret')) {
-            return true;
-        }
-
-        // check token
-        $sign = $request->input('sign');
-        if (!$sign) {
-            return $this->setError(new Resp(Resp::PARAM_ERROR, '未进行签名'));
-        }
-
-        // check sign
-        if ($sign !== $this->sign($request->all())) {
-            return $this->setError(new Resp(Resp::SIGN_ERROR, '签名错误'));
-        }
-        return true;
-    }
-
-    private function except($params): array
-    {
-        $excepts = [];
-        foreach ($params as $key => $param) {
-            if (!Str::startsWith($key, '_')) {
-                $excepts[$key] = $param;
-            }
-        }
-        return Arr::except($excepts, [
-            'sign', 'image', 'file', 'token',
-        ]);
     }
 }
