@@ -25,13 +25,25 @@ class MiddlewareServiceProvider extends ServiceProvider
         |--------------------------------------------------------------------------
         |
         */
-        $router->middlewareGroup('web-dft', [
+        /* 基于系统开关的权限验证
+         * ---------------------------------------- */
+        $router->middlewareGroup('web-base', [
             'web',
             'sys-site_open',
         ]);
 
+        /* 独立的 web-auth 验证
+         * ---------------------------------------- */
         $router->middlewareGroup('web-auth', [
-            'web-dft',
+            'web-base',
+            'sys-auth:web',
+            'sys-auth_session',
+            'sys-disabled_pam',
+        ]);
+
+        /* Web + Auth 进行验证
+         * ---------------------------------------- */
+        $router->middlewareGroup('with-auth', [
             'sys-auth:web',
             'sys-auth_session',
             'sys-disabled_pam',
