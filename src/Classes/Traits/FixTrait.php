@@ -67,7 +67,7 @@ trait FixTrait
 			'method'  => $this->fix['method'],
 		]);
 
-		return view('py-mgr-page::backend.tpl.progress', [
+		return view('py-mgr-page::tpl.progress', [
 			'total'         => $this->fix['total'],
 			'section'       => $this->fix['section'],
 			'left'          => $this->fix['left'],
