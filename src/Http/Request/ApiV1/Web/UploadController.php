@@ -17,11 +17,11 @@ class UploadController extends WebApiController
 {
 
     /**
-     * @api                 {post} api_v1/system/upload/image 图片上传
+     * @api                 {post} api_v1/system/upload/image [Sys]图片上传
      * @apiDescription      图片上传
      * @apiVersion          1.0.0
-     * @apiName             SystemUploadImage
-     * @apiGroup            System
+     * @apiName             SysUploadImage
+     * @apiGroup            Poppy
      * @apiParam   {string} image         图片内容(支持多张/单张上传)
      * @apiParam   {string} [type]        上传图片的类型 [form|表单(默认),base64,url]
      * @apiParam   {string} [image_type]  图片图片存储类型[default|默认]
@@ -154,11 +154,11 @@ class UploadController extends WebApiController
     }
 
     /**
-     * @api                 {post} api_v1/system/upload/file 文件上传
+     * @api                 {post} api_v1/system/upload/file [Sys]文件上传
      * @apiDescription      上传文件, 这里的文件上传支持音视频, 不支持图片
      * @apiVersion          1.0.0
-     * @apiName             SystemUploadFile
-     * @apiGroup            System
+     * @apiName             SysUploadFile
+     * @apiGroup            Poppy
      * @apiParam   {string} file        内容
      * @apiParam   {string} type        上传类型[audio|音频;video|视频;images|图片]
      */

@@ -23,10 +23,10 @@ class AuthController extends WebApiController
     use PoppyTrait, ThrottlesLogins;
 
     /**
-     * @api              {post} api_v1/system/auth/access 检测 Token
+     * @api              {post} api_v1/system/auth/access [Sys]检测 Token
      * @apiVersion       1.0.0
-     * @apiName          PamAuthAccess
-     * @apiGroup         System
+     * @apiName          SysAuthAccess
+     * @apiGroup         Poppy
      *
      * @apiParam {int}   token            Token
      *
@@ -76,10 +76,10 @@ class AuthController extends WebApiController
     }
 
     /**
-     * @api                    {post} api_v1/system/auth/login 登录/注册
+     * @api                    {post} api_v1/system/auth/login [Sys]登录/注册
      * @apiVersion             1.0.0
-     * @apiName                PamAuthToken
-     * @apiGroup               System
+     * @apiName                SysAuthLogin
+     * @apiGroup               Poppy
      * @apiParam {string}      guard           登录类型;web|Web;backend|后台;
      * @apiParam {string}      passport        通行证
      * @apiParam {string}      [password]      密码
@@ -157,10 +157,10 @@ class AuthController extends WebApiController
 
 
     /**
-     * @api                    {post} api_v1/system/auth/reset_password 重设密码
+     * @api                    {post} api_v1/system/auth/reset_password [Sys]重设密码
      * @apiVersion             1.0.0
-     * @apiName                PamResetPassword
-     * @apiGroup               System
+     * @apiName                SysAuthResetPassword
+     * @apiGroup               Poppy
      * @apiParam {string}      verify_code     验证串
      * @apiParam {string}      password        密码
      */

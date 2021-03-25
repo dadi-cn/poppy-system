@@ -2,6 +2,7 @@
 
 namespace Poppy\System\Classes\Api\Sign;
 
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -81,6 +82,15 @@ class DefaultApiSignProvider implements ApiSignContract
             return $this->setError(new Resp(Resp::SIGN_ERROR, '签名错误'));
         }
         return true;
+    }
+
+    /**
+     * 默认时间戳
+     * @return int
+     */
+    public static function timestamp(): int
+    {
+        return (new DateTime())->getTimestamp();
     }
 
     /**

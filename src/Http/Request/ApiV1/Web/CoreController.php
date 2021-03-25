@@ -13,10 +13,25 @@ class CoreController extends WebApiController
     use ThrottlesLogins;
 
     /**
-     * @api                    {post} api_v1/system/core/info 系统信息
+     * @api                    {post} api_v1/system/core/translate [Sys]多语言包
      * @apiVersion             1.0.0
-     * @apiName                SystemInfo
-     * @apiGroup               System
+     * @apiName                SysCoreTranslate
+     * @apiGroup               Poppy
+     */
+    public function translate()
+    {
+        return Resp::success('翻译信息', [
+            'json'         => true,
+            'translations' => app('translator')->fetch('zh'),
+        ]);
+    }
+
+
+    /**
+     * @api                    {post} api_v1/system/core/info [Sys]系统信息
+     * @apiVersion             1.0.0
+     * @apiName                SysCoreInfo
+     * @apiGroup               Poppy
      */
     public function info()
     {
@@ -25,20 +40,5 @@ class CoreController extends WebApiController
         $system = array_merge([], $hook);
 
         return Resp::success('获取系统配置信息', $system);
-    }
-
-
-    /**
-     * @api                    {post} api_v1/system/core/translate 多语言包
-     * @apiVersion             1.0.0
-     * @apiName                SystemTranslate
-     * @apiGroup               System
-     */
-    public function translate()
-    {
-        return Resp::success('翻译信息', [
-            'json'         => true,
-            'translations' => app('translator')->fetch('zh'),
-        ]);
     }
 }

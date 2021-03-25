@@ -14,10 +14,10 @@ class CaptchaController extends WebApiController
 {
 
     /**
-     * @api              {post} api_v1/system/captcha/send 发送验证码
+     * @api              {post} api_v1/system/captcha/send [Sys]发送验证码
      * @apiVersion       1.0.0
-     * @apiName          CaptchaSend
-     * @apiGroup         System
+     * @apiName          SysCaptchaSend
+     * @apiGroup         Poppy
      *
      * @apiParam {string}  passport            通行证
      */
@@ -44,10 +44,10 @@ class CaptchaController extends WebApiController
     }
 
     /**
-     * @api              {post} api_v1/system/captcha/fetch [L]获取验证码
+     * @api              {post} api_v1/system/captcha/fetch [Sys][L]获取验证码
      * @apiVersion       1.0.0
-     * @apiName          CaptchaFetch
-     * @apiGroup         System
+     * @apiName          SysCaptchaFetch
+     * @apiGroup         Poppy
      *
      * @apiParam {int}   passport            通行证
      */
@@ -74,11 +74,11 @@ class CaptchaController extends WebApiController
     }
 
     /**
-     * @api              {post} api_v1/system/captcha/verify_code 验证串
+     * @api              {post} api_v1/system/captcha/verify_code [Sys]获取验证串
      * @apiDescription   用以保存 passport 验证的验证串, 隐藏字串为 passport
      * @apiVersion       1.0.0
-     * @apiName          CaptchaOnceCode
-     * @apiGroup         System
+     * @apiName          SysCaptchaVerifyCode
+     * @apiGroup         Poppy
      *
      * @apiParam {string}   passport           通行证
      * @apiParam {string}   captcha            验证码

@@ -43,7 +43,7 @@ class MiddlewareServiceProvider extends ServiceProvider
 
         /* Web + Auth 进行验证
          * ---------------------------------------- */
-        $router->middlewareGroup('with-auth', [
+        $router->middlewareGroup('web-with-auth', [
             'sys-auth:web',
             'sys-auth_session',
             'sys-disabled_pam',
