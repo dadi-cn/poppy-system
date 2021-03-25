@@ -23,19 +23,24 @@ class MiddlewareServiceProvider extends ServiceProvider
 
         /*
         |--------------------------------------------------------------------------
-        | Web Auth
+        | Web Middleware
         |--------------------------------------------------------------------------
         |
         */
-        $router->middlewareGroup('web-auth', [
+        $router->middlewareGroup('web-dft', [
             'web',
             'sys-site_open',
-            'sys-auth:web',
-            'sys-auth_session',
-            'sys-disabled_pam',
             'sys-csrf_token',
             'sys-encrypt_cookies',
         ]);
+
+        $router->middlewareGroup('web-auth', [
+            'web-dft',
+            'sys-auth:web',
+            'sys-auth_session',
+            'sys-disabled_pam',
+        ]);
+
 
         /*
         |--------------------------------------------------------------------------

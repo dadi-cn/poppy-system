@@ -4,7 +4,8 @@ namespace Poppy\System\Http\Middlewares;
 
 use Closure;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Http\Request;
+use Illuminate\Auth\SessionGuard;
+use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Session\Middleware\AuthenticateSession as BaseAuthenticateSession;
 use Tymon\JWTAuth\JWTGuard;
 
@@ -19,10 +20,12 @@ class AuthenticateSession extends BaseAuthenticateSession
 {
 
     /**
-     * Handle an incoming request.
-     * @param Request $request
-     * @param Closure $next
-     * @return mixed
+     * @var Factory|SessionGuard
+     */
+    protected $auth;
+
+    /**
+     * @inheritDoc
      * @throws AuthenticationException
      */
     public function handle($request, Closure $next)
@@ -38,6 +41,7 @@ class AuthenticateSession extends BaseAuthenticateSession
         }
 
         if ($this->auth->viaRemember()) {
+            // 这里清理用户/如果登录不一致[不同的guard]
             $passwordHash = explode('|', $request->cookies->get($this->auth->getRecallerName()))[2];
             if ($passwordHash != $request->user()->getAuthPassword()) {
                 $this->logout($request);
@@ -46,23 +50,24 @@ class AuthenticateSession extends BaseAuthenticateSession
         $loginSessionKey = $this->auth->guard()->getName();
         $hashKey         = self::hashKey($loginSessionKey);
 
+        // 重新存储 hash
         if (!$request->session()->has($hashKey)) {
             $this->storePasswordHashInSession($request);
         }
 
+        // 检测用户密码是否发生过改动
         if ($request->session()->get($hashKey) !== $request->user()->getAuthPassword()) {
             $this->logout($request);
         }
 
+        // 登录完成后再进行存储
         return tap($next($request), function () use ($request) {
             $this->storePasswordHashInSession($request);
         });
     }
 
     /**
-     * Store the user's current password hash in the session.
-     * @param Request $request
-     * @return void
+     * @inheritDoc
      */
     protected function storePasswordHashInSession($request)
     {
@@ -79,12 +84,7 @@ class AuthenticateSession extends BaseAuthenticateSession
 
 
     /**
-     * Log the user out of the application.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return void
-     *
-     * @throws \Illuminate\Auth\AuthenticationException
+     * @inheritDoc
      */
     protected function logout($request)
     {
@@ -102,13 +102,13 @@ class AuthenticateSession extends BaseAuthenticateSession
      * @param string $login_key login key
      * @return string
      */
-    public static function hashKey($login_key)
+    public static function hashKey(string $login_key): string
     {
         $guard = self::guardName($login_key);
         return 'password_hash' . ($guard ? '_' . $guard : '');
     }
 
-    private static function guardName($login_key)
+    private static function guardName(string $login_key): string
     {
         $guard = '';
         if (preg_match('/login_(?<guard>.*?)_/', $login_key, $match)) {

@@ -5,7 +5,6 @@ namespace Poppy\System\Http\Middlewares;
 use Closure;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as IlluminateAuthenticate;
-use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
 use Poppy\System\Models\PamAccount;
 
@@ -36,11 +35,7 @@ class Authenticate extends IlluminateAuthenticate
     }
 
     /**
-     * 授权
-     * @param Request $request
-     * @param array   $guards 提供的保护伞
-     * @return mixed
-     * @throws AuthenticationException
+     * @inheritDoc
      */
     protected function authenticate($request, array $guards)
     {
@@ -56,11 +51,7 @@ class Authenticate extends IlluminateAuthenticate
     }
 
     /**
-     * Handle an incoming request.
-     * @param Request $request 请求
-     * @param Closure $next    后续处理
-     * @param array   $guards  可以支持的 guard
-     * @return mixed
+     * @inheritDoc
      */
     public function handle($request, Closure $next, ...$guards)
     {
