@@ -59,8 +59,8 @@ abstract class DefaultBaseApiSign implements ApiSignContract
         var md5 = hex_md5(str);
         var token = _val("token");
         var step1 = str;
-        var step2 = hex_md5(str)+_val("token");
-        var md5Secret = hex_md5(hex_md5(str)+_val("token"));
+        var step2 = hex_md5(str)+token;
+        var md5Secret = hex_md5(md5+_val("token"));
         var md5Short = md5Secret.charAt(1) + md5Secret.charAt(3) + md5Secret.charAt(15) + md5Secret.charAt(31);
         console.warn("step 1(origin):"+step1+"\\n step2(md5 once):"+step2+"\\n step3(md5 twice):"+md5Secret+"\\n sign : "+ md5Short);
         _sign(md5Short);
