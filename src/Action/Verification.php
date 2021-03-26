@@ -36,6 +36,12 @@ class Verification
     private $passportKey;
 
     /**
+     * 隐藏的数据
+     * @var mixed
+     */
+    private $hidden;
+
+    /**
      * @var RdsDb
      */
     private static $db;
@@ -153,18 +159,21 @@ class Verification
 
     /**
      * 生成一次验证码
-     * @param int    $expired_min 过期时间
-     * @param string $hidden_str  隐藏的验证字串
+     * @param int          $expired_min 过期时间
+     * @param string|array $hidden_str  隐藏的验证字串
      * @return string
      */
     public function genOnceVerifyCode($expired_min = 10, $hidden_str = ''): string
     {
         $randStr = Str::random();
-        $str     = [
-            'hidden' => $hidden_str,
+
+        $hidden = serialize($hidden_str);
+
+        $str  = [
+            'hidden' => $hidden,
             'random' => $randStr . '@' . Carbon::now()->timestamp,
         ];
-        $code    = md5(json_encode($str) . microtime());
+        $code = md5(json_encode($str) . microtime());
         self::$db->set($this->ckOnce() . ':' . $code, $str, 'ex', $expired_min * 60);
         return $code;
     }
@@ -178,7 +187,7 @@ class Verification
     public function verifyOnceCode(string $code, $forget = true): bool
     {
         if ($data = self::$db->get($this->ckOnce() . ':' . $code, true)) {
-            $this->hiddenStr = $data['hidden'];
+            $this->hidden = unserialize($data['hidden']);
             if ($forget) {
                 self::$db->del($this->ckOnce() . ':' . $code);
             }
@@ -195,10 +204,18 @@ class Verification
 
     /**
      * @return string
+     * @deprecated
+     * @see getHidden
      */
     public function getHiddenStr(): string
     {
-        return (string) $this->hiddenStr;
+        return (string) $this->hidden;
+    }
+
+
+    public function getHidden()
+    {
+        return $this->hidden;
     }
 
     /**

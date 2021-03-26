@@ -2,7 +2,6 @@
 
 namespace Poppy\System\Tests\Action;
 
-use Poppy\Framework\Exceptions\FakerException;
 use Poppy\System\Action\Verification;
 use Poppy\System\Tests\Base\SystemTestCase;
 
@@ -45,5 +44,11 @@ class VerificationTest extends SystemTestCase
         $onceCode = $this->verification->genOnceVerifyCode(5, $hidden);
         $this->verification->verifyOnceCode($onceCode, false);
         $this->assertEquals($hidden, $this->verification->getHiddenStr());
+
+        // 支持数组隐藏
+        $hidden   = ['a', 'b'];
+        $onceCode = $this->verification->genOnceVerifyCode(5, $hidden);
+        $this->verification->verifyOnceCode($onceCode, false);
+        $this->assertEquals($hidden, $this->verification->getHidden());
     }
 }
