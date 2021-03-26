@@ -299,6 +299,12 @@ class Pam
                 return false;
             }
 
+            // 兼容存在 system 模块事件
+            if (class_exists('\System\Events\LoginSuccessEvent')){
+                event(new \System\Events\LoginSuccessEvent($pam, $platform, $guard));
+                return true;
+            }
+
             event(new LoginSuccessEvent($pam, $platform, $guard));
 
             return true;
