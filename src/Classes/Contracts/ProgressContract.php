@@ -9,7 +9,6 @@ interface ProgressContract
 {
 	/**
 	 * 业务逻辑执行
-	 * @return array
 	 */
-	public function handle(): array;
+	public function handle():array;
 }
