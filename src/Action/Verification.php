@@ -58,7 +58,7 @@ class Verification
      * @param int    $length      验证码长度
      * @return bool
      */
-    public function genCaptcha(string $passport, $expired_min = 5, $length = 6): bool
+    public function genCaptcha(string $passport, int $expired_min = 5, int $length = 6): bool
     {
         if (!$this->checkPassport($passport)) {
             return false;

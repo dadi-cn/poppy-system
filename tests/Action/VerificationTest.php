@@ -33,6 +33,12 @@ class VerificationTest extends SystemTestCase
         $Verification->genCaptcha($mobile, 5, 4);
         $captcha = $Verification->getCaptcha();
         $this->assertEquals(4, strlen($captcha));
+
+
+        $mobile = $this->faker()->phoneNumber;
+        $Verification->genCaptcha($mobile, '5', '4');
+        $captcha = $Verification->getCaptcha();
+        $this->assertEquals(4, strlen($captcha));
     }
 
     /**
