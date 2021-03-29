@@ -11,6 +11,7 @@ use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\System\Classes\Traits\DbTrait;
 use Poppy\System\Models\PamAccount;
+use SysPam;
 
 class SystemTestCase extends TestCase
 {
@@ -65,7 +66,7 @@ class SystemTestCase extends TestCase
     protected function initPam($username = '')
     {
         $username = $username ?: $this->env('pam');
-        $pam      = PamAccount::passport($username);
+        $pam      = SysPam::passport($username);
         $this->assertNotNull($pam, 'Testing user pam is not exist');
         $this->pam = $pam;
     }

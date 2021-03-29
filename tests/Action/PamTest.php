@@ -2,10 +2,6 @@
 
 namespace Poppy\System\Tests\Action;
 
-/**
- * Copyright (C) Update For IDE
- */
-
 use Poppy\System\Action\Pam;
 use Poppy\System\Action\Verification;
 use Poppy\System\Models\PamAccount;
@@ -35,7 +31,7 @@ class PamTest extends SystemTestCase
         }
         else {
             $platform = collect(array_keys(PamAccount::kvPlatform()))->random(1)[0];
-            $Pam  = new Pam();
+            $Pam      = new Pam();
             if ($Pam->captchaLogin($mobile, $Verification->getCaptcha(), $platform)) {
                 $this->assertTrue(true);
             }
@@ -74,6 +70,41 @@ class PamTest extends SystemTestCase
         }
         else {
             $this->assertTrue(false, $Pam->getError());
+        }
+    }
+
+    /**
+     * 输出变量
+     */
+    public function testOutput()
+    {
+        $pam       = $this->pam;
+        $variables = [
+            'id',
+            'username',
+            'mobile',
+            'email',
+            'parent_id',
+            'password',
+            'password_key',
+            'type',
+            'is_enable',
+            'disable_reason',
+            'disable_start_at',
+            'disable_end_at',
+            'login_times',
+            'login_ip',
+            'reg_ip',
+            'reg_platform',
+            'remember_token',
+            'created_at',
+            'logined_at',
+            'updated_at',
+        ];
+
+        foreach ($variables as $variable) {
+            $this->outputVariables($pam->{$variable});
+            $this->assertTrue(true);
         }
     }
 }

@@ -21,24 +21,22 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
  * @property string                    $mobile             手机号
  * @property string                    $username           用户名称
  * @property string                    $password           用户密码
- * @property Carbon                    $logined_at         注册时间
+ * @property string|null               $password_key       账号注册时候随机生成的6位key
+ * @property Carbon                    $logined_at         登录时间
  * @property int                       $login_times        登录次数
  * @property string                    $reg_ip             注册IP
  * @property string                    $login_ip           当前登录IP
  * @property int                       $parent_id          父ID
- * @property int                       $is_enable
- * @property Carbon                    $created_at
- * @property Carbon                    $updated_at
- * @property string                    $remember_token
- * @property string|null               $type               邮箱
+ * @property int                       $is_enable          是否启用
+ * @property string|null               $type               类型
  * @property string|null               $email              邮箱
- * @property string|null               $password_key       账号注册时候随机生成的6位key
  * @property string|null               $reg_platform       注册平台
  * @property string                    $disable_reason     禁用原因
  * @property string|null               $disable_start_at   禁用开始时间
  * @property string|null               $disable_end_at     禁用结束时间
- * @property int                       $message_num        短信条数
- * @property int                       $allow_ip           是否开启ip限制
+ * @property string                    $remember_token     Token
+ * @property Carbon                    $created_at
+ * @property Carbon                    $updated_at
  * @property-read PamRoleAccount       $role
  * @property-read Collection|PamRole[] $roles
  * @mixin Eloquent
@@ -207,6 +205,21 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
         ];
 
         return kv($desc, $key, $check_exists);
+    }
+
+    /**
+     * 获取账户实例
+     * @return PamAccount
+     */
+    public static function instance(): PamAccount
+    {
+        if (config('poppy.core.rbac.account')) {
+            $pamClass = config('poppy.core.rbac.account');
+            return new $pamClass();
+        }
+        else {
+            return new self();
+        }
     }
 
     /**

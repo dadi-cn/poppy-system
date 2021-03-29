@@ -11,6 +11,7 @@ use Illuminate\Auth\Events\Login as AuthLoginEvent;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Poppy\Core\Events\PermissionInitEvent;
+use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use Poppy\System\Classes\Api\Sign\DefaultApiSignProvider;
@@ -20,6 +21,7 @@ use Poppy\System\Classes\Auth\Provider\BackendProvider;
 use Poppy\System\Classes\Auth\Provider\DevelopProvider;
 use Poppy\System\Classes\Auth\Provider\PamProvider;
 use Poppy\System\Classes\Auth\Provider\WebProvider;
+use Poppy\System\Classes\Contracts\PamContract;
 use Poppy\System\Classes\Contracts\ApiSignContract;
 use Poppy\System\Classes\Contracts\PasswordContract;
 use Poppy\System\Classes\Contracts\UploadContract;
@@ -100,7 +102,9 @@ class ServiceProvider extends PoppyServiceProvider
 
     public function provides(): array
     {
-        return [];
+        return [
+            'poppy.system.pam',
+        ];
     }
 
     private function registerSchedule()
@@ -138,6 +142,21 @@ class ServiceProvider extends PoppyServiceProvider
             return new $pwdClass();
         });
         $this->app->alias('poppy.system.password', PasswordContract::class);
+
+        $this->app->bind('poppy.system.pam', function ($app) {
+            if (config('poppy.core.rbac.account')) {
+                $pamClass = config('poppy.core.rbac.account');
+                $objPam   = new $pamClass();
+                if ($pamClass !== PamAccount::class && !($objPam instanceof PamAccount)) {
+                    throw new ApplicationException("{$pamClass} 需要继承自 Poppy\System\Models\PamAccount");
+                }
+                return $objPam;
+            }
+            else {
+                return new PamAccount();
+            }
+        });
+        $this->app->alias('poppy.system.pam', PamContract::class);
 
 
         /* 文件上传提供者
