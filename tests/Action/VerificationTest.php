@@ -49,7 +49,6 @@ class VerificationTest extends SystemTestCase
         $hidden   = 'once-code';
         $onceCode = $this->verification->genOnceVerifyCode(5, $hidden);
         $this->verification->verifyOnceCode($onceCode, false);
-        $this->assertEquals($hidden, $this->verification->getHiddenStr());
         $this->assertEquals($hidden, $this->verification->getHidden());
 
         // 支持数组隐藏

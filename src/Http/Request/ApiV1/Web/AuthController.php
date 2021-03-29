@@ -107,14 +107,6 @@ class AuthController extends WebApiController
         $captcha  = input('captcha', '');
         $password = input('password', '');
         $platform = input('platform', '');
-        $guard    = input('guard', '');
-
-        if ($guard === 'web') {
-            $guard = PamAccount::GUARD_JWT_WEB;
-        }
-        else {
-            $guard = PamAccount::GUARD_JWT_BACKEND;
-        }
 
         if (!$captcha && !$password) {
             return Resp::error('登录密码或者验证码必须填写');
@@ -138,7 +130,7 @@ class AuthController extends WebApiController
                 return Resp::error($Pam->getError());
             }
         }
-        elseif (!$Pam->loginCheck($passport, $password, $guard)) {
+        elseif (!$Pam->loginCheck($passport, $password, PamAccount::GUARD_JWT)) {
             return Resp::error($Pam->getError());
         }
 
@@ -171,7 +163,7 @@ class AuthController extends WebApiController
 
         $Verification = new Verification();
         if ($Verification->verifyOnceCode($verify_code)) {
-            $passport = $Verification->getHiddenStr();
+            $passport = $Verification->getHidden();
             $Pam      = new Pam();
             $pam      = PamAccount::passport($passport);
             if ($Pam->setPassword($pam, $password)) {
