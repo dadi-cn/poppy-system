@@ -6,12 +6,11 @@ use DB;
 use Illuminate\Contracts\Support\Arrayable;
 use Log;
 use Poppy\Framework\Application\TestCase;
+use Poppy\Framework\Classes\ConsoleTable;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\System\Classes\Traits\DbTrait;
 use Poppy\System\Models\PamAccount;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 class SystemTestCase extends TestCase
 {
@@ -127,39 +126,19 @@ class SystemTestCase extends TestCase
         $logs = $this->fetchQueryLog();
 
         if (count($logs)) {
-            $this->table(['Query', 'Time'], $logs);
+            $Table = new ConsoleTable();
+            $Table->headers([
+                'Query', 'Time',
+            ])->rows($logs);
+            $Table->display();
         }
-    }
-
-    /**
-     * Format input to textual table.
-     *
-     * @param array           $headers
-     * @param Arrayable|array $rows
-     * @param string          $tableStyle
-     * @param array           $columnStyles
-     * @return void
-     */
-    protected function table(array $headers, $rows, $tableStyle = 'default', array $columnStyles = []): void
-    {
-        $table = new Table(new ConsoleOutput());
-
-        if ($rows instanceof Arrayable) {
-            $rows = $rows->toArray();
-        }
-
-        $table->setHeaders((array) $headers)->setRows($rows)->setStyle($tableStyle);
-
-        foreach ($columnStyles as $columnIndex => $columnStyle) {
-            $table->setColumnStyle($columnIndex, $columnStyle);
-        }
-
-        $table->render();
     }
 
     /**
      * 输出变量
      * @param array|string $var
+     * @deprecated 3.1
+     * @removed    4.0
      */
     protected function export($var): void
     {

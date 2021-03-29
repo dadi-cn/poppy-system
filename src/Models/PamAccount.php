@@ -30,9 +30,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
  * @property Carbon                    $created_at
  * @property Carbon                    $updated_at
  * @property string                    $remember_token
+ * @property string|null               $type               邮箱
  * @property string|null               $email              邮箱
  * @property string|null               $password_key       账号注册时候随机生成的6位key
- * @property string|null               $type               邮箱
  * @property string|null               $reg_platform       注册平台
  * @property string                    $disable_reason     禁用原因
  * @property string|null               $disable_start_at   禁用开始时间
@@ -67,6 +67,7 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
     const GUARD_USER        = 'user';
     const GUARD_JWT_BACKEND = 'jwt_backend';
     const GUARD_JWT_WEB     = 'jwt_web';
+    const GUARD_JWT         = 'jwt';
 
     /* Register Platform
      -------------------------------------------- */
@@ -76,8 +77,6 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
     const REG_PLATFORM_PC      = 'pc';
     const REG_PLATFORM_H5      = 'h5';
     const REG_PLATFORM_WEAPP   = 'weapp';
-
-    const BIND_MOBILE = 10001;
 
     protected $table = 'pam_account';
 
@@ -94,6 +93,7 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
         'parent_id',
         'password',
         'type',
+        'login_ip',
         'logined_at',
         'is_enable',
         'password_key',
@@ -102,9 +102,6 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
         'disable_reason',
         'disable_start_at',
         'disable_end_at',
-        'login_ip',
-        'message_num',
-        'allow_ip',
     ];
 
     /**
@@ -120,7 +117,7 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
      * Return a key value array, containing any custom claims to be added to the JWT.
      * @return array
      */
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
         return [
             'user' => [
@@ -134,37 +131,13 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
      * @param string $passport 通行证
      * @return Model|null|object|PamAccount
      */
-    public static function passport($passport)
+    public static function passport(string $passport)
     {
         $type = (new Pam())->passportType($passport);
 
         return self::where($type, $passport)->first();
     }
 
-    /**
-     * 根据 Username 获取账户ID
-     * @param string $username 用户名
-     * @return mixed
-     */
-    public static function getIdByUsername($username)
-    {
-        return self::where('username', $username)->value('id');
-    }
-
-    /**
-     * 允许缓存, 获取账户类型, 因为账户类型不会变化
-     * @param int $id 账户类型
-     * @return mixed
-     */
-    public static function getTypeById($id)
-    {
-        static $accountType;
-        if (!isset($accountType[$id])) {
-            $accountType[$id] = self::where('id', $id)->value('type');
-        }
-
-        return $accountType[$id];
-    }
 
     /**
      * 获取用户所有的 permission
@@ -240,6 +213,8 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
      * @param int    $id    id
      * @param string $field 获取字段
      * @return \Illuminate\Database\Eloquent\Collection|Model|mixed|null|PamAccount|PamAccount[]
+     * @deprecated 3.1
+     * @removed    4.0
      */
     public static function fetch($id, $field = '')
     {
@@ -248,5 +223,35 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
         }
 
         return self::find($id);
+    }
+
+
+    /**
+     * 根据 Username 获取账户ID
+     * @param string $username 用户名
+     * @return mixed
+     * @deprecated 3.1
+     * @removed    4.0
+     */
+    public static function getIdByUsername($username)
+    {
+        return self::where('username', $username)->value('id');
+    }
+
+    /**
+     * 允许缓存, 获取账户类型, 因为账户类型不会变化
+     * @param int $id 账户类型
+     * @return mixed
+     * @deprecated 3.1
+     * @removed    4.0
+     */
+    public static function getTypeById($id)
+    {
+        static $accountType;
+        if (!isset($accountType[$id])) {
+            $accountType[$id] = self::where('id', $id)->value('type');
+        }
+
+        return $accountType[$id];
     }
 }

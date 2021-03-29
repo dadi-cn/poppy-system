@@ -300,7 +300,7 @@ class Pam
             }
 
             // 兼容存在 system 模块事件
-            if (class_exists('\System\Events\LoginSuccessEvent')){
+            if (class_exists('\System\Events\LoginSuccessEvent')) {
                 event(new \System\Events\LoginSuccessEvent($pam, $platform, $guard));
                 return true;
             }
@@ -392,7 +392,7 @@ class Pam
      * @param string $passport 通行证
      * @return string
      */
-    public function passportType($passport): string
+    public function passportType(string $passport): string
     {
         if (UtilHelper::isMobile($passport)) {
             $type = PamAccount::REG_TYPE_MOBILE;
