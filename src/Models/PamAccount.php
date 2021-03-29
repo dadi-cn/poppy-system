@@ -119,7 +119,8 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
     {
         return [
             'user' => [
-                'id' => $this->id,
+                'id'   => $this->id,
+                'type' => $this->type,
             ],
         ];
     }

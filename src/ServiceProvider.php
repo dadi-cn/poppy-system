@@ -2,27 +2,21 @@
 
 namespace Poppy\System;
 
-/**
- * Copyright (C) Update For IDE
- */
-
 use Illuminate\Auth\Events\Failed as AuthFailEvent;
 use Illuminate\Auth\Events\Login as AuthLoginEvent;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Foundation\Application;
 use Poppy\Core\Events\PermissionInitEvent;
 use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use Poppy\System\Classes\Api\Sign\DefaultApiSignProvider;
-use Poppy\System\Classes\Auth\Guard\JwtAuthGuard;
 use Poppy\System\Classes\Auth\Password\DefaultPasswordProvider;
 use Poppy\System\Classes\Auth\Provider\BackendProvider;
 use Poppy\System\Classes\Auth\Provider\DevelopProvider;
 use Poppy\System\Classes\Auth\Provider\PamProvider;
 use Poppy\System\Classes\Auth\Provider\WebProvider;
-use Poppy\System\Classes\Contracts\PamContract;
 use Poppy\System\Classes\Contracts\ApiSignContract;
+use Poppy\System\Classes\Contracts\PamContract;
 use Poppy\System\Classes\Contracts\PasswordContract;
 use Poppy\System\Classes\Contracts\UploadContract;
 use Poppy\System\Classes\Uploader\DefaultUploadProvider;
@@ -198,17 +192,6 @@ class ServiceProvider extends PoppyServiceProvider
         });
         app('auth')->provider('pam', function ($app) {
             return new PamProvider(PamAccount::class);
-        });
-
-        app('auth')->extend('jwt.backend', function (Application $app, $name, array $config) {
-            $guard = new JwtAuthGuard(
-                $app['tymon.jwt'],
-                $app['auth']->createUserProvider($config['provider']),
-                $app['request']
-            );
-            $app->refresh('request', $guard, 'setRequest');
-
-            return $guard;
         });
     }
 
