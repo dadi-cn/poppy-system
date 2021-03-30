@@ -7,13 +7,19 @@ namespace Poppy\System\Events;
  */
 class LoginFailedEvent
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     public $type;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $passport;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     public $password;
 
     public function __construct(array $credentials)

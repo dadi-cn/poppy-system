@@ -14,30 +14,6 @@ class Select extends AbstractDisplayer
 
         $class = "grid-select-{$name}";
 
-        $script = <<<EOT
-
-$('.$class').select2().on('change', function(){
-
-    var pk = $(this).data('key');
-    var value = $(this).val();
-
-    $.ajax({
-        url: "{$this->grid->resource()}/" + pk,
-        type: "POST",
-        data: {
-            $name: value,
-            _token: LA.token,
-            _method: 'PUT'
-        },
-        success: function (data) {
-            toastr.success(data.message);
-        }
-    });
-});
-
-EOT;
-
-
         $key = $this->row->{$this->grid->getKeyName()};
 
         $optionsHtml = '';

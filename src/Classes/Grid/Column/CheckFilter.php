@@ -42,30 +42,6 @@ class CheckFilter extends Filter
     }
 
     /**
-     * Add script to page.
-     *
-     * @return void
-     */
-    protected function addScript()
-    {
-        $script = <<<SCRIPT
-$('.{$this->class['all']}').on('ifChanged', function () {
-    if (this.checked) {
-        $('.{$this->class['item']}').iCheck('check');
-    } else {
-        $('.{$this->class['item']}').iCheck('uncheck');
-    }
-    return false;
-});
-
-$('.{$this->class['item']},.{$this->class['all']}').iCheck({
-    checkboxClass:'icheckbox_minimal-blue'
-});
-SCRIPT;
-
-    }
-
-    /**
      * Render this filter.
      *
      * @return string
@@ -85,8 +61,6 @@ SCRIPT;
 </li>
 HTML;
         })->implode("\r\n");
-
-        $this->addScript();
 
         $allCheck = (count($value) == count($this->options)) ? 'checked' : '';
         $active   = empty($value) ? '' : 'text-yellow';

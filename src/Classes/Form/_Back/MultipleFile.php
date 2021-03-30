@@ -223,28 +223,6 @@ class MultipleFile extends Field
     }
 
     /**
-     * @param string $options
-     */
-    protected function setupScripts($options)
-    {
-
-        if ($this->fileActionSettings['showRemove']) {
-            $text = [
-                'title'   => trans('admin.delete_confirm'),
-                'confirm' => trans('admin.confirm'),
-                'cancel'  => trans('admin.cancel'),
-            ];
-        }
-
-        if ($this->fileActionSettings['showDrag']) {
-            $this->addVariables([
-                'sortable'  => true,
-                'sort_flag' => static::FILE_SORT_FLAG,
-            ]);
-        }
-    }
-
-    /**
      * Render file upload field.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -259,10 +237,6 @@ class MultipleFile extends Field
             $this->options(['initialPreview' => $this->preview()]);
             $this->setupPreviewOptions();
         }
-
-        $options = json_encode($this->options);
-
-        $this->setupScripts($options);
 
         return parent::render();
     }

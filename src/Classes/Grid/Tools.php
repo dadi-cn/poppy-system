@@ -2,7 +2,6 @@
 
 namespace Poppy\System\Classes\Grid;
 
-use Closure;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
@@ -10,7 +9,6 @@ use Poppy\System\Classes\Actions\GridAction;
 use Poppy\System\Classes\Grid;
 use Poppy\System\Classes\Grid\Filter\AbstractFilter;
 use Poppy\System\Classes\Grid\Tools\AbstractTool;
-use Poppy\System\Classes\Grid\Tools\BatchActions;
 use Poppy\System\Classes\Grid\Tools\FilterButton;
 
 class Tools extends AbstractFilter implements Renderable

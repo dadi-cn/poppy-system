@@ -2,13 +2,10 @@
 
 namespace Poppy\System\Classes\Grid\Displayer;
 
-use Poppy\System\Classes\Facades\Admin;
-
 class Secret extends AbstractDisplayer
 {
     public function display($dotCount = 6)
     {
-        $this->addScript();
 
         $dots = str_repeat('*', $dotCount);
 
@@ -22,13 +19,4 @@ class Secret extends AbstractDisplayer
 HTML;
     }
 
-    protected function addScript()
-    {
-        $script = <<<'SCRIPT'
-$('.secret-wrapper i').click(function () {
-    $(this).toggleClass('fa-eye fa-eye-slash').parent().find('.secret-placeholder,.secret-content').toggle();
-});
-SCRIPT;
-
-    }
 }

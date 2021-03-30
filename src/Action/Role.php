@@ -28,10 +28,14 @@ class Role
 {
     use AppTrait, PamTrait, CoreTrait;
 
-    /** @var PamRole */
+    /**
+     * @var PamRole
+     */
     protected $role;
 
-    /** @var int Role id */
+    /**
+     * @var int Role id
+     */
     protected $roleId;
 
     /**

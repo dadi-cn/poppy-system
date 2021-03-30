@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Poppy\System\Classes\Grid\Column;
-use Poppy\System\Classes\Grid\Model;
 use Poppy\System\Classes\Grid\Tools;
 
 /**

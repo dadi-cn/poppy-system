@@ -57,11 +57,6 @@ class RangeFilter extends Filter
      */
     public function render()
     {
-        $script = <<<'SCRIPT'
-$('.dropdown-menu input').click(function(e) {
-    e.stopPropagation();
-});
-SCRIPT;
 
 
         $this->addScript();
@@ -114,7 +109,6 @@ EOT;
             return;
         }
 
-        $options = json_encode($options);
 
     }
 }

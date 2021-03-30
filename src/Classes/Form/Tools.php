@@ -226,49 +226,6 @@ HTML;
 
 		$class = uniqid();
 
-		$script = <<<SCRIPT
-
-$('.{$class}-delete').unbind('click').click(function() {
-
-    swal({
-        title: "{$trans['delete_confirm']}",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "{$trans['confirm']}",
-        showLoaderOnConfirm: true,
-        cancelButtonText: "{$trans['cancel']}",
-        preConfirm: function() {
-            return new Promise(function(resolve) {
-                $.ajax({
-                    method: 'post',
-                    url: '{$this->getDeletePath()}',
-                    data: {
-                        _method:'delete',
-                        _token:LA.token,
-                    },
-                    success: function (data) {
-                        $.pjax({container:'#pjax-container', url: '{$this->getListPath()}' });
-
-                        resolve(data);
-                    }
-                });
-            });
-        }
-    }).then(function(result) {
-        var data = result.value;
-        if (typeof data === 'object') {
-            if (data.status) {
-                swal(data.message, '', 'success');
-            } else {
-                swal(data.message, '', 'error');
-            }
-        }
-    });
-});
-
-SCRIPT;
-
 		return <<<HTML
 <div class="btn-group pull-right" style="margin-right: 5px">
     <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete" title="{$trans['delete']}">

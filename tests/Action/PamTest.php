@@ -103,8 +103,7 @@ class PamTest extends SystemTestCase
         ];
 
         foreach ($variables as $variable) {
-            $this->outputVariables($pam->{$variable});
-            $this->assertTrue(true);
+            $this->assertTrue(isset($pam->{$variable}), 'Error Key @ Pam : ' . $variable);
         }
     }
 }

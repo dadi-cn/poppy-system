@@ -158,7 +158,6 @@ class Text extends Presenter
      */
     public function inputmask($options = [], $icon = 'pencil'): self
     {
-        $options = json_encode($options);
 
 
         $this->icon = $icon;

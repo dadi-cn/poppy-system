@@ -3,7 +3,6 @@
 namespace Poppy\System\Classes\Grid\Concerns;
 
 use Closure;
-use Poppy\System\Classes\Grid;
 use Poppy\System\Classes\Grid\Tools\Header;
 
 trait HasHeader

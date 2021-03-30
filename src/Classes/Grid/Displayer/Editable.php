@@ -182,21 +182,6 @@ class Editable extends AbstractDisplayer
 
         $this->buildEditableOptions(func_get_args());
 
-        $options = json_encode($this->options);
-
-        $options = substr($options, 0, -1) . <<<'STR'
-    ,
-    "success":function(response, newValue){
-        if (response.status){
-            $.admin.toastr.success(response.message, '', {positionClass:"toast-top-center"});
-        } else {
-            $.admin.toastr.error(response.message, '', {positionClass:"toast-top-center"});
-        }
-    }
-}
-STR;
-
-
         $this->value = htmlentities($this->value);
 
         $attributes = [

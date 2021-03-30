@@ -4,7 +4,6 @@ namespace Poppy\System\Services;
 
 use Poppy\Core\Services\Contracts\ServiceArray;
 use Poppy\System\Http\Forms\Settings\FormSettingPam;
-use Poppy\System\Http\Forms\Settings\FormSettingUpload;
 use Poppy\System\Http\Forms\Settings\FormSettingSite;
 
 class SettingSystem implements ServiceArray

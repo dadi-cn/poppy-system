@@ -36,49 +36,6 @@ class SwitchDisplay extends AbstractDisplayer
                 });
         }
 
-        $script = <<<EOT
-
-$('.$class').bootstrapSwitch({
-    size:'mini',
-    onText: '{$this->states['on']['text']}',
-    offText: '{$this->states['off']['text']}',
-    onColor: '{$this->states['on']['color']}',
-    offColor: '{$this->states['off']['color']}',
-    onSwitchChange: function(event, state){
-
-        $(this).val(state ? 'on' : 'off');
-
-        var pk = $(this).data('key');
-        var value = $(this).val();
-        var _status = true;
-
-        $.ajax({
-            url: "{$this->grid->resource()}/" + pk,
-            type: "POST",
-            async:false,
-            data: {
-                "$key": value,
-                _token: LA.token,
-                _method: 'PUT'
-            },
-            success: function (data) {
-                if (data.status)
-                    toastr.success(data.message);
-                else
-                    toastr.warning(data.message);
-            },
-            complete:function(xhr,status) {
-                if (status == 'success')
-                    _status = xhr.responseJSON.status;
-            }
-        });
-        
-        return _status;
-    }
-});
-
-EOT;
-
 
         $key = $this->row->{$this->grid->getKeyName()};
 

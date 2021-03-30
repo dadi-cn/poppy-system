@@ -75,8 +75,6 @@ class InputFilter extends Filter
             return;
         }
 
-        $options = json_encode($options);
-
     }
 
     /**
@@ -86,13 +84,6 @@ class InputFilter extends Filter
      */
     public function render()
     {
-        $script = <<<'SCRIPT'
-$('.dropdown-menu input').click(function(e) {
-    e.stopPropagation();
-});
-SCRIPT;
-
-        $this->addScript();
 
         $active = empty($value) ? '' : 'text-yellow';
 

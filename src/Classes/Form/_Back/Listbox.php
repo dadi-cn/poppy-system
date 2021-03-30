@@ -41,17 +41,6 @@ class Listbox extends MultipleSelect
 
     public function render()
     {
-        $settings = array_merge([
-            'infoText'              => trans('admin.listbox.text_total'),
-            'infoTextEmpty'         => trans('admin.listbox.text_empty'),
-            'infoTextFiltered'      => trans('admin.listbox.filtered'),
-            'filterTextClear'       => trans('admin.listbox.filter_clear'),
-            'filterPlaceHolder'     => trans('admin.listbox.filter_placeholder'),
-            'selectorMinimalHeight' => 200,
-        ], $this->settings);
-
-        $settings = json_encode($settings);
-
         $this->attribute('data-value', implode(',', (array) $this->value()));
 
         return parent::render();

@@ -4,9 +4,6 @@ namespace Poppy\System\Classes\Grid\Displayer;
 
 use Poppy\Framework\Helper\ArrayHelper;
 use Poppy\System\Classes\Actions\RowAction;
-use Poppy\System\Classes\Grid\Actions\Delete;
-use Poppy\System\Classes\Grid\Actions\Edit;
-use Poppy\System\Classes\Grid\Actions\Show;
 
 class DropdownActions extends Actions
 {
@@ -26,27 +23,6 @@ class DropdownActions extends Actions
     protected $defaultClass = [Edit::class, Show::class, Delete::class];
 
     /**
-     * Add JS script into pages.
-     *
-     * @return void.
-     */
-    protected function addScript()
-    {
-        $script = <<<'SCRIPT'
-(function ($) {
-    $('.table-responsive').on('show.bs.dropdown', function () {
-         $('.table-responsive').css("overflow", "inherit" );
-    });
-    
-    $('.table-responsive').on('hide.bs.dropdown', function () {
-         $('.table-responsive').css("overflow", "auto");
-    })
-})(jQuery);
-SCRIPT;
-
-    }
-
-    /**
      * @param RowAction $action
      *
      * @return $this
@@ -58,31 +34,6 @@ SCRIPT;
         array_push($this->custom, $action);
 
         return $this;
-    }
-
-    /**
-     * Prepend default `edit` `view` `delete` actions.
-     */
-    protected function prependDefaultActions()
-    {
-        foreach ($this->defaultClass as $class) {
-            /** @var RowAction $action */
-            $action = new $class();
-
-            $this->prepareAction($action);
-
-            array_push($this->default, $action);
-        }
-    }
-
-    /**
-     * @param RowAction $action
-     */
-    protected function prepareAction(RowAction $action)
-    {
-        $action->setGrid($this->grid)
-            ->setColumn($this->column)
-            ->setRow($this->row);
     }
 
     /**
@@ -147,9 +98,8 @@ SCRIPT;
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function display($callback = null)
+    public function display($callback = null): string
     {
-        $this->addScript();
 
         if ($callback instanceof \Closure) {
             $callback->call($this, $this);
@@ -163,5 +113,30 @@ SCRIPT;
         ];
 
         return view('py-system::tpl.grid.dropdown-actions', $actions);
+    }
+
+    /**
+     * Prepend default `edit` `view` `delete` actions.
+     */
+    protected function prependDefaultActions()
+    {
+        foreach ($this->defaultClass as $class) {
+            /** @var RowAction $action */
+            $action = new $class();
+
+            $this->prepareAction($action);
+
+            array_push($this->default, $action);
+        }
+    }
+
+    /**
+     * @param RowAction $action
+     */
+    protected function prepareAction(RowAction $action)
+    {
+        $action->setGrid($this->grid)
+            ->setColumn($this->column)
+            ->setRow($this->row);
     }
 }

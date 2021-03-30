@@ -52,34 +52,6 @@ class SwitchGroup extends AbstractDisplayer
                 });
         }
 
-        $script = <<<EOT
-
-$('.$class').bootstrapSwitch({
-    size:'mini',
-    onText: '{$this->states['on']['text']}',
-    offText: '{$this->states['off']['text']}',
-    onColor: '{$this->states['on']['color']}',
-    offColor: '{$this->states['off']['color']}',
-    onSwitchChange: function(event, state){
-        $(this).val(state ? 'on' : 'off');
-        var pk = $(this).data('key');
-        var value = $(this).val();
-        $.ajax({
-            url: "{$this->grid->resource()}/" + pk,
-            type: "POST",
-            data: {
-                "$key": value,
-                _token: LA.token,
-                _method: 'PUT'
-            },
-            success: function (data) {
-                toastr.success(data.message);
-            }
-        });
-    }
-});
-EOT;
-
 
         $key = $this->row->{$this->grid->getKeyName()};
 

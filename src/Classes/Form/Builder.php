@@ -519,32 +519,6 @@ class Builder
 
         $tabObj = $this->form->getTab();
 
-        if (!$tabObj->isEmpty()) {
-            $script = <<<'SCRIPT'
-
-var hash = document.location.hash;
-if (hash) {
-    $('.nav-tabs a[href="' + hash + '"]').tab('show');
-}
-
-// Change hash for page-reload
-$('.nav-tabs a').on('shown.bs.tab', function (e) {
-    history.pushState(null,null, e.target.hash);
-});
-
-if ($('.has-error').length) {
-    $('.has-error').each(function () {
-        var tabId = '#'+$(this).closest('.tab-pane').attr('id');
-        $('li a[href="'+tabId+'"] i').removeClass('hide');
-    });
-
-    var first = $('.has-error:first').closest('.tab-pane').attr('id');
-    $('li a[href="#'+first+'"]').tab('show');
-}
-
-SCRIPT;
-        }
-
         $data = [
             'form'   => $this,
             'tabObj' => $tabObj,

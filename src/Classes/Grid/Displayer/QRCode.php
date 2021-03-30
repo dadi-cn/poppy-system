@@ -11,12 +11,6 @@ class QRCode extends AbstractDisplayer
 {
     protected function addScript()
     {
-        $script = <<<'SCRIPT'
-$('.grid-column-qrcode').popover({
-    html: true,
-    trigger: 'focus'
-});
-SCRIPT;
 
     }
 

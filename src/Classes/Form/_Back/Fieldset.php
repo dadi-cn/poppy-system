@@ -13,11 +13,6 @@ class Fieldset
 
     public function start($title)
     {
-        $script = <<<SCRIPT
-$('.{$this->name}-title').click(function () {
-    $("i", this).toggleClass("fa-angle-double-down fa-angle-double-up");
-});
-SCRIPT;
 
 
         return <<<HTML
@@ -40,12 +35,6 @@ HTML;
 
     public function collapsed()
     {
-        $script = <<<SCRIPT
-$("#{$this->name}").removeClass("in");
-$(".{$this->name}-title i").toggleClass("fa-angle-double-down fa-angle-double-up");
-SCRIPT;
-
-
         return $this;
     }
 }

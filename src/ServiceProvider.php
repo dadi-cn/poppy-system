@@ -2,7 +2,6 @@
 
 namespace Poppy\System;
 
-use Illuminate\Auth\Events\Failed as AuthFailEvent;
 use Illuminate\Auth\Events\Login as AuthLoginEvent;
 use Illuminate\Console\Scheduling\Schedule;
 use Poppy\Core\Events\PermissionInitEvent;
@@ -42,9 +41,6 @@ class ServiceProvider extends PoppyServiceProvider
         ],
         PermissionInitEvent::class      => [
             Listeners\PermissionInit\InitToDbListener::class,
-        ],
-        AuthFailEvent::class            => [
-            Listeners\AuthFailed\LogListener::class,
         ],
 
         // system
