@@ -15,11 +15,13 @@ use Poppy\Framework\Validation\Rule;
 use Poppy\System\Classes\Contracts\PasswordContract;
 use Poppy\System\Classes\Traits\PamTrait;
 use Poppy\System\Classes\Traits\UserSettingTrait;
+use Poppy\System\Events\LoginBannedEvent;
 use Poppy\System\Events\LoginFailedEvent;
 use Poppy\System\Events\LoginSuccessEvent;
 use Poppy\System\Events\PamDisableEvent;
 use Poppy\System\Events\PamEnableEvent;
 use Poppy\System\Events\PamRegisteredEvent;
+use Poppy\System\Exceptions\LoginException;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamLog;
 use Poppy\System\Models\PamRole;
@@ -294,6 +296,13 @@ class Pam
                 return false;
             }
 
+
+            try {
+                event(new LoginBannedEvent($pam, $guard));
+            } catch (Throwable $e) {
+                return $this->setError($e);
+            }
+            
             if (method_exists($this, 'loginAllowIpCheck') && !$this->loginAllowIpCheck()) {
                 $guard->logout();
                 return false;
