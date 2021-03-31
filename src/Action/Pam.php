@@ -302,13 +302,14 @@ class Pam
             } catch (Throwable $e) {
                 return $this->setError($e);
             }
-            
+
             if (method_exists($this, 'loginAllowIpCheck') && !$this->loginAllowIpCheck()) {
                 $guard->logout();
                 return false;
             }
 
             // 兼容存在 system 模块事件
+            // deprecated 为了兼容 q2
             if (class_exists('\System\Events\LoginSuccessEvent')) {
                 event(new \System\Events\LoginSuccessEvent($pam, $platform, $guard));
                 return true;
