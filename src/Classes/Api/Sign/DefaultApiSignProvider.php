@@ -4,16 +4,13 @@ namespace Poppy\System\Classes\Api\Sign;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Helper\ArrayHelper;
-use Poppy\System\Classes\Contracts\ApiSignContract;
 
 /**
  * 后台用户认证
  */
-class DefaultApiSignProvider extends DefaultBaseApiSign implements ApiSignContract
+class DefaultApiSignProvider extends DefaultBaseApiSign
 {
-    use AppTrait;
 
     /**
      * @var Request 请求内容

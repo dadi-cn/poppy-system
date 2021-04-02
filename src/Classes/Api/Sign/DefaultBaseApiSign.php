@@ -48,7 +48,7 @@ abstract class DefaultBaseApiSign implements ApiSignContract
 	        params.push($(ele).attr("name"));
         });
 
-        params = _.without(params, "sign", "token", "image");
+        params = _.without(params, "sign", "token", "image", "_py_sys_secret");
         params.sort();
 
         _.each(params, function(key) {
