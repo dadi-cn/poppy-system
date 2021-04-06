@@ -3,7 +3,6 @@
 namespace Poppy\System\Http\Forms\Settings;
 
 use Poppy\Framework\Validation\Rule;
-use Poppy\System\Models\PamAccount;
 
 class FormSettingSite extends FormSettingBase
 {
@@ -26,7 +25,8 @@ class FormSettingSite extends FormSettingBase
             Rule::nullable(),
         ]);
         $this->textarea('description', '网站描述')->placeholder('请输入网站描述');
-        $token = app('tymon.jwt.auth')->fromUser(PamAccount::first());
+        $user = app('auth')->guard()->user();
+        $token = app('tymon.jwt.auth')->fromUser($user);
         $this->image('logo', 'Logo')->rules([
             Rule::nullable(),
         ])->placeholder('网站logo')->token($token)->help('后台Logo 在此更换, 更改左上角的Logo 地址');
