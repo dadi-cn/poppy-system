@@ -10,13 +10,16 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
+use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
+use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\Framework\Exceptions\PoppyException;
 use Poppy\Framework\Helper\ArrayHelper;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Classes\Form as BaseForm;
 use Poppy\System\Classes\Form\Field;
 use Throwable;
+use Url;
 
 /**
  * Class Form.
@@ -440,7 +443,12 @@ class FormWidget implements Renderable
     {
         $this->prepareForm();
 
-        $this->prepareHandle();
+
+        $result = $this->prepareHandle();
+        if (is_post()) {
+            return $result;
+        }
+
 
         $form = view('py-system::tpl.widgets.form', $this->getVariables())->render();
 
@@ -554,6 +562,7 @@ class FormWidget implements Renderable
 
     /**
      * @throws PoppyException
+     * @throws ApplicationException
      */
     protected function prepareHandle()
     {
@@ -562,9 +571,54 @@ class FormWidget implements Renderable
                 throw new PoppyException('模块 `poppy.mgr-page` 不存在, 你需要安装才可以运行进行表单类型的提交');
             }
             $this->method();
-            $this->action(route('py-mgr-page:backend.handle.form'));
+            $this->action(Url::current());
             $this->hidden('_form_')->default(get_called_class());
         }
+
+        if (is_post()) {
+            $request = $this->pyRequest();
+            $form    = $this->resolveForm();
+
+            if ($errors = $form->validate($request)) {
+                if ($form->ajax) {
+                    return Resp::error($errors);
+                }
+                else {
+                    return back()->withInput()->withErrors($errors);
+                }
+            }
+            return $form->sanitize()->handle($request);
+        }
+        return null;
+    }
+
+
+    /**
+     * @return FormWidget
+     * @throws ApplicationException
+     *
+     */
+    private function resolveForm(): FormWidget
+    {
+        $request = $this->pyRequest();
+        if (!$request->has('_form_')) {
+            throw new ApplicationException('Invalid form request.');
+        }
+
+        $formClass = $request->get('_form_');
+
+        if (!class_exists($formClass)) {
+            throw new ApplicationException("Form [{$formClass}] does not exist.");
+        }
+
+        /** @var FormWidget $form */
+        $form = app($formClass);
+
+        if (!method_exists($form, 'handle')) {
+            throw new ApplicationException("Form method {$formClass}::handle() does not exist.");
+        }
+
+        return $form;
     }
 
     /**
