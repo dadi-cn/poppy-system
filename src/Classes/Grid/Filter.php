@@ -275,11 +275,7 @@ class Filter extends FilterButton
             }
         }
 
-        return tap(array_filter($conditions), function ($conditions) {
-            if (!empty($conditions)) {
-                $this->expand();
-            }
-        });
+        return array_filter($conditions);
     }
 
     /**
