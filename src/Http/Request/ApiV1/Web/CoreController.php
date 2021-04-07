@@ -3,6 +3,7 @@
 namespace Poppy\System\Http\Request\ApiV1\Web;
 
 use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Poppy\Framework\Classes\Mocker;
 use Poppy\Framework\Classes\Resp;
 
 /**
@@ -40,5 +41,18 @@ class CoreController extends WebApiController
         $system = array_merge([], $hook);
 
         return Resp::success('获取系统配置信息', $system);
+    }
+
+    /**
+     * @api                    {post} api_v1/system/core/mock [Sys]Mock
+     * @apiVersion             1.0.0
+     * @apiName                SysCoreMock
+     * @apiGroup               Poppy
+     * @apiParam {string}      mock   Json 格式的数据
+     */
+    public function mock()
+    {
+        $data = Mocker::generate(input('mock'));
+        return Resp::success('Success', $data);
     }
 }

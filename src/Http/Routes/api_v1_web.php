@@ -23,6 +23,7 @@ Route::group([
     // info
     $route->post('core/info', 'CoreController@info');
     $route->post('core/translate', 'CoreController@translate');
+    $route->post('core/mock', 'CoreController@mock');
 
     // auth
     $route->post('auth/reset_password', 'AuthController@resetPassword');
