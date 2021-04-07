@@ -24,7 +24,6 @@ class ListPamRole extends ListBase
     public function columns()
     {
         $this->column('id', "ID")->sortable()->width(80);
-        $this->column('name', "标识");
         $this->column('title', "名称");
     }
 
