@@ -52,7 +52,7 @@ class CoreController extends WebApiController
      */
     public function mock()
     {
-        $data = Mocker::generate(input('mock'));
+        $data = Mocker::generate(input('mock'), 'zh_CN');
         return Resp::success('Success', $data);
     }
 }

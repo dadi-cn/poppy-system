@@ -77,7 +77,7 @@ JS;
         }
 
         // 加密 debug, 不验证签名
-        if (config('poppy.system.secret') && $request->input('_py_sys_secret') === config('poppy.system.secret')) {
+        if (config('poppy.system.secret') && (string) $request->input('_py_sys_secret') === (string) config('poppy.system.secret')) {
             return true;
         }
 

@@ -72,12 +72,18 @@ class FormPamEstablish extends FormDialogWidget
                 $Pam->setPassword($this->item, $password);
             }
             $Pam->setRoles($this->item, $role_id);
-            return Resp::success('用户修改成功', '_top_reload|1');
+            return Resp::success('用户修改成功', [
+                '_top_reload' => 1,
+                'id'          => $Pam->getPam()->id,
+            ]);
         }
 
         $Pam = new Pam();
         if ($Pam->register($username, $password, $role_id)) {
-            return Resp::success('用户添加成功', '_top_reload|1');
+            return Resp::success('用户添加成功', [
+                '_top_reload' => 1,
+                'id'          => $Pam->getPam()->id,
+            ]);
         }
         return Resp::error($Pam->getError());
     }

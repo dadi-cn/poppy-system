@@ -601,11 +601,13 @@ class FormWidget implements Renderable
     private function resolveForm(): FormWidget
     {
         $request = $this->pyRequest();
-        if (!$request->has('_form_')) {
-            throw new ApplicationException('Invalid form request.');
-        }
 
-        $formClass = $request->get('_form_');
+        if (!$request->has('_form_')) {
+            $formClass = get_called_class();
+        }
+        else {
+            $formClass = $request->get('_form_');
+        }
 
         if (!class_exists($formClass)) {
             throw new ApplicationException("Form [{$formClass}] does not exist.");
