@@ -6,9 +6,10 @@ use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Action\Pam;
+use Poppy\System\Classes\Widgets\FormWidget;
 use Poppy\System\Models\PamAccount;
 
-class FormPamDisable extends FormDialogWidget
+class FormPamDisable extends FormWidget
 {
     public $ajax = true;
 
@@ -40,16 +41,14 @@ class FormPamDisable extends FormDialogWidget
 
     public function handle()
     {
-        $id = input('id');
-        if (!$id) {
+        if (!$this->id) {
             return Resp::error('您尚未选择用户!');
         }
 
-        $this->setId($id);
         $date   = input('date', '');
         $reason = input('reason', '');
         $Pam    = (new Pam())->setPam($this->pam);
-        if (!$Pam->disable($id, $date, $reason)) {
+        if (!$Pam->disable($this->id, $date, $reason)) {
             return Resp::error($Pam->getError());
         }
 

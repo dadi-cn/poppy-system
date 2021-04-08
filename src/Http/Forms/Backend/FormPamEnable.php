@@ -8,10 +8,11 @@ use Illuminate\Routing\Redirector;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\System\Action\Pam;
+use Poppy\System\Classes\Widgets\FormWidget;
 use Poppy\System\Models\PamAccount;
 use Response;
 
-class FormPamEnable extends FormDialogWidget
+class FormPamEnable extends FormWidget
 {
     public $ajax = true;
 
@@ -41,21 +42,15 @@ class FormPamEnable extends FormDialogWidget
         return $this;
     }
 
-    /**
-     * @return array|JsonResponse|RedirectResponse|\Illuminate\Http\Response|Redirector|mixed|Resp|Response
-     * @throws ApplicationException
-     */
     public function handle()
     {
-        $id = input('id');
-        if (!$id) {
+        if (!$this->id) {
             return Resp::error('您尚未选择用户!');
         }
 
-        $this->setId($id);
         $Pam      = (new Pam())->setPam($this->pam);
         $reason   = input('reason', '');
-        if (!$Pam->enable($id, $reason)) {
+        if (!$Pam->enable($this->id, $reason)) {
             return Resp::error($Pam->getError());
         }
 

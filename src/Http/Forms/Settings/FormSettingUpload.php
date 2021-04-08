@@ -8,9 +8,11 @@ use Poppy\Framework\Validation\Rule;
 class FormSettingUpload extends FormSettingBase
 {
 
-    public $title = '上传配置';
+    protected $title = '上传配置';
 
     public $inbox = true;
+
+    protected $withContent = true;
 
     protected $group = 'py-system::picture';
 
@@ -34,7 +36,7 @@ class FormSettingUpload extends FormSettingBase
             if (isset($desc['setting'])) {
                 $url  = route($desc['route']);
                 $link = <<<Link
-<a class="J_iframe" href="{$url}"><i class="fa fa-cogs"></i> {$desc['title']}设置</a>
+<a class="J_iframe" href="$url"><i class="fa fa-cogs"></i> {$desc['title']}设置</a>
 Link;
 
                 $this->html($link, $desc['title']);

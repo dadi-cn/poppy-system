@@ -3,13 +3,13 @@
 namespace Poppy\System\Http\Forms\Backend;
 
 use Poppy\Framework\Classes\Resp;
-use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Action\Pam;
+use Poppy\System\Classes\Widgets\FormWidget;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamRole;
 
-class FormPamEstablish extends FormDialogWidget
+class FormPamEstablish extends FormWidget
 {
 
     public $ajax = true;
@@ -27,7 +27,6 @@ class FormPamEstablish extends FormDialogWidget
      * 设置id
      * @param $id
      * @return $this
-     * @throws ApplicationException
      */
     public function setId($id): self
     {
@@ -35,11 +34,9 @@ class FormPamEstablish extends FormDialogWidget
 
         if ($id) {
             $this->item = PamAccount::passport($this->id);
-
-            if (!$this->item) {
-                throw  new ApplicationException('无用户数据');
+            if ($this->item) {
+                $this->type = $this->item->type;
             }
-            $this->type = $this->item->type;
         }
         return $this;
     }
@@ -49,7 +46,7 @@ class FormPamEstablish extends FormDialogWidget
      * @param string $type
      * @return $this
      */
-    public function setType($type)
+    public function setType(string $type): self
     {
         $this->type = $type;
         return $this;
@@ -60,13 +57,11 @@ class FormPamEstablish extends FormDialogWidget
         $username = input('username');
         $password = input('password');
         $role_id  = input('role_id');
-        $id       = input('id');
 
         if (!$role_id) {
             return Resp::error('请选择角色');
         }
-        if ($id) {
-            $this->setId($id);
+        if ($this->item) {
             $Pam = new Pam();
             if ($password) {
                 $Pam->setPassword($this->item, $password);
@@ -74,7 +69,6 @@ class FormPamEstablish extends FormDialogWidget
             $Pam->setRoles($this->item, $role_id);
             return Resp::success('用户修改成功', [
                 '_top_reload' => 1,
-                'id'          => $Pam->getPam()->id,
             ]);
         }
 
@@ -90,7 +84,7 @@ class FormPamEstablish extends FormDialogWidget
 
     public function data(): array
     {
-        if ($this->id) {
+        if ($this->item) {
             return [
                 'id'       => $this->item->id,
                 'username' => $this->item->username,
@@ -105,14 +99,14 @@ class FormPamEstablish extends FormDialogWidget
         if ($this->id) {
             $this->hidden('id', 'ID');
             $this->text('username', '用户名')->readonly()->disable();
-            $this->tags('role_id', '用户角色')->options(PamRole::getLinear($this->type, 'id'))->readonly();
+            $this->tags('role_id', '用户角色')->options(PamRole::getLinear($this->type))->readonly();
 
         }
         else {
             $this->text('username', '用户名')->rules([
                 Rule::nullable(),
             ]);
-            $this->tags('role_id', '用户角色')->options(PamRole::getLinear($this->type, 'id'));
+            $this->tags('role_id', '用户角色')->options(PamRole::getLinear($this->type));
         }
 
         $this->password('password', '密码');

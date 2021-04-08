@@ -12,13 +12,11 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
-use Poppy\Framework\Exceptions\ApplicationException;
-use Poppy\Framework\Exceptions\PoppyException;
 use Poppy\Framework\Helper\ArrayHelper;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Classes\Form as BaseForm;
 use Poppy\System\Classes\Form\Field;
-use Throwable;
+use Poppy\System\Classes\Layout\Content;
 use Url;
 
 /**
@@ -77,12 +75,6 @@ class FormWidget implements Renderable
 {
     use PoppyTrait;
 
-    /**
-     * The title of form.
-     *
-     * @var string
-     */
-    public $title;
 
     /**
      * @var bool
@@ -95,9 +87,23 @@ class FormWidget implements Renderable
     public $ajax = false;
 
     /**
+     * The title of form.
+     *
+     * @var string
+     */
+    protected $title = '';
+
+    /**
+     * 是否包含 JS 加载界面
+     * @var bool
+     */
+    protected $withContent = true;
+
+    /**
      * @var Field[]
      */
     protected $fields = [];
+
     /**
      * @var array
      */
@@ -127,8 +133,8 @@ class FormWidget implements Renderable
      * @var array
      */
     protected $width = [
-        'label' => 2,
-        'field' => 6,
+        'label' => 3,
+        'field' => 9,
     ];
 
     /**
@@ -191,7 +197,7 @@ class FormWidget implements Renderable
      *
      * @return $this
      */
-    public function attribute($attr, $value = '')
+    public function attribute($attr, $value = ''): self
     {
         if (is_array($attr)) {
             foreach ($attr as $key => $value) {
@@ -212,7 +218,7 @@ class FormWidget implements Renderable
      *
      * @return string
      */
-    public function formatAttribute($attributes = [])
+    public function formatAttribute($attributes = []): string
     {
         $attributes = $attributes ?: $this->attributes;
 
@@ -244,8 +250,6 @@ class FormWidget implements Renderable
      * Method of the form.
      *
      * @param string $method
-     *
-     * @return $this
      */
     public function method($method = 'POST')
     {
@@ -437,22 +441,41 @@ class FormWidget implements Renderable
 
     /**
      * Render the form.
-     * @throws Throwable
      */
     public function render()
     {
-        $this->prepareForm();
-
-
-        $result = $this->prepareHandle();
-        if (is_post()) {
-            return $result;
+        if (method_exists($this, 'form')) {
+            $this->form();
         }
 
+        if (method_exists($this, 'handle')) {
+            $this->method();
+            $this->action(Url::current());
+        }
+
+        if (input('_query')) {
+            return Resp::success('Success', $this->getFeVariables());
+        }
+
+        if (is_post()) {
+            $request = $this->pyRequest();
+            if ($errors = $this->validate($request)) {
+                if ($this->ajax) {
+                    return Resp::error($errors);
+                }
+                else {
+                    return back()->withInput()->withErrors($errors);
+                }
+            }
+            return $this->sanitize()->handle($request);
+        }
 
         $form = view('py-system::tpl.widgets.form', $this->getVariables())->render();
 
         if (!($title = $this->title()) || !$this->inbox) {
+            if ($this->withContent) {
+                return (new Content())->body($form);
+            }
             return $form;
         }
 
@@ -460,7 +483,9 @@ class FormWidget implements Renderable
         $box = (new BoxWidget($title, $form));
 
         $box->tools($this->boxTools);
-
+        if ($this->withContent) {
+            return (new Content())->body($box->render());
+        }
         return $box->render();
     }
 
@@ -491,9 +516,9 @@ class FormWidget implements Renderable
     /**
      * Get form title.
      *
-     * @return mixed
+     * @return string
      */
-    protected function title()
+    protected function title(): string
     {
         return $this->title;
     }
@@ -518,7 +543,7 @@ class FormWidget implements Renderable
      *
      * @return array
      */
-    protected function getVariables()
+    protected function getVariables(): array
     {
         collect($this->fields())->each->fill($this->data());
 
@@ -532,6 +557,32 @@ class FormWidget implements Renderable
             'width'      => $this->width,
             'ajax'       => $this->ajax,
             'id'         => $this->attributes['id'],
+        ];
+    }
+
+
+    protected function getFeVariables(): array
+    {
+        collect($this->fields())->each->fill($this->data());
+
+        $fields = [];
+        foreach ($this->fields() as $field) {
+            $variable = $field->variables();
+            $fields[] = [
+                'name'        => $variable['name'],
+                'type'        => $field->getType(),
+                'value'       => $variable['value'],
+                'label'       => $variable['label'],
+                'placeholder' => $variable['placeholder'],
+                'rules'       => $variable['rules'],
+                'options'     => $variable['options'],
+            ];
+        }
+        return [
+            'fields'  => $fields,
+            'action'  => $this->attributes['action'],
+            'method'  => $this->attributes['method'],
+            'buttons' => $this->buttons,
         ];
     }
 
@@ -551,76 +602,6 @@ class FormWidget implements Renderable
         }
 
         return $messageBag;
-    }
-
-    protected function prepareForm()
-    {
-        if (method_exists($this, 'form')) {
-            $this->form();
-        }
-    }
-
-    /**
-     * @throws PoppyException
-     * @throws ApplicationException
-     */
-    protected function prepareHandle()
-    {
-        if (method_exists($this, 'handle')) {
-            if (!$this->pyPoppy()->exists('poppy.mgr-page')) {
-                throw new PoppyException('模块 `poppy.mgr-page` 不存在, 你需要安装才可以运行进行表单类型的提交');
-            }
-            $this->method();
-            $this->action(Url::current());
-            $this->hidden('_form_')->default(get_called_class());
-        }
-
-        if (is_post()) {
-            $request = $this->pyRequest();
-            $form    = $this->resolveForm();
-
-            if ($errors = $form->validate($request)) {
-                if ($form->ajax) {
-                    return Resp::error($errors);
-                }
-                else {
-                    return back()->withInput()->withErrors($errors);
-                }
-            }
-            return $form->sanitize()->handle($request);
-        }
-        return null;
-    }
-
-
-    /**
-     * @return FormWidget
-     * @throws ApplicationException
-     *
-     */
-    private function resolveForm(): FormWidget
-    {
-        $request = $this->pyRequest();
-
-        if (!$request->has('_form_')) {
-            $formClass = get_called_class();
-        }
-        else {
-            $formClass = $request->get('_form_');
-        }
-
-        if (!class_exists($formClass)) {
-            throw new ApplicationException("Form [{$formClass}] does not exist.");
-        }
-
-        /** @var FormWidget $form */
-        $form = app($formClass);
-
-        if (!method_exists($form, 'handle')) {
-            throw new ApplicationException("Form method {$formClass}::handle() does not exist.");
-        }
-
-        return $form;
     }
 
     /**

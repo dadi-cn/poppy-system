@@ -6,7 +6,7 @@ use Poppy\Framework\Validation\Rule;
 
 class FormSettingSite extends FormSettingBase
 {
-    public $title = '站点设置';
+    protected $title = '站点设置';
 
     protected $group = 'py-system::site';
 

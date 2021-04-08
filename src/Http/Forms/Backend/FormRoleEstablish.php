@@ -15,10 +15,6 @@ class FormRoleEstablish extends FormWidget
 
     public $ajax = true;
 
-    protected $width = [
-        'label' => 3,
-        'field' => 9,
-    ];
 
     private $id;
 
@@ -48,28 +44,25 @@ class FormRoleEstablish extends FormWidget
 
     public function handle()
     {
-        $id   = input('id');
-        $Role = (new Role())->setPam(request()->user());
+        $Role = (new Role());
+        $Role->setPam(request()->user());
         if (is_post()) {
-            $this->setId($id);
-            if ($Role->establish(request()->all(), $id)) {
-                return Resp::success('操作成功', '_top_reload|1');
+            if ($Role->establish(request()->all(), $this->id)) {
+                return Resp::success('操作成功', '_top_reload|1;id|' . $Role->getRole()->id);
             }
 
             return Resp::error($Role->getError());
         }
-        $id && $Role->init($id) && $Role->share();
+        $this->id && $Role->init($this->id) && $Role->share();
     }
 
     public function data(): array
     {
         if ($this->id) {
             return [
-                'id'            => $this->item->id,
-                'title'         => $this->item->title,
-                'name'          => $this->item->name,
-                'guard'         => $this->item->type,
-                'guard-display' => $this->item->type,
+                'title' => $this->item->title,
+                'name'  => $this->item->name,
+                'type'  => $this->item->type,
             ];
         }
         return [];
@@ -78,22 +71,18 @@ class FormRoleEstablish extends FormWidget
     public function form()
     {
         if ($this->id) {
-            $this->hidden('id', 'ID');
-            $this->hidden('guard', 'Guard');
-            $this->select('guard-display', '角色组')->options(PamAccount::kvType())->rules([
-                Rule::required(),
-            ])->disable()->attribute([
+            $this->select('type', '角色组')->options(PamAccount::kvType())->attribute([
                 'lay-ignore',
-            ]);
-            $this->text('name', '标识')->disable()->readonly()->help('角色标识在后台不进行显示, 如果需要进行项目内部约定');
+            ])->disable();
         }
         else {
-            $this->select('guard', '角色组')->options(PamAccount::kvType())->rules([
+            $this->select('type', '角色组')->options(PamAccount::kvType())->rules([
                 Rule::required(),
+            ])->attribute([
+                'lay-ignore',
             ]);
-            $this->text('name', '标识')->help('角色标识在后台不进行显示, 如果需要进行项目内部约定');
         }
-
+        $this->text('name', '标识')->help('角色标识在后台不进行显示, 如果需要进行项目内部约定');
         $this->text('title', '角色名称')->rules([
             Rule::required(),
         ])->help('显示的名称');

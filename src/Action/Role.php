@@ -4,8 +4,6 @@ namespace Poppy\System\Action;
 
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Arr;
 use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\Core\Rbac\Permission\Permission;
@@ -52,9 +50,9 @@ class Role
      * 创建需求
      * @param array    $data 创建数据
      * @param null|int $id   角色id
-     * @return bool|RedirectResponse|Redirector
+     * @return bool
      */
-    public function establish($data, $id = null)
+    public function establish(array $data, $id = null)
     {
         if (!$this->checkPam()) {
             return false;
@@ -62,7 +60,7 @@ class Role
 
         $initDb = [
             'title'       => (string) Arr::get($data, 'title', ''),
-            'type'        => (string) Arr::get($data, 'guard', ''),
+            'type'        => (string) Arr::get($data, 'type', ''),
             'description' => (string) Arr::get($data, 'description', ''),
         ];
 
@@ -78,10 +76,9 @@ class Role
             'type'  => [
                 Rule::required(),
                 Rule::in([
-                    PamAccount::GUARD_BACKEND,
-                    PamAccount::GUARD_WEB,
-                    PamAccount::GUARD_DEVELOP,
-                    PamAccount::GUARD_USER,
+                    PamAccount::TYPE_BACKEND,
+                    PamAccount::TYPE_DEVELOP,
+                    PamAccount::TYPE_USER,
                 ]),
             ],
         ];
@@ -180,6 +177,12 @@ class Role
     public function share()
     {
         View::share(['item' => $this->role]);
+    }
+
+
+    public function getRole(): PamRole
+    {
+        return $this->role;
     }
 
     /**

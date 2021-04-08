@@ -86,7 +86,7 @@ class Content implements Renderable
         }
 
         // 接收 Form 请求并返回Form 数据
-        if ($content instanceof FormWidget && is_post() && method_exists($content, 'render')) {
+        if ($content instanceof FormWidget && (is_post() || input('_query')) && method_exists($content, 'render')) {
             return $content->render();
         }
 

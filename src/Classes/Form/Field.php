@@ -888,7 +888,7 @@ class Field implements Renderable
      *
      * @return array
      */
-    public function variables()
+    public function variables(): array
     {
         return array_merge($this->variables, [
             'id'          => $this->id,
@@ -904,6 +904,7 @@ class Field implements Renderable
             'attributes'  => $this->attributes,
             'placeholder' => $this->getPlaceholder(),
             'rules'       => $this->rules,
+            'options'     => $this->options,
         ]);
     }
 
@@ -935,6 +936,12 @@ class Field implements Renderable
         $this->view = $view;
 
         return $this;
+    }
+
+    public function getType(): string
+    {
+        $class = explode('\\', get_called_class());
+        return strtolower(end($class));
     }
 
     /**
@@ -1080,7 +1087,7 @@ class Field implements Renderable
      *
      * @param string $column
      *
-     * @return mixed|string
+     * @return mixed
      */
     protected function formatColumn($column = '')
     {

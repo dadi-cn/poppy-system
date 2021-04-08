@@ -6,7 +6,7 @@ use Poppy\Framework\Validation\Rule;
 
 class FormSettingPam extends FormSettingBase
 {
-    public $title = 'Pam设置';
+    protected $title = 'Pam设置';
 
     protected $group = 'py-system::pam';
 

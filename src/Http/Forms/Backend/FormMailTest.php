@@ -12,10 +12,6 @@ use Throwable;
 
 class FormMailTest extends FormWidget
 {
-    protected $width = [
-        'label' => 3,
-        'field' => 9,
-    ];
 
     public function handle(Request $request)
     {

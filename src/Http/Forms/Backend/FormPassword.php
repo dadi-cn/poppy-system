@@ -12,7 +12,7 @@ use Poppy\System\Models\PamAccount;
 class FormPassword extends FormWidget
 {
 
-    public $title = '修改密码';
+    protected $title = '修改密码';
 
     public $ajax = true;
 

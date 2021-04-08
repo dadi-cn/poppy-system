@@ -13,16 +13,9 @@ use Poppy\System\Models\PamAccount;
 class FormPamPassword extends FormWidget
 {
     public $ajax = true;
-    /**
-     * Width for label and submit field.
-     *
-     * @var array
-     */
-    protected $width = [
-        'label' => 3,
-        'field' => 9,
-    ];
+
     private $id;
+
     /**
      * @var PamAccount
      */
@@ -98,7 +91,6 @@ class FormPamPassword extends FormWidget
         if ($this->id) {
             $this->hidden('id', 'ID');
         }
-
         $this->text('username', '用户名')->disable();
         $this->password('password', '密码');
         $this->password('password_confirmation', '重复密码');

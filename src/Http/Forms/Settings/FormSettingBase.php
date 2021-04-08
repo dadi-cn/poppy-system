@@ -19,16 +19,14 @@ abstract class FormSettingBase extends FormWidget
     use KeyParserTrait;
 
     public $ajax = true;
-
     public $inbox = false;
-
-    public $title = '';
-
+    protected $title = '';
+    protected $withContent = false;
     protected $group = '';
 
     /**
      * @param Request $request
-     * @return array|JsonResponse|RedirectResponse|\Illuminate\Http\Response|Redirector|mixed|Resp|Response
+     * @return array|\Illuminate\Http\Response|JsonResponse|Redirector|RedirectResponse|Resp|Response
      * @throws FormException
      */
     public function handle(Request $request)

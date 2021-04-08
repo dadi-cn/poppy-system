@@ -13,9 +13,11 @@ class FormMailStore extends FormSettingBase
 
     public $ajax = true;
 
+    protected $withContent = true;
+
     public $inbox = true;
 
-    public $title = '邮件配置';
+    protected $title = '邮件配置';
 
     protected $group = 'py-system::mail';
 

@@ -84,10 +84,10 @@ class BoxWidget extends Widget implements Renderable
 		return $this;
 	}
 
-	/**
-	 * Render box.
-	 * @throws Throwable
-	 */
+    /**
+     * Render box.
+     * @throws Throwable
+     */
 	public function render()
 	{
 		return view('py-system::tpl.widgets.box', $this->variables())->render();

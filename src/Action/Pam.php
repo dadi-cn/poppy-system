@@ -123,7 +123,7 @@ class Pam
         $type = $this->passportType($passport);
 
         $initDb = [
-            $type          => (string) $passport,
+            $type          => $passport,
             'password'     => (string) $password,
             'reg_platform' => (string) $platform,
             'parent_id'    => $this->parentId,
