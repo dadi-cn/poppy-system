@@ -259,7 +259,10 @@ class DefaultUploadProvider implements UploadContract
 
         if (UtilHelper::isUrl($content)) {
             $extension = FileHelper::ext($content);
-            $content   = \Image::make($content)->stream();
+            if (!$extension) {
+                $extension = 'png';
+            }
+            $content = \Image::make($content)->stream();
         }
 
         // 缩放图片

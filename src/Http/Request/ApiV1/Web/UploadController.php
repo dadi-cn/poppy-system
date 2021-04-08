@@ -64,7 +64,7 @@ class UploadController extends WebApiController
 
         $urls = [];
         if ($type === 'form') {
-            $Image->setExtension(['jpg', 'png', 'gif', 'jpeg', 'bmp', 'mp4', 'rm', 'rmvb', 'wmv']);
+            $Image->setExtension(['jpg', 'png', 'gif', 'jpeg', 'webp', 'bmp', 'mp4', 'rm', 'rmvb', 'wmv']);
             $image = Request::file('image');
             if (!is_array($image)) {
                 $image = [$image];
