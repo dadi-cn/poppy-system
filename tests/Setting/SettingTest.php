@@ -4,9 +4,20 @@ namespace Poppy\System\Tests\Setting;
 
 use Exception;
 use Poppy\Framework\Application\TestCase;
+use Poppy\System\Setting\Repository\SettingRepository;
 
 class SettingTest extends TestCase
 {
+
+    public function testItem()
+    {
+        $key     = $this->randKey();
+        $setting = new SettingRepository();
+        $this->assertTrue($setting->set($key, 'value'));
+        $item = $setting->get($key);
+        $this->assertEquals('value', $item, 'Value Fetch Error');
+        $this->assertTrue($setting->delete($key));
+    }
 
     public function testGet()
     {
@@ -51,6 +62,6 @@ class SettingTest extends TestCase
     private function randKey($group = ''): string
     {
         $faker = $this->faker();
-        return 'testing::' . ($group ? $group : $faker->regexify('[a-z]{3,5}')) . '.' . $faker->regexify('/[a-z]{5,8}/');
+        return 'testing::' . ($group ?: $faker->regexify('[a-z]{3,5}')) . '.' . $faker->regexify('/[a-z]{5,8}/');
     }
 }

@@ -55,7 +55,6 @@ class SettingRepository implements SettingContract
 
     /**
      * @inheritDoc
-     * @throws Exception
      */
     public function delete(string $key): bool
     {
@@ -69,10 +68,13 @@ class SettingRepository implements SettingContract
             return false;
         }
 
-        $record->delete();
+        try {
+            $record->delete();
+        } catch (Exception $e) {
+            return false;
+        }
 
         unset(static::$cache[$key]);
-
         return true;
     }
 
