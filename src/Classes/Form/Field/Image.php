@@ -18,7 +18,7 @@ class Image extends Field
     protected $sizeClass = 'form_thumb-normal';
 
 
-    public function token($token)
+    public function token(string $token): self
     {
         $this->token = $token;
         return $this;
@@ -29,7 +29,7 @@ class Image extends Field
      * @param string $size [small:60|large:120|normal:85]
      * @return $this
      */
-    public function size($size = 'normal')
+    public function size($size = 'normal'): self
     {
         $sizeClass = 'form_thumb-normal';
         if ($size === 'normal') {
