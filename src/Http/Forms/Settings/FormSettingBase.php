@@ -21,22 +21,19 @@ abstract class FormSettingBase extends FormWidget
     use KeyParserTrait, PamTrait;
 
     /**
-     * @var PamAccount
-     */
-    protected $user;
-
-    /**
      * 是否设置用户
      * @var bool
      */
     public $ajax = true;
-
     /**
      * 是否 Inbox
      * @var bool
      */
     public $inbox = false;
-
+    /**
+     * @var PamAccount
+     */
+    protected $user;
     /**
      * 是否显示标题
      * @var string
