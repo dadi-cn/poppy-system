@@ -518,7 +518,7 @@ class FormWidget implements Renderable
      *
      * @return string
      */
-    protected function title(): string
+    public function title(): string
     {
         return $this->title;
     }

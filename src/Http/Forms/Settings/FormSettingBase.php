@@ -10,18 +10,49 @@ use Illuminate\Support\Str;
 use Poppy\Core\Classes\Contracts\SettingContract;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
+use Poppy\System\Classes\Traits\PamTrait;
 use Poppy\System\Classes\Widgets\FormWidget;
 use Poppy\System\Exceptions\FormException;
+use Poppy\System\Models\PamAccount;
 use Response;
 
 abstract class FormSettingBase extends FormWidget
 {
-    use KeyParserTrait;
+    use KeyParserTrait, PamTrait;
 
+    /**
+     * @var PamAccount
+     */
+    protected $user;
+
+    /**
+     * 是否设置用户
+     * @var bool
+     */
     public $ajax = true;
+
+    /**
+     * 是否 Inbox
+     * @var bool
+     */
     public $inbox = false;
+
+    /**
+     * 是否显示标题
+     * @var string
+     */
     protected $title = '';
+
+    /**
+     * 是否包含框架内容
+     * @var bool
+     */
     protected $withContent = false;
+
+    /**
+     * 定义分组
+     * @var string
+     */
     protected $group = '';
 
     /**

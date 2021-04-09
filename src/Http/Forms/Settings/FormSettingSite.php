@@ -25,8 +25,11 @@ class FormSettingSite extends FormSettingBase
             Rule::nullable(),
         ]);
         $this->textarea('description', '网站描述')->placeholder('请输入网站描述');
-        $user = app('auth')->guard()->user();
-        $token = app('tymon.jwt.auth')->fromUser($user);
+        if ($this->pam) {
+            $token = app('tymon.jwt.auth')->fromUser($this->pam);
+        } else {
+            $token = '';
+        }
         $this->image('logo', 'Logo')->rules([
             Rule::nullable(),
         ])->placeholder('网站logo')->token($token)->help('后台Logo 在此更换, 更改左上角的Logo 地址');

@@ -6,30 +6,19 @@ use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Action\Pam;
 use Poppy\System\Classes\Contracts\PasswordContract;
+use Poppy\System\Classes\Traits\PamTrait;
 use Poppy\System\Classes\Widgets\FormWidget;
 use Poppy\System\Models\PamAccount;
 
 class FormPassword extends FormWidget
 {
 
+    use PamTrait;
+
     protected $title = '修改密码';
 
     public $ajax = true;
 
-    /**
-     * @var PamAccount
-     */
-    private $pam;
-
-    /**
-     * @param PamAccount $pam
-     * @return $this
-     */
-    public function setPam(PamAccount $pam)
-    {
-        $this->pam = $pam;
-        return $this;
-    }
 
     public function handle()
     {
