@@ -94,4 +94,12 @@ abstract class FormSettingBase extends FormWidget
         }
         return $data;
     }
+
+    /**
+     * @return string
+     */
+    public function getGroup(): string
+    {
+        return $this->group;
+    }
 }
