@@ -59,7 +59,7 @@ class ConfigurationTest extends TestCase
             if (in_array('required', $formField->getRules(), true)) {
                 $this->assertNotEmpty(sys_setting($key), "设置项" . $formField->label() . " ($key) 必须设置");
             }
-            elseif ($group === ('py-system::mail') || ('py-aliyun-oss::oss')) {
+            elseif (in_array($group, ['py-system::mail', 'py-aliyun-oss::oss'])) {
                 $this->assertNotEmpty(sys_setting($key), "设置项" . $formField->label() . " ($key) 必须设置");
             }
             else {
