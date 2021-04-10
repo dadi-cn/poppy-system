@@ -2,6 +2,7 @@
 
 namespace Poppy\System\Tests\Base;
 
+use Curl\Curl;
 use DB;
 use Illuminate\Contracts\Support\Arrayable;
 use Log;
@@ -26,6 +27,12 @@ class SystemTestCase extends TestCase
      * @var array
      */
     protected $reportType = ['log', 'console'];
+
+    /**
+     * 访问内容
+     * @var string|null
+     */
+    protected $visitContent;
 
     public function setUp(): void
     {
@@ -112,6 +119,29 @@ class SystemTestCase extends TestCase
             ])->rows($logs);
             $Table->display();
         }
+    }
+
+    /**
+     * 对 Url 地址进行请求并且获取请求内容
+     * @param $url
+     */
+    protected function visit($url)
+    {
+        $Curl = new Curl();
+        if ($content = $Curl->get($url)) {
+            $this->assertTrue(true, $Curl->getCurlErrorMessage());
+        }
+        else {
+            $this->assertTrue(false, $Curl->getCurlErrorMessage());
+        }
+        if ($Curl->getHttpStatusCode() !== 200) {
+            $this->assertTrue(false, 'Visit Url ' . $url . ' Failed,  Reason:' . $Curl->getUrl());
+        }
+        else {
+            $this->assertTrue(true);
+        }
+
+        $this->visitContent = $content;
     }
 
     /**
