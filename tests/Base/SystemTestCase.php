@@ -8,10 +8,8 @@ use Log;
 use Poppy\Framework\Application\TestCase;
 use Poppy\Framework\Classes\ConsoleTable;
 use Poppy\Framework\Helper\StrHelper;
-use Poppy\Framework\Helper\UtilHelper;
 use Poppy\System\Classes\Traits\DbTrait;
 use Poppy\System\Models\PamAccount;
-use SysPam;
 
 class SystemTestCase extends TestCase
 {
@@ -66,7 +64,7 @@ class SystemTestCase extends TestCase
     protected function initPam($username = '')
     {
         $username = $username ?: $this->env('pam');
-        $pam      = SysPam::passport($username);
+        $pam      = PamAccount::passport($username);
         $this->assertNotNull($pam, 'Testing user pam is not exist');
         $this->pam = $pam;
     }
@@ -84,25 +82,6 @@ class SystemTestCase extends TestCase
         }
 
         return env('TESTING_' . strtoupper($key), $default);
-    }
-
-    /**
-     * 读取模块 Json 文件
-     * @param $module
-     * @param $path
-     * @return array
-     */
-    protected function readJson($module, $path): array
-    {
-        $filePath = poppy_path($module, $path);
-        if (file_exists($filePath)) {
-            $config = file_get_contents($filePath);
-            if (UtilHelper::isJson($config)) {
-                return json_decode($config, true);
-            }
-            return [];
-        }
-        return [];
     }
 
     /**
