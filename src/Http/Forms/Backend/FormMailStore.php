@@ -12,11 +12,8 @@ class FormMailStore extends FormSettingBase
     use KeyParserTrait;
 
     public $ajax = true;
-
-    protected $withContent = true;
-
     public $inbox = true;
-
+    protected $withContent = true;
     protected $title = '邮件配置';
 
     protected $group = 'py-system::mail';
@@ -49,6 +46,6 @@ class FormMailStore extends FormSettingBase
         $this->text('username', '账号')->rules([
             Rule::nullable(),
         ]);
-        $this->password('password', '密码');
+        $this->password('password', '密码')->help('如果重新保存, 必须要设置密码, 否则密码会被置空');
     }
 }

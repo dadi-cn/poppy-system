@@ -73,7 +73,7 @@ abstract class FormSettingBase extends FormWidget
             $Setting->set($fullKey, $value);
         }
 
-        return Resp::success('更新配置成功', '_reload|1');
+        return Resp::success('更新配置成功');
     }
 
     /**
