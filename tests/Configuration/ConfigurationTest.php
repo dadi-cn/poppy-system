@@ -55,6 +55,9 @@ class ConfigurationTest extends TestCase
         }
         $group = $objForm->getGroup();
         collect($objForm->fields())->each(function ($formField) use ($group) {
+            if (!$formField->column()){
+                return;
+            }
             $key = $group . '.' . $formField->column();
             if (in_array('required', $formField->getRules(), true)) {
                 $this->assertNotEmpty(sys_setting($key), "设置项" . $formField->label() . " ($key) 必须设置");
