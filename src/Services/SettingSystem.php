@@ -9,17 +9,11 @@ use Poppy\System\Http\Forms\Settings\FormSettingSite;
 class SettingSystem implements ServiceArray
 {
 
-	/**
-	 * @return mixed
-	 */
-	public function key()
+	public function key():string
 	{
 		return 'poppy.system';
 	}
 
-	/**
-	 * @return mixed
-	 */
 	public function data()
 	{
 		return [

@@ -7,17 +7,11 @@ use Poppy\Core\Services\Contracts\ServiceArray;
 class ApiInfo implements ServiceArray
 {
 
-	/**
-	 * @return mixed
-	 */
-	public function key()
+	public function key():string
 	{
 		return 'py-system';
 	}
 
-	/**
-	 * @return mixed
-	 */
 	public function data()
 	{
 		return [
