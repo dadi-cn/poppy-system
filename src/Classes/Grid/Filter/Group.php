@@ -2,36 +2,35 @@
 
 namespace Poppy\System\Classes\Grid\Filter;
 
+use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class Group extends AbstractFilter
 {
     /**
-     * @var \Closure|null
+     * Input value from presenter.
+     *
+     * @var mixed
+     */
+    public $input;
+    /**
+     * @var Closure|null
      */
     protected $builder;
-
     /**
      * @var string
      */
     protected $name;
 
     /**
-     * Input value from presenter.
-     *
-     * @var mixed
-     */
-    public $input;
-
-    /**
      * Group constructor.
      *
-     * @param string        $column
-     * @param string        $label
-     * @param \Closure|null $builder
+     * @param string       $column
+     * @param string       $label
+     * @param Closure|null $builder
      */
-    public function __construct($column, $label = '', \Closure $builder = null)
+    public function __construct($column, $label = '', Closure $builder = null)
     {
         $this->column = $column;
 
@@ -45,35 +44,6 @@ class Group extends AbstractFilter
         }
 
         $this->initialize();
-    }
-
-    /**
-     * Initialize a group filter.
-     */
-    protected function initialize()
-    {
-        $this->id    = $this->formatId($this->column);
-        $this->group = new Collection();
-        $this->name  = "{$this->id}-filter-group";
-
-        $this->setupDefaultPresenter();
-    }
-
-    /**
-     * Join a query to group.
-     *
-     * @param string $label
-     * @param array  $condition
-     *
-     * @return $this
-     */
-    protected function joinGroup($label, array $condition)
-    {
-        $this->group->push(
-            compact('label', 'condition')
-        );
-
-        return $this;
     }
 
     /**
@@ -130,52 +100,14 @@ class Group extends AbstractFilter
     }
 
     /**
-     * Filter out `not less then` records.
-     *
-     * @param string $label
-     *
-     * @return Group
-     */
-    public function nlt($label = '')
-    {
-        return $this->equal($label, '>=');
-    }
-
-    /**
-     * Filter out `not greater than` records.
-     *
-     * @param string $label
-     *
-     * @return Group
-     */
-    public function ngt($label = '')
-    {
-        return $this->equal($label, '<=');
-    }
-
-    /**
-     * Filter out records that match the regex.
-     *
-     * @param string $label
-     *
-     * @return Group
-     */
-    public function match($label = '')
-    {
-        $label = $label ?: 'Match';
-
-        return $this->equal($label, 'REGEXP');
-    }
-
-    /**
      * Specify a where query.
      *
-     * @param string   $label
-     * @param \Closure $builder
+     * @param string  $label
+     * @param Closure $builder
      *
      * @return Group
      */
-    public function where($label, \Closure $builder)
+    public function where($label, Closure $builder)
     {
         $this->input = $this->value;
 
@@ -226,38 +158,6 @@ class Group extends AbstractFilter
     }
 
     /**
-     * Filter out records which starts with input query.
-     *
-     * @param string $label
-     *
-     * @return Group
-     */
-    public function startWith($label = '')
-    {
-        $label = $label ?: 'Start with';
-
-        $condition = [$this->column, 'like', "{$this->value}%"];
-
-        return $this->joinGroup($label, $condition);
-    }
-
-    /**
-     * Filter out records which ends with input query.
-     *
-     * @param string $label
-     *
-     * @return Group
-     */
-    public function endWith($label = '')
-    {
-        $label = $label ?: 'End with';
-
-        $condition = [$this->column, 'like', "%{$this->value}"];
-
-        return $this->joinGroup($label, $condition);
-    }
-
-    /**
      * @inheritDoc
      */
     public function condition(array $inputs)
@@ -304,5 +204,104 @@ class Group extends AbstractFilter
         }
 
         return parent::render();
+    }
+
+    /**
+     * Filter out `not less then` records.
+     *
+     * @param string $label
+     *
+     * @return Group
+     */
+    public function nlt($label = '')
+    {
+        return $this->equal($label, '>=');
+    }
+
+    /**
+     * Filter out `not greater than` records.
+     *
+     * @param string $label
+     *
+     * @return Group
+     */
+    public function ngt($label = '')
+    {
+        return $this->equal($label, '<=');
+    }
+
+    /**
+     * Filter out records that match the regex.
+     *
+     * @param string $label
+     *
+     * @return Group
+     */
+    public function match($label = '')
+    {
+        $label = $label ?: 'Match';
+
+        return $this->equal($label, 'REGEXP');
+    }
+
+    /**
+     * Filter out records which starts with input query.
+     *
+     * @param string $label
+     *
+     * @return Group
+     */
+    public function startWith($label = '')
+    {
+        $label = $label ?: 'Start with';
+
+        $condition = [$this->column, 'like', "{$this->value}%"];
+
+        return $this->joinGroup($label, $condition);
+    }
+
+    /**
+     * Filter out records which ends with input query.
+     *
+     * @param string $label
+     *
+     * @return Group
+     */
+    public function endWith($label = '')
+    {
+        $label = $label ?: 'End with';
+
+        $condition = [$this->column, 'like', "%{$this->value}"];
+
+        return $this->joinGroup($label, $condition);
+    }
+
+    /**
+     * Initialize a group filter.
+     */
+    protected function initialize()
+    {
+        $this->id    = $this->formatId($this->column);
+        $this->group = new Collection();
+        $this->name  = "{$this->id}-filter-group";
+
+        $this->setupDefaultPresenter();
+    }
+
+    /**
+     * Join a query to group.
+     *
+     * @param string $label
+     * @param array  $condition
+     *
+     * @return $this
+     */
+    protected function joinGroup($label, array $condition)
+    {
+        $this->group->push(
+            compact('label', 'condition')
+        );
+
+        return $this;
     }
 }

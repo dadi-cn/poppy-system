@@ -46,6 +46,8 @@ layui.table.render($.extend({!! $lay !!}, {
     autoSort : false,
     id : '{!! $filter_id !!}-table',
     loading : true,
+    toolbar : true,
+    even : true,
     parseData : function(resp) {
         return {
             code : resp.status,
@@ -61,15 +63,12 @@ $('#{!! $filter_id !!}-reload').on('click', function() {
     $.each(values, function(i, field) {
         query[field.name] = field.value;
     });
-    layui.table.reload('{!! $filter_id !!}-table',
-        {
-            page : {
-                curr : 1 //重新从第 1 页开始
-            },
-            where : query
+    layui.table.reload('{!! $filter_id !!}-table', {
+        page : {
+            curr : 1 //重新从第 1 页开始
         },
-        'data'
-    );
+        where : query
+    }, 'data');
     return false;
 });
 
@@ -80,7 +79,8 @@ layui.table.on('sort({!! $id !!}-filter)', function(obj) {
         initSort : obj,
         where : {
             _field : obj.field,
-            _order : obj.type
+            _order : obj.type,
+            _query : 1
         }
     });
 });

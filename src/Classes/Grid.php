@@ -16,6 +16,7 @@ use Poppy\System\Classes\Grid\Column;
 use Poppy\System\Classes\Grid\Concerns;
 use Poppy\System\Classes\Grid\Model;
 use Poppy\System\Classes\Grid\Row;
+use Poppy\System\Classes\Layout\Content;
 use Poppy\System\Http\Lists\ListBase;
 use Response;
 use Throwable;
@@ -453,7 +454,8 @@ class Grid
 
         $variables = $this->variables();
 
-        return view($this->view, $variables)->render();
+        $content = view($this->view, $variables)->render();
+        return (new Content())->body($content);
     }
 
 
