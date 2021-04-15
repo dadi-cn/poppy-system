@@ -59,7 +59,9 @@ layui.table.render($.extend({!! $lay !!}, {
 }));
 $('#{!! $filter_id !!}-reload').on('click', function() {
     let values = $('#{!! $filter_id !!}-form').serializeArray();
-    let query  = {};
+    let query  = {
+        _query : 1
+    };
     $.each(values, function(i, field) {
         query[field.name] = field.value;
     });

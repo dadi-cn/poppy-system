@@ -148,7 +148,7 @@ class Column
      * 定义宽度
      * @var string
      */
-    protected $width = '';
+    protected $width = 0;
 
     /**
      * Original grid data.
@@ -277,13 +277,17 @@ class Column
      *
      * @return $this
      */
-    public function style(string $style = '')
+    public function style(string $style = ''): self
     {
         $this->style = $style . ($this->style ? ';' . $this->style : '');
         return $this;
     }
 
-    public function getStyle()
+    /**
+     * 获取定义的样式
+     * @return string
+     */
+    public function getStyle(): string
     {
         return $this->style;
     }
@@ -295,7 +299,7 @@ class Column
      *
      * @return $this
      */
-    public function width($width)
+    public function width($width): self
     {
         $this->width = $width;
         return $this;
@@ -308,7 +312,7 @@ class Column
      *
      * @return $this
      */
-    public function color(string $color)
+    public function color(string $color): self
     {
         return $this->style("color:$color;");
     }
@@ -355,11 +359,9 @@ class Column
 
     /**
      * Mark this column as sortable.
-     *
-     *
-     * @return Column|string
+     * @return Column
      */
-    public function sortable()
+    public function sortable(): self
     {
         $this->sortable = true;
         return $this;
@@ -458,7 +460,7 @@ class Column
      *
      * @return $this
      */
-    public function using(array $values, $default = null)
+    public function using(array $values, $default = null): self
     {
         return $this->display(function ($value) use ($values, $default) {
             if (is_null($value)) {
@@ -531,7 +533,7 @@ class Column
      *
      * @return $this
      */
-    public function filesize()
+    public function filesize(): self
     {
         return $this->display(function ($value) {
             return UtilHelper::formatBytes($value);
@@ -545,7 +547,7 @@ class Column
      *
      * @return $this
      */
-    public function gravatar($size = 30)
+    public function gravatar($size = 30): self
     {
         return $this->display(function ($value) use ($size) {
             $src = sprintf(
@@ -587,7 +589,7 @@ class Column
      *
      * @return $this
      */
-    public function icon(array $setting, $default = '')
+    public function icon(array $setting, $default = ''): self
     {
         return $this->display(function ($value) use ($setting, $default) {
             $fa = '';
@@ -610,7 +612,7 @@ class Column
      *
      * @return $this
      */
-    public function diffForHumans($locale = null)
+    public function diffForHumans($locale = null): self
     {
         if ($locale) {
             Carbon::setLocale($locale);
@@ -628,7 +630,7 @@ class Column
      *
      * @return $this
      */
-    public function date($format)
+    public function date(string $format): self
     {
         return $this->display(function ($value) use ($format) {
             return date($format, strtotime($value));
@@ -643,12 +645,12 @@ class Column
      *
      * @return $this
      */
-    public function bool(array $map = [], $default = false)
+    public function bool(array $map = [], $default = false): self
     {
         return $this->display(function ($value) use ($map, $default) {
             $bool = empty($map) ? boolval($value) : Arr::get($map, $value, $default);
 
-            return $bool ? '<i class="fa fa-check text-green"></i>' : '<i class="fa fa-close text-red"></i>';
+            return $bool ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-close text-danger"></i>';
         });
     }
 
@@ -659,7 +661,7 @@ class Column
      *
      * @return $this
      */
-    public function action($action)
+    public function action($action): self
     {
         if (!is_subclass_of($action, RowAction::class)) {
             throw new InvalidArgumentException("Action class [$action] must be sub-class of [Poppy\System\Classes\Actions\GridAction]");
@@ -687,7 +689,7 @@ class Column
      *
      * @return $this
      */
-    public function dot($options = [], $default = '')
+    public function dot($options = [], $default = ''): self
     {
         return $this->prefix(function ($_, $original) use ($options, $default) {
             if (is_null($original)) {
@@ -754,7 +756,7 @@ class Column
         return $this->resolveDisplayer($method, $arguments);
     }
 
-    public function getWidth()
+    public function getWidth(): int
     {
         return $this->width;
     }

@@ -62,7 +62,7 @@ trait LayDefines
 
             if ($width = $column->getWidth()) {
                 $defines += [
-                    'width' => $column->getWidth(),
+                    'width' => $width,
                 ];
             }
             $columns[] = $defines;
