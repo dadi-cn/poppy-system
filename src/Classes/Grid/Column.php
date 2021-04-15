@@ -470,19 +470,16 @@ class Column
     }
 
     /**
-     * Replace output value with giving map.
-     *
+     * 替换输出
      * @param array $replacements
-     *
      * @return $this
      */
-    public function replace(array $replacements)
+    public function replace(array $replacements): self
     {
         return $this->display(function ($value) use ($replacements) {
             if (isset($replacements[$value])) {
                 return $replacements[$value];
             }
-
             return $value;
         });
     }
