@@ -54,16 +54,20 @@ trait LayDefines
         $columns = [];
         collect($this->visibleColumns())->each(function (Column $column) use (&$columns) {
             $defines = [
-                'field' => $column->getName(),
-                'title' => $column->getLabel(),
-                'sort'  => $column->getSortable(),
-                'style' => $column->getStyle(),
+                'field' => $column->name,
+                'title' => $column->label,
+                'sort'  => $column->sortable,
+                'style' => $column->style,
             ];
 
-            if ($width = $column->getWidth()) {
-                $defines += [
-                    'width' => $width,
-                ];
+            if ($width = $column->width) {
+                $defines += ['width' => $width];
+            }
+            if ($fixed = $column->fixed) {
+                $defines += ['fixed' => $fixed];
+            }
+            if ( $column->editable) {
+                $defines += ['edit' => 'text'];
             }
             $columns[] = $defines;
         });

@@ -92,7 +92,7 @@ abstract class ListBase implements ListContract
             return $this->macroCall($method, $parameters);
         }
 
-        $label = $parameters[0] ?? null;
+        $label = $parameters[0] ?? '';
 
         if ($this->model()->eloquent()) {
             return $this->addColumn($method, $label);

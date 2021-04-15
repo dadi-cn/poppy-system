@@ -10,14 +10,14 @@ class Modal extends AbstractDisplayer
             [$title, $callback] = func_get_args();
         }
         elseif (func_num_args() == 1) {
-            $title = $this->trans('title');
+            $title = 'title';
         }
 
         $callback = $callback->bindTo($this->row);
 
         $html = call_user_func_array($callback, [$this->row]);
 
-        $key = $this->getKey() . '-' . str_replace('.', '_', $this->getColumn()->getName());
+        $key = $this->getKey() . '-' . str_replace('.', '_', $this->getColumn()->name);
 
         return <<<EOT
 <span class="grid-expand" data-toggle="modal" data-target="#grid-modal-{$key}">

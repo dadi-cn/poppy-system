@@ -22,7 +22,7 @@ class SwitchDisplay extends AbstractDisplayer
     {
         $this->updateStates($states);
 
-        $name = $this->column->getName();
+        $name = $this->column->name;
 
         $class = 'grid-switch-' . str_replace('.', '-', $name);
 

@@ -18,8 +18,8 @@ class ColumnSelector extends AbstractTool
      * @var array
      */
     protected static $ignoredColumns = [
-        Grid\Column::SELECT_COLUMN_NAME,
-        Grid\Column::ACTION_COLUMN_NAME,
+        Grid\Column::NAME_SELECTOR,
+        Grid\Column::NAME_ACTION,
     ];
 
     /**
@@ -51,13 +51,13 @@ class ColumnSelector extends AbstractTool
     protected function getGridColumns()
     {
         return $this->grid->columns()->map(function (Grid\Column $column) {
-            $name = $column->getName();
+            $name = $column->name;
 
             if ($this->isColumnIgnored($name)) {
                 return;
             }
 
-            return [$name => $column->getLabel()];
+            return [$name => $column->label];
         })->filter()->collapse();
     }
 

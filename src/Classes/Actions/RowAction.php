@@ -133,7 +133,7 @@ abstract class RowAction extends GridAction
             "<a data-_key='%s' href='javascript:void(0);' class='%s' {$attributes}>%s</a>",
             $this->getKey(),
             $this->getElementClass(),
-            $this->asColumn ? $this->display($this->row($this->column->getName())) : $this->name()
+            $this->asColumn ? $this->display($this->row($this->column->name)) : $this->name()
         );
     }
 

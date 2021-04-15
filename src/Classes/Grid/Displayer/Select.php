@@ -10,7 +10,7 @@ class Select extends AbstractDisplayer
             $options = $options->call($this, $this->row);
         }
 
-        $name = $this->column->getName();
+        $name = $this->column->name;
 
         $class = "grid-select-{$name}";
 

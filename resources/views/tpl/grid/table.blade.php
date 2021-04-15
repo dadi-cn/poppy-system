@@ -1,18 +1,17 @@
 <div class="layui-card">
-    @if(isset($title))
-        <div class="layui-card-header">
-            {{ $title }}
-            {{--显示工具--}}
-            {!! $grid->renderHeaderTools() !!}
+    {{--  标题以及工具  --}}
+    <div class="layui-card-header">
+        {{ $title }}
+        {{--显示工具--}}
+        {!! $grid->renderHeaderTools() !!}
 
-            <div class="pull-right">
-                {!! $grid->renderQuickButton() !!}
-            </div>
-            @if ($grid->isShowExporter())
-                {!! $grid->renderExportButton() !!}
-            @endif
+        <div class="pull-right">
+            {!! $grid->renderQuickButton() !!}
         </div>
-    @endif
+        @if ($grid->isShowExporter())
+            {!! $grid->renderExportButton() !!}
+        @endif
+    </div>
 
     <div class="layui-card-body">
 
@@ -42,6 +41,7 @@ layui.table.render($.extend({!! $lay !!}, {
     request : {
         limitName : 'pagesize'
     },
+    limit : {!! $grid->getPerPage() !!},
     // 使用后端排序
     autoSort : false,
     id : '{!! $filter_id !!}-table',

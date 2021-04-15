@@ -24,9 +24,7 @@ use Throwable;
 class Grid
 {
     use Concerns\HasElementNames,
-        Concerns\HasHeader,
         Concerns\HasExport,
-        Concerns\HasFooter,
         Concerns\HasFilter,
         Concerns\HasTools,
         Concerns\HasTotalRow,
@@ -48,11 +46,10 @@ class Grid
      *
      * @var array
      */
-    public $perPages = [15, 20, 30, 50, 100];
+    public $perPages = [15, 30, 50, 100, 200];
 
     /**
-     * Default items count per-page.
-     *
+     * 默认分页数
      * @var int
      */
     public $perPage = 15;
@@ -155,10 +152,10 @@ class Grid
     /**
      * Create a new grid instance.
      *
-     * @param Eloquent     $model
-     * @param Closure|null $builder
+     * @param Eloquent|\Illuminate\Database\Eloquent\Model $model
+     * @param Closure|null                                 $builder
      */
-    public function __construct(Eloquent $model, Closure $builder = null)
+    public function __construct($model, Closure $builder = null)
     {
         $this->model   = new Model($model, $this);
         $this->keyName = $model->getKeyName();
@@ -248,7 +245,7 @@ class Grid
      *
      * @return void
      */
-    public function paginate($perPage = 20)
+    public function paginate($perPage = 15)
     {
         $this->perPage = $perPage;
 
@@ -328,7 +325,7 @@ class Grid
         $this->columns->map(function (Column $column) use (&$data) {
             $data = $column->fill($data);
 
-            $this->columnNames[] = $column->getName();
+            $this->columnNames[] = $column->name;
         });
 
         $this->buildRows($data);
@@ -458,6 +455,10 @@ class Grid
         return (new Content())->body($content);
     }
 
+    public function getPerPage(): int
+    {
+        return $this->perPage;
+    }
 
     /**
      * Initialize with user pre-defined default disables and exporter, etc.

@@ -2,11 +2,13 @@
 
 namespace Poppy\System\Classes\Grid\Displayer;
 
+use Closure;
+
 class Link extends AbstractDisplayer
 {
     public function display($callback = '', $target = '_blank')
     {
-        if ($callback instanceof \Closure) {
+        if ($callback instanceof Closure) {
             $callback = $callback->bindTo($this->row);
             $href     = call_user_func_array($callback, [$this->row]);
         }
@@ -14,6 +16,6 @@ class Link extends AbstractDisplayer
             $href = $callback ?: $this->value;
         }
 
-        return "<a href='$href' target='$target'>{$this->value}</a>";
+        return "<a href='$href' target='$target'>$this->value</a>";
     }
 }

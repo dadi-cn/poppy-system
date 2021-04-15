@@ -127,8 +127,8 @@ trait HasQuickSearch
     protected function parseQueryBindings(array $queries)
     {
         $columnMap = $this->columns->mapWithKeys(function (Column $column) {
-            $label = $column->getLabel();
-            $name  = $column->getName();
+            $label = $column->label;
+            $name  = $column->name;
 
             return [$label => $name, $name => $name];
         });

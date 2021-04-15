@@ -34,7 +34,7 @@ class Filter implements Renderable
      */
     public function getColumnName()
     {
-        return $this->parent->getName();
+        return $this->parent->name;
     }
 
     /**

@@ -3,8 +3,10 @@
 namespace Poppy\System\Classes\Grid\Displayer;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Facades\Storage;
 
+/**
+ * 将文件渲染为可下载的
+ */
 class Downloadable extends AbstractDisplayer
 {
     public function display($server = '')
@@ -25,16 +27,15 @@ class Downloadable extends AbstractDisplayer
                 $src = rtrim($server, '/') . '/' . ltrim($value, '/');
             }
             else {
-                $src = Storage::disk(config('admin.upload.disk'))->url($value);
+                $src = $value;
             }
 
             $name = basename($value);
-
             return <<<HTML
-<a href="$src" download="{$name}" target="_blank" class="text-muted">
-    <i class="fa fa-download"></i> {$name}
+<a href="$src" download="$name" target="_blank" class="J_tooltip" title="$name">
+    <i class="fa fa-download"></i>
 </a>
 HTML;
-        })->implode('<br>');
+        })->implode('&nbsp;');
     }
 }

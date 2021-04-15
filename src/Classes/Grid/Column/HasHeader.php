@@ -1,5 +1,10 @@
 <?php
-
+/*
+ * This is NOT a Free software.
+ * When you have some Question or Advice can contact Me.
+ * @author     Duoli <zhaody901@126.com>
+ * @copyright  Copyright (c) 2013-2021 Poppy Team
+ */
 namespace Poppy\System\Classes\Grid\Column;
 
 use Illuminate\Contracts\Support\Htmlable;
@@ -44,7 +49,7 @@ trait HasHeader
     public function bindFilterQuery(Model $model)
     {
         if ($this->filter) {
-            $this->filter->addBinding(request($this->getName()), $model);
+            $this->filter->addBinding(request($this->name), $model);
         }
     }
 

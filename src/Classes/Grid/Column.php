@@ -41,14 +41,22 @@ use Poppy\System\Classes\Grid\Displayer\AbstractDisplayer;
  * @method $this prefix($prefix, $delimiter = '&nbsp;')
  * @method $this suffix($suffix, $delimiter = '&nbsp;')
  * @method $this secret($dotCount = 6)
+ * @property string $fixed
+ * @property string $width
+ * @property string $sortable
+ * @property string $label
+ * @property string $name
+ * @property string $style
+ * @property string $original
+ * @property string $editable
  */
 class Column
 {
     use Column\HasHeader;
 
-    const SELECT_COLUMN_NAME = '__row_selector__';
+    const NAME_SELECTOR = '_selector_';
+    const NAME_ACTION   = '_actions_';
 
-    const ACTION_COLUMN_NAME = '__actions__';
     /**
      * Displayer for grid column.
      *
@@ -143,7 +151,6 @@ class Column
      */
     protected $style = '';
 
-
     /**
      * 定义宽度
      * @var string
@@ -164,26 +171,26 @@ class Column
      * @var array
      */
     protected static $rowAttributes = [];
+
     /**
      * @var Model
      */
     protected static $model;
 
     /**
+     * 列定位
+     * @var string
+     */
+    private $fixed = '';
+
+    /**
      * @param string $name
      * @param string $label
      */
-    public function __construct($name, $label)
+    public function __construct(string $name, string $label = '')
     {
         $this->name = $name;
-
-        $this->label = $this->formatLabel($label);
-    }
-
-
-    public function getSortable()
-    {
-        return $this->sortable;
+        $this->label = $label ?: ucfirst($name);
     }
 
     /**
@@ -284,15 +291,6 @@ class Column
     }
 
     /**
-     * 获取定义的样式
-     * @return string
-     */
-    public function getStyle(): string
-    {
-        return $this->style;
-    }
-
-    /**
      * Set the width of column.
      *
      * @param string|int $width
@@ -306,64 +304,23 @@ class Column
     }
 
     /**
-     * Set the color of column.
-     *
-     * @param string $color
-     *
-     * @return $this
-     */
-    public function color(string $color): self
-    {
-        return $this->style("color:$color;");
-    }
-
-    /**
-     * Get original column value.
-     *
-     * @return mixed
-     */
-    public function getOriginal()
-    {
-        return $this->original;
-    }
-
-    /**
-     * Get name of this column.
-     *
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getClassName()
-    {
-        $name = str_replace('.', '-', $this->getName());
-
-        return "column-{$name}";
-    }
-
-    /**
-     * Get label of the column.
-     *
-     * @return mixed
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * Mark this column as sortable.
+     * 标识列为可排序
      * @return Column
      */
     public function sortable(): self
     {
         $this->sortable = true;
+        return $this;
+    }
+
+    /**
+     * 标识列为可fix 显示
+     * @param string $position
+     * @return Column
+     */
+    public function fixed($position = 'right'): self
+    {
+        $this->fixed = $position;
         return $this;
     }
 
@@ -388,7 +345,7 @@ class Column
     {
         $this->searchable = true;
 
-        $name  = $this->getName();
+        $name  = $this->name;
         $query = request()->query();
 
         $this->prefix(function ($_, $original) use ($name, $query) {
@@ -409,11 +366,11 @@ class Column
      */
     public function bindSearchQuery(Model $model)
     {
-        if (!$this->searchable || !request()->has($this->getName())) {
+        if (!$this->searchable || !request()->has($this->name)) {
             return;
         }
 
-        $model->where($this->getName(), request($this->getName()));
+        $model->where($this->name, request($this->name));
     }
 
     /**
@@ -453,14 +410,12 @@ class Column
     }
 
     /**
-     * Display column using array value map.
-     *
-     * @param array $values
-     * @param null  $default
-     *
+     * 替换输出, 并指定默认值, 可以用于状态值替换, 使用KV
+     * @param array  $values
+     * @param string $default
      * @return $this
      */
-    public function using(array $values, $default = null): self
+    public function using(array $values, $default = ''): self
     {
         return $this->display(function ($value) use ($values, $default) {
             if (is_null($value)) {
@@ -468,21 +423,6 @@ class Column
             }
 
             return Arr::get($values, $value, $default);
-        });
-    }
-
-    /**
-     * 替换输出
-     * @param array $replacements
-     * @return $this
-     */
-    public function replace(array $replacements): self
-    {
-        return $this->display(function ($value) use ($replacements) {
-            if (isset($replacements[$value])) {
-                return $replacements[$value];
-            }
-            return $value;
         });
     }
 
@@ -503,14 +443,12 @@ class Column
     }
 
     /**
-     * Hide this column by default.
-     *
+     * 当前列存在, 但是数据暂时隐藏掉
      * @return $this
      */
-    public function hide()
+    public function hide(): self
     {
-        $this->grid->hideColumns($this->getName());
-
+        $this->grid->hideColumns($this->name);
         return $this;
     }
 
@@ -541,21 +479,19 @@ class Column
     }
 
     /**
-     * Display the fields in the email format as gavatar.
-     *
+     * 使用 gravatar 来显示头像图
      * @param int $size
-     *
      * @return $this
      */
-    public function gravatar($size = 30): self
+    public function gravatar($size = 25): self
     {
         return $this->display(function ($value) use ($size) {
+            sys_debug('', '', $size);
             $src = sprintf(
                 'https://www.gravatar.com/avatar/%s?s=%d',
                 md5(strtolower($value)),
                 $size
             );
-
             return "<img src='$src' alt='{$value}' class='img img-circle'/>";
         });
     }
@@ -578,30 +514,6 @@ class Column
             }
 
             return Arr::get($others, $value, $value);
-        });
-    }
-
-    /**
-     * Display column as an font-awesome icon based on it's value.
-     *
-     * @param array  $setting
-     * @param string $default
-     *
-     * @return $this
-     */
-    public function icon(array $setting, $default = ''): self
-    {
-        return $this->display(function ($value) use ($setting, $default) {
-            $fa = '';
-
-            if (isset($setting[$value])) {
-                $fa = $setting[$value];
-            }
-            elseif ($default) {
-                $fa = $default;
-            }
-
-            return "<i class=\"fa fa-{$fa}\"></i>";
         });
     }
 
@@ -746,19 +658,23 @@ class Column
     {
         if ($this->isRelation() && !$this->relationColumn) {
             $this->name  = "{$this->relation}.$method";
-            $this->label = $this->formatLabel($arguments[0] ?? null);
+            $this->label = ucfirst($arguments[0] ?? null);
 
             $this->relationColumn = $method;
 
             return $this;
         }
-
         return $this->resolveDisplayer($method, $arguments);
     }
 
-    public function getWidth(): int
+    /**
+     * 获取类属性
+     * @param string $key
+     * @return string
+     */
+    public function __get(string $key)
     {
-        return $this->width;
+        return $this->{$key} ?? '';
     }
 
     /**
@@ -811,24 +727,6 @@ class Column
         $columnAttributes = Arr::get(static::$htmlAttributes, $name, []);
 
         return array_merge($rowAttributes, $columnAttributes);
-    }
-
-    /**
-     * Format label.
-     *
-     * @param $label
-     *
-     * @return mixed
-     */
-    protected function formatLabel($label)
-    {
-        if ($label) {
-            return $label;
-        }
-
-        $label = ucfirst($this->name);
-
-        return __(str_replace(['.', '_'], ' ', $label));
     }
 
     /**
@@ -976,37 +874,35 @@ class Column
     /**
      * Find a displayer to display column.
      *
-     * @param string $abstract
+     * @param string $method
      * @param array  $arguments
      *
      * @return $this
      */
-    protected function resolveDisplayer($abstract, $arguments)
+    protected function resolveDisplayer(string $method, array $arguments): self
     {
-        if (array_key_exists($abstract, static::$displayers)) {
-            return $this->callBuiltinDisplayer(static::$displayers[$abstract], $arguments);
+        if (array_key_exists($method, static::$displayers)) {
+            return $this->callBuiltinDisplayer(static::$displayers[$method], $arguments);
         }
-
-        return $this->callSupportDisplayer($abstract, $arguments);
+        return $this->callSupportDisplayer($method, $arguments);
     }
 
     /**
      * Call Illuminate/Support displayer.
      *
-     * @param string $abstract
+     * @param string $method
      * @param array  $arguments
-     *
      * @return $this
      */
-    protected function callSupportDisplayer($abstract, $arguments)
+    protected function callSupportDisplayer(string $method, array $arguments): self
     {
-        return $this->display(function ($value) use ($abstract, $arguments) {
+        return $this->display(function ($value) use ($method, $arguments) {
             if (is_array($value) || $value instanceof Arrayable) {
-                return call_user_func_array([collect($value), $abstract], $arguments);
+                return call_user_func_array([collect($value), $method], $arguments);
             }
 
             if (is_string($value)) {
-                return call_user_func_array([Str::class, $abstract], array_merge([$value], $arguments));
+                return call_user_func_array([Str::class, $method], array_merge([$value], $arguments));
             }
 
             return $value;
@@ -1021,7 +917,7 @@ class Column
      *
      * @return $this
      */
-    protected function callBuiltinDisplayer($abstract, $arguments)
+    protected function callBuiltinDisplayer(string $abstract, array $arguments): self
     {
         if ($abstract instanceof Closure) {
             return $this->display(function ($value) use ($abstract, $arguments) {

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Poppy\System\Classes\Grid;
 use Poppy\System\Classes\Grid\Column;
 use stdClass;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractDisplayer
 {
@@ -96,16 +95,4 @@ abstract class AbstractDisplayer
      * @return mixed
      */
     abstract public function display();
-
-    /**
-     * Get translation.
-     *
-     * @param string $text
-     *
-     * @return string|TranslatorInterface
-     */
-    protected function trans($text)
-    {
-        return trans("admin.$text");
-    }
 }

@@ -65,7 +65,7 @@ class ListPamAccount extends ListBase
     public function actions()
     {
         $Action = $this;
-        $this->addColumn(Column::ACTION_COLUMN_NAME, '操作')
+        $this->addColumn(Column::NAME_ACTION, '操作')
             ->displayUsing(Actions::class, [
                 function (Actions $actions) use ($Action) {
                     $item = $actions->row;

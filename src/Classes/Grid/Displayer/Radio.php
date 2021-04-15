@@ -11,7 +11,7 @@ class Radio extends AbstractDisplayer
         }
 
         $radios = '';
-        $name   = $this->column->getName();
+        $name   = $this->column->name;
 
         foreach ($options as $value => $label) {
             $checked = ($value == $this->value) ? 'checked' : '';
@@ -29,10 +29,10 @@ EOT;
 <form class="form-group grid-radio-$name" style="text-align: left" data-key="{$this->getKey()}">
     $radios
     <button type="submit" class="btn btn-info btn-xs pull-left">
-        <i class="fa fa-save"></i>&nbsp;{$this->trans('save')}
+        <i class="fa fa-save"></i>&nbsp;{'save'}
     </button>
     <button type="reset" class="btn btn-warning btn-xs pull-left" style="margin-left:10px;">
-        <i class="fa fa-trash"></i>&nbsp;{$this->trans('reset')}
+        <i class="fa fa-trash"></i>&nbsp;{'reset'}
     </button>
 </form>
 EOT;
@@ -40,7 +40,7 @@ EOT;
 
     protected function script()
     {
-        $name = $this->column->getName();
+        $name = $this->column->name;
 
         return <<<EOT
 
