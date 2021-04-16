@@ -74,7 +74,7 @@ class Filter extends FilterButton
     /**
      * @var string
      */
-    protected $filterID = 'filter-box';
+    protected $filterId = 'filter-box';
 
     /**
      * @var string
@@ -188,19 +188,19 @@ class Filter extends FilterButton
      */
     public function getFilterId()
     {
-        return $this->filterID;
+        return $this->filterId;
     }
 
     /**
      * Set ID of search form.
      *
-     * @param string $filterID
+     * @param string $id
      *
      * @return $this
      */
-    public function setFilterID($filterID)
+    public function setFilterId($id)
     {
-        $this->filterID = $filterID;
+        $this->filterId = $id;
 
         return $this;
     }
@@ -222,7 +222,7 @@ class Filter extends FilterButton
     {
         $this->name = $name;
 
-        $this->setFilterID("{$this->name}-{$this->filterID}");
+        $this->setFilterId("$this->name-$this->filterId");
 
         return $this;
     }
@@ -307,7 +307,7 @@ class Filter extends FilterButton
      *
      * @return AbstractFilter[]
      */
-    public function filters():array
+    public function filters(): array
     {
         return $this->filters;
     }
@@ -414,11 +414,10 @@ class Filter extends FilterButton
         if (empty($this->filters)) {
             return '';
         }
-
         return view($this->view, [
             'action'    => $this->action ?: $this->urlWithoutFilters(),
             'layout'    => $this->layout,
-            'filter_id' => $this->filterID,
+            'filter_id' => $this->filterId,
         ])->render();
     }
 

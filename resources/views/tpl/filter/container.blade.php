@@ -7,9 +7,9 @@
                 @endforeach
             </div>
         @endforeach
-        <div class="layui-col-md2">
-            <button class="layui-btn layui-btn-info" id="{{ $filter_id }}-reload"><i class="fa fa-search"></i>&nbsp;搜索</button>
-            <a href="{!! $action !!}" class="layui-btn layui-btn-primary J_ignore"><i class="fa fa-undo"></i>&nbsp;重置</a>
+        <div class="layui-col-md1">
+            <button class="layui-btn layui-btn-info" id="{{ $filter_id }}-reload"><i class="fa fa-search"></i></button>
+            <a href="{!! $action !!}" class="layui-btn layui-btn-primary J_ignore"><i class="fa fa-undo"></i></a>
         </div>
     </div>
 </form>
