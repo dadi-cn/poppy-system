@@ -13,9 +13,9 @@ class Copyable extends AbstractDisplayer
     public function display()
     {
         return <<<HTML
-<a href="javascript:void(0);" class="grid-column-copyable text-muted" data-content="{$this->getValue()}" title="Copied!" data-placement="bottom">
-    <i class="fa fa-copy"></i>
-</a>&nbsp;{$this->getValue()}
+<span data-clipboard-text="{$this->getValue()}">
+    <i class="fa fa-copy"></i> {$this->getValue()}
+</span>&nbsp;
 HTML;
     }
 }
