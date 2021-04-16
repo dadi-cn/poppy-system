@@ -2,47 +2,42 @@
 
 namespace Poppy\System\Classes\Grid\Displayer;
 
-use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class SwitchDisplay extends AbstractDisplayer
 {
+
     protected $states = [
-        'on'  => ['value' => 1, 'text' => 'ON', 'color' => 'primary'],
-        'off' => ['value' => 0, 'text' => 'OFF', 'color' => 'default'],
+        '1' => '开',
+        '0' => '关',
     ];
 
-    protected function updateStates($states)
+    public function display($states = []): string
     {
-        foreach (Arr::dot($states) as $key => $state) {
-            Arr::set($this->states, $key, $state);
+        if ($states) {
+            $this->states = $states;
         }
-    }
-
-    public function display($states = [])
-    {
-        $this->updateStates($states);
-
+        $type = '1/0';
+        if (isset($this->states['Y'])) {
+            $type = 'Y/N';
+        }
         $name = $this->column->name;
 
-        $class = 'grid-switch-' . str_replace('.', '-', $name);
-
-        $keys = collect(explode('.', $name));
-        if ($keys->isEmpty()) {
-            $key = $name;
+        if ($type === 'Y/N') {
+            $checked = $this->value === 'Y' ? 'checked' : '';
         }
         else {
-            $key = $keys->shift() . $keys->reduce(function ($carry, $val) {
-                    return $carry . "[$val]";
-                });
+            $checked = $this->value ? 'checked' : '';
         }
 
 
-        $key = $this->row->{$this->grid->getKeyName()};
-
-        $checked = $this->states['on']['value'] == $this->value ? 'checked' : '';
-
+        $id = Str::random();
         return <<<EOT
-        <input type="checkbox" class="$class" $checked data-key="$key" />
+    <div class="layui-field-checkbox-item">
+        <input type="checkbox" class="layui-field-checkbox" lay-ignore $checked id="$id" data-field="$name" data-type="$type" lay-event="switch" />
+        <label class="layui-field-checkbox-label" for="$id" style="margin:0;top:-3px;"></label>
+    </div>
 EOT;
     }
+
 }

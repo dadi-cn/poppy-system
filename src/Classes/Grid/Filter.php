@@ -360,9 +360,7 @@ class Filter extends FilterButton
     public function column($width, Closure $closure): self
     {
         $width = $width < 1 ? round(12 * $width) : $width;
-
         $this->layout->column($width, $closure);
-
         return $this;
     }
 

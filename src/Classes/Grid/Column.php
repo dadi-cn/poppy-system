@@ -19,26 +19,14 @@ use Poppy\System\Classes\Grid\Displayer\AbstractDisplayer;
 /**
  * Class Column.
  * @method $this switch ($states = [])
- * @method $this switchGroup($columns = [], $states = [])
- * @method $this select($options = [])
  * @method $this image($server = '', $width = 200, $height = 200)
- * @method $this label($style = 'success')
- * @method $this button($style = null)
  * @method $this link($href = '', $target = '_blank')
- * @method $this badge($style = 'red')
  * @method $this progress($style = 'primary', $size = 'sm', $max = 100)
- * @method $this radio($options = [])
- * @method $this checkbox($options = [])
- * @method $this orderAble($column, $label = '')
- * @method $this table($titles = [])
- * @method $this expand($callback = null)
- * @method $this modal($callback = null)
  * @method $this downloadable($server = '')
  * @method $this copyable()
  * @method $this qrcode($formatter = null, $width = 150, $height = 150)
  * @method $this prefix($prefix, $delimiter = '&nbsp;')
  * @method $this suffix($suffix, $delimiter = '&nbsp;')
- * @method $this secret($dotCount = 6)
  * @property string $fixed
  * @property string $width
  * @property string $sortable
@@ -47,6 +35,7 @@ use Poppy\System\Classes\Grid\Displayer\AbstractDisplayer;
  * @property string $style
  * @property string $original
  * @property string $editable
+ * @property string $template
  */
 class Column
 {
@@ -62,26 +51,14 @@ class Column
      */
     public static $displayers = [
         'switch'       => Displayer\SwitchDisplay::class,
-        'switchGroup'  => Displayer\SwitchGroup::class,
-        'select'       => Displayer\Select::class,
         'image'        => Displayer\Image::class,
-        'label'        => Displayer\Label::class,
-        'button'       => Displayer\Button::class,
         'link'         => Displayer\Link::class,
-        'badge'        => Displayer\Badge::class,
         'progress'     => Displayer\ProgressBar::class,
-        'radio'        => Displayer\Radio::class,
-        'checkbox'     => Displayer\Checkbox::class,
-        'orderable'    => Displayer\Orderable::class,
-        'table'        => Displayer\Table::class,
-        'expand'       => Displayer\Expand::class,
-        'modal'        => Displayer\Modal::class,
         'downloadable' => Displayer\Downloadable::class,
         'copyable'     => Displayer\Copyable::class,
         'qrcode'       => Displayer\QRCode::class,
         'prefix'       => Displayer\Prefix::class,
         'suffix'       => Displayer\Suffix::class,
-        'secret'       => Displayer\Secret::class,
     ];
     /**
      * Defined columns.
@@ -221,66 +198,6 @@ class Column
     }
 
     /**
-     * Set column attributes.
-     *
-     * @param array $attributes
-     * @return $this
-     * @deprecated laytable 不支持, 可能需要改成 style
-     */
-    public function setAttributes($attributes = [], $key = null)
-    {
-        if ($key) {
-            static::$rowAttributes[$this->name][$key] = array_merge(
-                Arr::get(static::$rowAttributes, "{$this->name}.{$key}", []),
-                $attributes
-            );
-
-            return $this;
-        }
-
-        static::$htmlAttributes[$this->name] = array_merge(
-            Arr::get(static::$htmlAttributes, $this->name, []),
-            $attributes
-        );
-
-        return $this;
-    }
-
-    /**
-     * Format attributes to html.
-     *
-     * @return string
-     */
-    public function formatHtmlAttributes()
-    {
-        $attrArr = [];
-        foreach (static::getAttributes($this->name) as $name => $val) {
-            $attrArr[] = "$name=\"$val\"";
-        }
-
-        return implode(' ', $attrArr);
-    }
-
-    /**
-     * Format attributes to html.
-     *
-     * @return string
-     */
-    public function formatStyle()
-    {
-        $attrArr = [];
-
-        $colStyles = Arr::get(static::$styles, $this->name, []);
-
-
-        foreach ($colStyles as $name => $val) {
-            $attrArr[] = "$name=\"$val\"";
-        }
-
-        return implode(';', $attrArr);
-    }
-
-    /**
      * Set style of this column.
      *
      * @param string $style
@@ -338,6 +255,7 @@ class Column
     {
         return $this->addFilter(...func_get_args());
     }
+
 
     /**
      * Set column as searchable.

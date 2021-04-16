@@ -106,4 +106,29 @@ layui.table.on('edit({!! $id !!}-filter)', function(obj) {
         '_pk' : obj.data['{!! $model_pk !!}']
     })
 });
+
+layui.table.on('tool({!! $id !!}-filter)', function(obj) {
+    if (!obj.data['{!! $model_pk !!}']) {
+        Util.splash({
+            status : 1,
+            message : '尚未定义/返回主键, 无法使用编辑功能'
+        })
+        return obj;
+    }
+    let field   = this.getAttribute('data-field');
+    let type    = this.getAttribute('data-type');
+    let value;
+    let checked = $(this).prop('checked');
+    if (type === 'Y/N') {
+        value = checked ? 'Y' : 'N';
+    } else {
+        value = checked ? '1' : '0';
+    }
+    Util.makeRequest('{!! $url_base !!}', {
+        '_edit' : 1,
+        '_field' : field,
+        '_value' : value,
+        '_pk' : obj.data['{!! $model_pk !!}']
+    })
+});
 </script>

@@ -69,6 +69,7 @@ abstract class AbstractDisplayer
         return $this->column;
     }
 
+
     /**
      * Get key of current row.
      *

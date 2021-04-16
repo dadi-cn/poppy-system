@@ -34,9 +34,7 @@ class Layout
     public function __construct(Filter $filter)
     {
         $this->parent = $filter;
-
         $this->current = new Column();
-
         $this->columns = new Collection();
     }
 
@@ -60,17 +58,14 @@ class Layout
     {
         if ($this->columns->isEmpty()) {
             $column = $this->current;
-
             $column->setWidth($width);
         }
         else {
-            $column = new Column($width);
-
+            $column        = new Column($width);
             $this->current = $column;
         }
 
         $this->columns->push($column);
-
         $closure($this->parent);
     }
 
@@ -84,7 +79,6 @@ class Layout
         if ($this->columns->isEmpty()) {
             $this->columns->push($this->current);
         }
-
         return $this->columns;
     }
 }

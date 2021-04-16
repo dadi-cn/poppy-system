@@ -69,6 +69,9 @@ trait LayDefines
             if ($column->editable) {
                 $defines += ['edit' => 'text'];
             }
+            if ($column->template) {
+                $defines += ['templet' => $column->template];
+            }
             $columns[] = $defines;
         });
         $this->layCols[0] = array_merge($this->layCols[0], $columns);
