@@ -2,37 +2,38 @@
 
 namespace Poppy\System\Classes\Grid\Displayer;
 
-use Poppy\System\Classes\Facades\Admin;
+use Illuminate\Support\Str;
 
 /**
  * Class QRCode.
  */
 class QRCode extends AbstractDisplayer
 {
-    protected function addScript()
-    {
-
-    }
-
     public function display($formatter = null, $width = 150, $height = 150)
     {
-        $this->addScript();
-
-        $content = $this->getColumn()->getOriginal();
+        $content = $this->getValue();
 
         if ($formatter instanceof \Closure) {
             $content = call_user_func($formatter, $content, $this->row);
         }
 
         $img = sprintf(
-            "<img src='https://api.qrserver.com/v1/create-qr-code/?size=%sx%s&data=%s' style='height:%spx;width:%spx;'/>",
-            $width, $height, $content, $height, $width
+            "https://api.qrserver.com/v1/create-qr-code/?size=%sx%s&data=%s",
+            $width, $height, $content
         );
 
+        $id = 'qr-'.Str::random();
+        $dialogWidth = $width + 50;
+        $dialogHeight = $width + 120;
         return <<<HTML
-<a href="javascript:void(0);" class="grid-column-qrcode text-muted" data-content="{$img}" data-toggle="popover" tabindex="0">
+<script type="text/tmplate" id="$id">
+<div style="text-align:center">
+    <img src="$img" style="max-height:{$height}px;max-width:{$width}px;" title="二维码"/>
+</div>
+</script>
+<a href="javascript:void(0);" class="J_dialog" data-element="#$id" data-width="$dialogWidth" data-height="$dialogHeight">
     <i class="fa fa-qrcode"></i>
-</a>&nbsp;{$this->getValue()}
+</a>&nbsp
 HTML;
     }
 }

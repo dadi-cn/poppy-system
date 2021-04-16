@@ -3,7 +3,6 @@
 namespace Poppy\System\Classes\Grid\Displayer;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Facades\Storage;
 
 class Image extends AbstractDisplayer
 {
@@ -21,10 +20,10 @@ class Image extends AbstractDisplayer
                 $src = rtrim($server, '/') . '/' . ltrim($path, '/');
             }
             else {
-                $src = Storage::disk(config('admin.upload.disk'))->url($path);
+                $src = $path;
             }
 
-            return "<img src='$src' style='max-width:{$width}px;max-height:{$height}px' class='img img-thumbnail' />";
+            return "<img src='$src' style='max-width:{$width}px;max-height:{$height}px' class='J_image_preview' />";
         })->implode('&nbsp;');
     }
 }

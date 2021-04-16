@@ -69,7 +69,6 @@ class Column
         'button'       => Displayer\Button::class,
         'link'         => Displayer\Link::class,
         'badge'        => Displayer\Badge::class,
-        'progressBar'  => Displayer\ProgressBar::class,
         'progress'     => Displayer\ProgressBar::class,
         'radio'        => Displayer\Radio::class,
         'checkbox'     => Displayer\Checkbox::class,
@@ -511,12 +510,9 @@ class Column
     public function loading($values = [], $others = [])
     {
         return $this->display(function ($value) use ($values, $others) {
-            $values = (array) $values;
-
             if (in_array($value, $values)) {
-                return '<i class="fa fa-refresh fa-spin text-primary"></i>';
+                return '<i class="fa fa-refresh fa-spin text-info"></i>';
             }
-
             return Arr::get($others, $value, $value);
         });
     }
