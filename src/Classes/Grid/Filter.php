@@ -307,7 +307,7 @@ class Filter extends FilterButton
      *
      * @return AbstractFilter[]
      */
-    public function filters()
+    public function filters():array
     {
         return $this->filters;
     }
