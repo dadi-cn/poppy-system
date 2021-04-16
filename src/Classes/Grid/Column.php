@@ -18,8 +18,6 @@ use Poppy\System\Classes\Grid\Displayer\AbstractDisplayer;
 
 /**
  * Class Column.
- *
- * @method $this editable()
  * @method $this switch ($states = [])
  * @method $this switchGroup($columns = [], $states = [])
  * @method $this select($options = [])
@@ -63,7 +61,6 @@ class Column
      * @var array
      */
     public static $displayers = [
-        'editable'     => Displayer\Editable::class,
         'switch'       => Displayer\SwitchDisplay::class,
         'switchGroup'  => Displayer\SwitchGroup::class,
         'select'       => Displayer\Select::class,
@@ -156,7 +153,6 @@ class Column
      * @var string
      */
     protected $width = 0;
-
     /**
      * Original grid data.
      *
@@ -171,12 +167,14 @@ class Column
      * @var array
      */
     protected static $rowAttributes = [];
-
     /**
      * @var Model
      */
     protected static $model;
-
+    /**
+     * @var bool 是否可编辑
+     */
+    private $editable = false;
     /**
      * 列定位
      * @var string
@@ -189,7 +187,7 @@ class Column
      */
     public function __construct(string $name, string $label = '')
     {
-        $this->name = $name;
+        $this->name  = $name;
         $this->label = $label ?: ucfirst($name);
     }
 
@@ -203,6 +201,12 @@ class Column
         $this->grid = $grid;
 
         $this->setModel($grid->model()->eloquent());
+    }
+
+    public function editable(): self
+    {
+        $this->editable = true;
+        return $this;
     }
 
     /**

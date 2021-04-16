@@ -15,6 +15,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\Mixed_;
 use Poppy\System\Classes\Grid;
 
 class Model
@@ -419,6 +420,25 @@ class Model
         ]);
 
         return $this;
+    }
+
+
+    /**
+     * @param mixed    $id
+     * @param string $field
+     * @param string $value
+     * @return bool
+     */
+    public function edit($id, string $field, string $value): bool
+    {
+        $pk = $this->originalModel->getKeyName();
+        if (!$pk){
+            return false;
+        }
+        $this->originalModel->where($pk, $id)->update([
+            $field => $value,
+        ]);
+        return true;
     }
 
     /**

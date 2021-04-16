@@ -305,55 +305,6 @@ class Grid
     }
 
     /**
-     * 查询并返回数据
-     * @param int $pagesize
-     * @return array|JsonResponse|RedirectResponse|\Illuminate\Http\Response|Redirector|Resp|Response
-     */
-    public function inquire($pagesize = 15)
-    {
-        $this->paginate($pagesize);
-        /**
-         * 获取到的模型数据
-         */
-        $collection = $this->applyQuery();
-
-        $this->build();
-
-        Column::setOriginalGridModels($collection);
-
-        $data = $collection->toArray();
-        $this->columns->map(function (Column $column) use (&$data) {
-            $data = $column->fill($data);
-
-            $this->columnNames[] = $column->name;
-        });
-
-        $this->buildRows($data);
-
-        $rows = [];
-        foreach ($this->rows as $row) {
-            $item = [];
-            foreach ($this->visibleColumnNames() as $name) {
-                $item[$name] = $row->column($name);
-            }
-            $rows[] = $item;
-        }
-
-        $paginator = $this->paginator();
-
-        return Resp::success('获取成功', [
-            'list'       => $rows,
-            'pagination' => [
-                'total' => $paginator->total(),
-                'page'  => $paginator->currentPage(),
-                'size'  => $paginator->perPage(),
-                'pages' => $paginator->lastPage(),
-            ],
-            '_json'      => 1,
-        ]);
-    }
-
-    /**
      * Set grid row callback function.
      *
      * @param Closure|null $callable
@@ -441,6 +392,9 @@ class Grid
 
         if (input('_query')) {
             return $this->inquire(PageInfo::pagesize());
+        }
+        if (input('_edit')) {
+            return $this->edit();
         }
 
         $this->build();
@@ -591,6 +545,8 @@ class Grid
         $this->variables['filter_id'] = $this->getFilter()->getFilterId();
         $this->variables['scopes']    = $this->getFilter()->getScopes();
         $this->variables['lay']       = $this->layDefine();
+        $this->variables['url_base']  = $this->pyRequest()->fullUrl();
+        $this->variables['model_pk']  = $this->model()->getOriginalModel()->getKeyName();
 
         return $this->variables;
     }
@@ -605,5 +561,65 @@ class Grid
         foreach ($this->renderingCallbacks as $callback) {
             call_user_func($callback, $this);
         }
+    }
+
+    private function edit()
+    {
+        $pk    = input('_pk');
+        $field = input('_field');
+        $value = input('_value');
+        if (!$this->model->edit($pk, $field, $value)){
+            return Resp::error('修改失败');
+        }
+        return Resp::success('修改成功');
+    }
+
+    /**
+     * 查询并返回数据
+     * @param int $pagesize
+     * @return array|JsonResponse|RedirectResponse|\Illuminate\Http\Response|Redirector|Resp|Response
+     */
+    private function inquire($pagesize = 15)
+    {
+        $this->paginate($pagesize);
+        /**
+         * 获取到的模型数据
+         */
+        $collection = $this->applyQuery();
+
+        $this->build();
+
+        Column::setOriginalGridModels($collection);
+
+        $data = $collection->toArray();
+        $this->columns->map(function (Column $column) use (&$data) {
+            $data = $column->fill($data);
+
+            $this->columnNames[] = $column->name;
+        });
+
+        $this->buildRows($data);
+
+        $rows = [];
+        foreach ($this->rows as $row) {
+            $item = [];
+            foreach ($this->visibleColumnNames() as $name) {
+                $item[$name] = $row->column($name);
+            }
+            $rows[] = $item;
+        }
+
+        $paginator = $this->paginator();
+
+        return Resp::success('获取成功', [
+            'list'       => $rows,
+            'pagination' => [
+                'total' => $paginator->total(),
+                'page'  => $paginator->currentPage(),
+                'size'  => $paginator->perPage(),
+                'pages' => $paginator->lastPage(),
+            ],
+            '_json'      => 1,
+        ]);
     }
 }

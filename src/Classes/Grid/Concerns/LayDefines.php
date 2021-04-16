@@ -66,7 +66,7 @@ trait LayDefines
             if ($fixed = $column->fixed) {
                 $defines += ['fixed' => $fixed];
             }
-            if ( $column->editable) {
+            if ($column->editable) {
                 $defines += ['edit' => 'text'];
             }
             $columns[] = $defines;
