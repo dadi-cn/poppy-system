@@ -138,7 +138,7 @@ class Role
         }
 
         if ($permission_ids) {
-            $objPermissions = PamPermission::whereIn('id', $permission_ids)->where('type', $this->role->type)->get();
+            $objPermissions = PamPermission::whereIn('id', $permission_ids)->get();
             if (!$objPermissions->count()) {
                 return $this->setError(trans('py-system::action.role.permission_error'));
             }
@@ -199,6 +199,11 @@ class Role
         }
         $permissions = $this->corePermission()->permissions();
         $type        = $role->type;
+
+        // 权限映射
+        if ($map = config('poppy.system.role_type_map')) {
+            $type = isset($map[$type]) ? $map[$type] : $type;
+        }
 
         $keys              = $permissions->keys();
         $match             = PamPermission::where('type', $type)->whereIn('name', $keys)->pluck('id', 'name');
