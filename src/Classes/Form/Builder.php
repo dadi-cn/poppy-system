@@ -536,9 +536,10 @@ class Builder
      */
     protected function addRedirectUrlField()
     {
-        $previous = URL::previous();
+        $Url = app('url');
+        $previous = $Url->previous();
 
-        if (!$previous || $previous == URL::current()) {
+        if (!$previous || $previous == $Url->current()) {
             return;
         }
 
