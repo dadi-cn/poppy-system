@@ -106,7 +106,7 @@ class Pam
      * 设置父级ID
      * @param int $parent_id 父级id
      */
-    public function setParentId($parent_id): void
+    public function setParentId(int $parent_id): void
     {
         $this->parentId = $parent_id;
     }
@@ -260,7 +260,7 @@ class Pam
      * @param string $platform   平台
      * @return bool
      */
-    public function loginCheck($passport, $password, $guard_type = PamAccount::GUARD_WEB, $platform = ''): bool
+    public function loginCheck(string $passport, string $password, $guard_type = PamAccount::GUARD_WEB, $platform = ''): bool
     {
         $type        = $this->passportType($passport);
         $credentials = [
@@ -325,7 +325,7 @@ class Pam
         if (!$guard->getLastAttempted()) {
             return $this->setError(trans('py-system::action.pam.account_not_exist'));
         }
-        
+
         $credentials += [
             'type'     => $type,
             'passport' => $passport,
@@ -339,11 +339,11 @@ class Pam
 
     /**
      * 设置登录密码
-     * @param PamAccount $pam      用户
+     * @param PamAccount|mixed $pam      用户
      * @param string     $password 密码
      * @return bool
      */
-    public function setPassword($pam, $password): bool
+    public function setPassword($pam, string $password): bool
     {
         if (!$pam && !($pam instanceof PamAccount)) {
             return $this->setError(trans('py-system::action.pam.pam_error'));
@@ -369,11 +369,11 @@ class Pam
 
     /**
      * 设置角色
-     * @param PamAccount $pam   账号数据
+     * @param PamAccount|mixed $pam   账号数据
      * @param array      $roles 角色名
      * @return bool
      */
-    public function setRoles($pam, $roles): bool
+    public function setRoles($pam, array $roles): bool
     {
         /** @var PamRole[]|Collection $role */
         $role = PamRole::whereIn('id', $roles)->get();
