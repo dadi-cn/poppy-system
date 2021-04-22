@@ -2,14 +2,10 @@
 
 namespace Poppy\System\Classes\Actions\Interactor;
 
-use Encore\Admin\Actions\RowAction;
-use Encore\Admin\Admin;
-use Encore\Admin\Form\Field;
 use Illuminate\Http\Request;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator;
-use Symfony\Component\DomCrawler\Crawler;
 
 class Form extends Interactor
 {
@@ -507,39 +503,6 @@ class Form extends Interactor
 		}
 
 		return $this->modalId;
-	}
-
-	/**
-	 * @return void
-	 */
-	public function addScript()
-	{
-		$this->action->attribute('modal', $this->getModalId());
-
-		$parameters = json_encode($this->action->parameters());
-
-		$script = <<<SCRIPT
-
-(function ($) {
-    $('{$this->action->selector($this->action->selectorPrefix)}').off('{$this->action->event}').on('{$this->action->event}', function() {
-        var data = $(this).data();
-        var target = $(this);
-        var modalId = $(this).attr('modal');
-        Object.assign(data, {$parameters});
-        {$this->action->actionScript()}
-        $('#'+modalId).modal('show');
-        $('#'+modalId+' form').off('submit').on('submit', function (e) {
-            e.preventDefault();
-            var form = this;
-            {$this->buildActionPromise()}
-            {$this->action->handleActionPromise()}
-        });
-    });
-})(jQuery);
-
-SCRIPT;
-
-		Admin::script($script);
 	}
 
 	/**

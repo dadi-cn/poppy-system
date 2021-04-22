@@ -6,6 +6,7 @@ use Auth;
 use Carbon\Carbon;
 use DB;
 use Exception;
+use Illuminate\Auth\SessionGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -21,7 +22,6 @@ use Poppy\System\Events\LoginSuccessEvent;
 use Poppy\System\Events\PamDisableEvent;
 use Poppy\System\Events\PamEnableEvent;
 use Poppy\System\Events\PamRegisteredEvent;
-use Poppy\System\Exceptions\LoginException;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamLog;
 use Poppy\System\Models\PamRole;
@@ -49,7 +49,11 @@ class Pam
 
     public function __construct()
     {
-        $this->pamTable = (new PamAccount())->getTable();
+        $pamClass = config('poppy.core.rbac.account');
+        if (!$pamClass) {
+            $pamClass = PamAccount::class;
+        }
+        $this->pamTable = (new $pamClass())->getTable();
     }
 
     /**
@@ -258,8 +262,6 @@ class Pam
      */
     public function loginCheck($passport, $password, $guard_type = PamAccount::GUARD_WEB, $platform = ''): bool
     {
-        $pamTable = (new PamAccount())->getTable();
-
         $type        = $this->passportType($passport);
         $credentials = [
             $type      => $passport,
@@ -270,7 +272,6 @@ class Pam
         $validator = Validator::make($credentials, [
             $type      => [
                 Rule::required(),
-                Rule::exists($pamTable, $type),
             ],
             'password' => Rule::required(),
         ], []);
@@ -278,6 +279,7 @@ class Pam
             return $this->setError($validator->errors());
         }
 
+        /** @var SessionGuard $guard */
         $guard = Auth::guard($guard_type);
 
         if ($guard->attempt($credentials)) {
@@ -319,6 +321,11 @@ class Pam
 
             return true;
         }
+
+        if (!$guard->getLastAttempted()) {
+            return $this->setError(trans('py-system::action.pam.account_not_exist'));
+        }
+        
         $credentials += [
             'type'     => $type,
             'passport' => $passport,
@@ -327,6 +334,7 @@ class Pam
         event(new LoginFailedEvent($credentials));
 
         return $this->setError(trans('py-system::action.pam.login_fail_again'));
+
     }
 
     /**

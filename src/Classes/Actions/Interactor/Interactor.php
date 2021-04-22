@@ -31,9 +31,4 @@ abstract class Interactor
 	{
 		$this->action = $action;
 	}
-
-	/**
-	 * @return mixed
-	 */
-	abstract public function addScript();
 }

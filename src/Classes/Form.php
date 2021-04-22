@@ -1677,18 +1677,4 @@ class Form implements Renderable
     {
         $this->layout = new Layout($this);
     }
-
-    /**
-     * Don't snake case attributes.
-     *
-     * @param Model $model
-     *
-     * @return void
-     */
-    protected static function doNotSnakeAttributes(Model $model)
-    {
-        $class = get_class($model);
-
-        $class::$snakeAttributes = false;
-    }
 }

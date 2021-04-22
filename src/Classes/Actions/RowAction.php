@@ -125,8 +125,6 @@ abstract class RowAction extends GridAction
             return "<a href='{$href}'>{$this->name()}</a>";
         }
 
-        $this->addScript();
-
         $attributes = $this->formatAttributes();
 
         return sprintf(

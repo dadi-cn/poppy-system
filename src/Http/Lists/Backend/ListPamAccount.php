@@ -128,7 +128,7 @@ class ListPamAccount extends ListBase
     public function edit($item): BaseButton
     {
         return new BaseButton('<i class="fa fa-edit"></i>', route('py-mgr-page:backend.pam.establish', [$item->id]), [
-            'title' => "编辑[{$item->username}]",
+            'title' => "编辑[$item->username]",
             'class' => 'J_iframe',
         ]);
     }
