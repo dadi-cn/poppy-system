@@ -426,7 +426,7 @@ class Pam
      */
     public function passportType(string $passport): string
     {
-        if (MobileCty::validate($passport)) {
+        if (UtilHelper::isMobile($passport)) {
             $type = PamAccount::REG_TYPE_MOBILE;
         }
         elseif (UtilHelper::isEmail($passport)) {
