@@ -239,7 +239,7 @@ class Pam
                 }
 
                 // 设置默认国际手机号, 后台自动生成(Backend 用户/Develop)
-                if (in_array($initDb, [PamAccount::TYPE_BACKEND, PamAccount::TYPE_DEVELOP]) && !isset($initDb['mobile'])) {
+                if (in_array($initDb['type'], [PamAccount::TYPE_BACKEND, PamAccount::TYPE_DEVELOP]) && !isset($initDb['mobile'])) {
                     $pam->mobile = PamAccount::dftMobile($pam->id);
                 }
 
