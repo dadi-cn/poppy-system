@@ -4,7 +4,6 @@ use Illuminate\Support\Str;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberUtil;
 use Poppy\Framework\Helper\UtilHelper;
-use Poppy\Sms\Action\Sms;
 
 /**
  * 表单生成
@@ -309,17 +308,6 @@ class MobileCty
     public static function codes()
     {
         return collect(self::$countries)->pluck('cty')->toArray();
-    }
-
-    /**
-     * 根据手机号选择短信模板
-     * @param string $mobile 手机号 86-152**
-     * @return string
-     */
-    public static function smsCty($mobile)
-    {
-        $code = self::parse($mobile)['country'] ?? 86;
-        return (int) $code === 86 ? Sms::ZH : Sms::CTY;
     }
 
     /**
