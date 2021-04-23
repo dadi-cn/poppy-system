@@ -6,7 +6,6 @@ use Illuminate\Auth\Events\Login as AuthLoginEvent;
 use Illuminate\Console\Scheduling\Schedule;
 use Poppy\Core\Events\PermissionInitEvent;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
-use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use Poppy\System\Classes\Api\Sign\DefaultApiSignProvider;
@@ -16,10 +15,8 @@ use Poppy\System\Classes\Auth\Provider\DevelopProvider;
 use Poppy\System\Classes\Auth\Provider\PamProvider;
 use Poppy\System\Classes\Auth\Provider\WebProvider;
 use Poppy\System\Classes\Contracts\ApiSignContract;
-use Poppy\System\Classes\Contracts\PamContract;
 use Poppy\System\Classes\Contracts\PasswordContract;
 use Poppy\System\Classes\Contracts\UploadContract;
-use Poppy\System\Classes\Passport\MobileCty;
 use Poppy\System\Classes\Uploader\DefaultUploadProvider;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamRole;
@@ -70,8 +67,6 @@ class ServiceProvider extends PoppyServiceProvider
         parent::boot($this->name);
 
         $this->bootConfigs();
-
-        $this->bootValidation();
     }
 
     /**
@@ -197,12 +192,5 @@ class ServiceProvider extends PoppyServiceProvider
             'poppy.framework.title'       => sys_setting('py-system::site.name'),
             'poppy.framework.description' => sys_setting('py-system::site.description'),
         ]);
-    }
-
-    private function bootValidation()
-    {
-        $this->pyValidation()->extend('mobile_cty', function ($value) {
-            return MobileCty::validate($value);
-        });
     }
 }

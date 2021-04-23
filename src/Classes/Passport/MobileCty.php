@@ -240,15 +240,6 @@ class MobileCty
     ];
 
     /**
-     * 开启的国家
-     * @return \Illuminate\Support\Collection
-     */
-    public static function open()
-    {
-        return collect(self::$countries)->where('is_open', 1);
-    }
-
-    /**
      * 验证手机号是否符合规范
      * @param string $mobile 需要验证的手机号 86-152*** / 152***
      * @return bool
@@ -263,7 +254,7 @@ class MobileCty
         $country = (int) $mobileWithCty['country'];
         // 如果是后台默认手机号
         if ($country === 33023) {
-            return false;
+            return true;
         }
 
         // 如果是国内
@@ -302,15 +293,6 @@ class MobileCty
     }
 
     /**
-     * 获取所有的国家码
-     * @return array
-     */
-    public static function codes()
-    {
-        return collect(self::$countries)->pluck('cty')->toArray();
-    }
-
-    /**
      * 手机号拼接国家码
      * @param string $passport 手机或邮箱或用户名
      * @param int    $country  国家码
@@ -333,7 +315,7 @@ class MobileCty
     {
         if (Str::contains($mobile, '-')) {
             [$country, $mobile] = explode('-', $mobile);
-            return $mobile;
+            return $country . $mobile;
         }
 
         return $mobile;

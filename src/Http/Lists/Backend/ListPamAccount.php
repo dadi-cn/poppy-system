@@ -3,6 +3,7 @@
 namespace Poppy\System\Http\Lists\Backend;
 
 use Closure;
+use Illuminate\Support\Str;
 use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\System\Action\Pam;
 use Poppy\System\Classes\Grid\Column;
@@ -46,8 +47,11 @@ class ListPamAccount extends ListBase
             $filter->column(1 / 12, function (Filter $ft) {
                 $ft->where(function ($query) {
                     $passport = input('passport');
-                    // todo 手机号的验证
                     $type     = (new Pam())->passportType($passport);
+                    if ($type === PamAccount::REG_TYPE_MOBILE && !Str::contains($passport, '-')) {
+                        // 默认拼接国内手机号
+                        $passport = '86-' . $passport;
+                    }
                     $query->where($type, $passport);
                 }, '手机/用户名/邮箱', 'passport');
             });
