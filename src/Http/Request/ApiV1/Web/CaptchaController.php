@@ -4,7 +4,7 @@ namespace Poppy\System\Http\Request\ApiV1\Web;
 
 use Poppy\Framework\Classes\Resp;
 use Poppy\System\Action\Verification;
-use Poppy\System\Events\CaptchaBeforeSendEvent;
+use Poppy\System\Events\PassportVerifyEvent;
 use Poppy\System\Events\CaptchaSendEvent;
 use Throwable;
 
@@ -28,7 +28,7 @@ class CaptchaController extends WebApiController
         $passport = sys_get($input, 'passport');
 
         try {
-            event(new CaptchaBeforeSendEvent($passport));
+            event(new PassportVerifyEvent($passport));
         } catch (Throwable $e) {
             return Resp::error($e);
         }
