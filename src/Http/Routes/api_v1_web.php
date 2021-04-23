@@ -27,6 +27,7 @@ Route::group([
 
     // auth
     $route->post('auth/reset_password', 'AuthController@resetPassword');
+    $route->post('auth/bind_mobile', 'AuthController@bindMobile');
     $route->group([
         'middleware' => ['sys-auth:jwt', 'sys-disabled_pam'],
     ], function (Illuminate\Routing\Router $route) {

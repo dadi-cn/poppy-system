@@ -11,7 +11,6 @@ use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Action\Pam;
 use Poppy\System\Action\Verification;
-use Poppy\System\Classes\Passport\MobileCty;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\Resources\PamResource;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -178,6 +177,52 @@ class AuthController extends WebApiController
         return Resp::error($Verification->getError());
     }
 
+    /**
+     * @api                    {post} api_v1/system/auth/bind_mobile [Sys]换绑手机
+     * @apiVersion             1.0.0
+     * @apiName                SysAuthBindMobile
+     * @apiGroup               Poppy
+     * @apiParam {string}      verify_code     验证串
+     * @apiParam {string}      passport        手机号
+     * @apiParam {string}      captcha         验证码
+     */
+    public function bindMobile()
+    {
+        $captcha     = input('captcha');
+        $passport    = input('passport');
+        $verify_code = input('verify_code');
+
+        if (!$this->pam()) {
+            return Resp::error('请先登录');
+        }
+
+        if (!UtilHelper::isMobile($passport)) {
+            return Resp::error('请输入正确手机号');
+        }
+
+        $Verification = new Verification();
+        if (!$Verification->checkCaptcha($passport, $captcha)) {
+            return Resp::error('请输入正确验证码');
+        }
+
+        if ($verify_code && !$Verification->verifyOnceCode($verify_code)) {
+            return Resp::error($Verification->getError());
+        }
+
+        if ($this->pam()->mobile === $passport) {
+            return Resp::error('手机号已绑定当前账号,请换绑手机!');
+        }
+
+        $id = PamAccount::where('mobile', $passport)->value('id');
+        if ($id && $id !== $this->pam()->id) {
+            return Resp::error('手机号已绑定其他账号,请换绑手机!');
+        }
+
+        // 绑定手机
+        $this->pam()->mobile = $passport;
+        $this->pam()->save();
+        return Resp::success('成功绑定手机');
+    }
 
     protected function username(): string
     {
