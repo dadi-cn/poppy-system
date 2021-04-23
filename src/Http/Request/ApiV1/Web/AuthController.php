@@ -154,10 +154,10 @@ class AuthController extends WebApiController
      * @apiVersion             1.0.0
      * @apiName                SysAuthResetPassword
      * @apiGroup               Poppy
-     * @apiParam {string}      [verify_code]     验证串
-     * @apiParam {string}      password          密码
+     * @apiParam {string}      [verify_code]     方式1: 通过验证码获取到-> 验证串
+     * @apiParam {string}      [passport]        方式2: 手机号 + 验证码直接验证并修改
      * @apiParam {string}      [captcha]         验证码
-     * @apiParam {string}      [passport]        手机号
+     * @apiParam {string}      password          密码
      */
     public function resetPassword()
     {
@@ -192,8 +192,8 @@ class AuthController extends WebApiController
      * @apiVersion             1.0.0
      * @apiName                SysAuthBindMobile
      * @apiGroup               Poppy
-     * @apiParam {string}      verify_code     验证串
-     * @apiParam {string}      passport        手机号
+     * @apiParam {string}      verify_code     之前手机号生成的校验验证串
+     * @apiParam {string}      passport        新手机号
      * @apiParam {string}      captcha         验证码
      */
     public function bindMobile()

@@ -149,13 +149,31 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
     }
 
     /**
+     * 补足 86 手机号
+     * @param $passport
+     * @return string
+     */
+    public static function fullFilledPassport($passport): string
+    {
+        $passport = preg_replace('/\s+/', '', $passport);
+        // lower
+        $passport = strtolower($passport);
+        // mobile
+        if (UtilHelper::isChMobile($passport)) {
+            return '86-' . substr($passport, -11);
+        }
+        return $passport;
+    }
+
+    /**
      * 根据passport返回Pam
-     * @param string $passport 通行证
+     * @param string|numeric $passport 通行证
      * @return Model|null|object|PamAccount
      */
-    public static function passport(string $passport)
+    public static function passport($passport)
     {
-        $type = self::passportType($passport);
+        $passport = self::fullFilledPassport($passport);
+        $type     = self::passportType($passport);
         return self::where($type, $passport)->first();
     }
 

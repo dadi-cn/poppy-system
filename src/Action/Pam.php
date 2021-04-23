@@ -13,7 +13,6 @@ use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Classes\Contracts\PasswordContract;
-use Poppy\System\Classes\Passport\MobileCty;
 use Poppy\System\Classes\Traits\PamTrait;
 use Poppy\System\Classes\Traits\UserSettingTrait;
 use Poppy\System\Events\LoginBannedEvent;
@@ -121,10 +120,8 @@ class Pam
      */
     public function register(string $passport, $password = '', $role_name = PamRole::FE_USER, $platform = ''): bool
     {
-        // 组织数据 -> 根据数据库字段来组织
-        $passport = strtolower($passport);
-
-        $type = PamAccount::passportType($passport);
+        $passport = PamAccount::fullFilledPassport($passport);
+        $type     = PamAccount::passportType($passport);
 
         $initDb = [
             $type          => $passport,
@@ -147,16 +144,7 @@ class Pam
         ];
 
         // 完善主账号类型规则
-        if ($type === PamAccount::REG_TYPE_MOBILE) {
-            if (UtilHelper::isChMobile($passport)) {
-                $initDb['mobile'] = '86-' . substr($passport, -11);
-            }
-            $rule[$type][] = Rule::mobile();
-        }
-        elseif ($type === PamAccount::REG_TYPE_EMAIL) {
-            $rule[$type][] = Rule::email();
-        }
-        else {
+        if ($type === PamAccount::REG_TYPE_USERNAME) {
             if (preg_match('/\s+/', $passport)) {
                 return $this->setError(trans('py-system::action.pam.user_name_not_space'));
             }
@@ -356,6 +344,10 @@ class Pam
      */
     public function setPassword($pam, string $password): bool
     {
+        if (is_string($pam) || is_numeric($pam)) {
+            $pam = PamAccount::passport($pam);
+        }
+
         if (!$pam && !($pam instanceof PamAccount)) {
             return $this->setError(trans('py-system::action.pam.pam_error'));
         }
@@ -443,22 +435,29 @@ class Pam
     }
 
     /**
-     * 修改账户密码
-     * @param int    $id       用户id
-     * @param string $password 密码
+     * 更换账号主体, 支持除非ID外的更换方式
+     * @param string|numeric|PamAccount $old_passport
+     * @param string                    $new_passport
      * @return bool
      */
-    public function setPasswordById($id, $password): bool
+    public function rebind($old_passport, string $new_passport): bool
     {
-        if (!PamAccount::where('id', $id)->exists()) {
-            return $this->setError(trans('py-system::action.pam.account_not_exist'));
+        $pam = null;
+        if (is_numeric($old_passport) || is_string($old_passport)) {
+            $pam = PamAccount::passport($old_passport);
         }
-        $pam = PamAccount::find($id);
-
-        if (!$this->setPassword($pam, $password)) {
-            return false;
+        else if ($old_passport instanceof PamAccount) {
+            $pam = $old_passport;
         }
-
+        if (!$pam) {
+            return $this->setError('原账号不存在, 无法更换');
+        }
+        $newPassportType = PamAccount::passportType($new_passport);
+        if ($newPassportType === 'id') {
+            return $this->setError('用户ID 无法更换, 请检查输入');
+        }
+        $pam->{$newPassportType} = PamAccount::fullFilledPassport($new_passport);
+        $pam->save();
         return true;
     }
 
@@ -591,6 +590,27 @@ class Pam
         }
 
         return $this->setPassword($this->pam, $password);
+    }
+
+    /**
+     * 修改账户密码
+     * @param int    $id       用户id
+     * @param string $password 密码
+     * @return bool
+     * @see        setPassword()
+     * @deprecated 3.1
+     */
+    public function setPasswordById(int $id, string $password): bool
+    {
+        if (!$pam = PamAccount::find($id)) {
+            return $this->setError(trans('py-system::action.pam.account_not_exist'));
+        }
+
+        if (!$this->setPassword($pam, $password)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

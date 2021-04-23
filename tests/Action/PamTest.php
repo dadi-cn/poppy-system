@@ -78,6 +78,29 @@ class PamTest extends SystemTestCase
         }
     }
 
+
+    public function testRebind()
+    {
+        $this->initPam();
+        $mobile    = $this->faker()->phoneNumber;
+        $oldMobile = $this->pam->mobile;
+        $Pam       = new Pam();
+        if ($Pam->rebind($this->pam, $mobile)) {
+            $this->assertTrue(true);
+        }
+        else {
+            $this->assertTrue(false, $Pam->getError());
+        }
+
+        // 改变回去
+        if ($Pam->rebind($mobile, $oldMobile)) {
+            $this->assertTrue(true);
+        }
+        else {
+            $this->assertTrue(false, $Pam->getError());
+        }
+    }
+
     /**
      * 设置密码
      */
