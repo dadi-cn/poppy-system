@@ -154,27 +154,37 @@ class AuthController extends WebApiController
      * @apiVersion             1.0.0
      * @apiName                SysAuthResetPassword
      * @apiGroup               Poppy
-     * @apiParam {string}      verify_code     验证串
-     * @apiParam {string}      password        密码
+     * @apiParam {string}      [verify_code]     验证串
+     * @apiParam {string}      password          密码
+     * @apiParam {string}      [captcha]         验证码
+     * @apiParam {string}      [passport]        手机号
      */
     public function resetPassword()
     {
         $verify_code = input('verify_code', '');
         $password    = input('password', '');
+        $passport    = input('passport', '');
+        $captcha     = input('captcha', '');
 
         $Verification = new Verification();
-        if ($Verification->verifyOnceCode($verify_code)) {
-            $passport = $Verification->getHidden();
-            $Pam      = new Pam();
-            $pam      = PamAccount::passport($passport);
-            if ($Pam->setPassword($pam, $password)) {
-                return Resp::success('密码已经重新设置');
-            }
-
-            return Resp::error($Pam->getError());
+        if ($passport && $captcha && !$Verification->checkCaptcha($passport, $captcha)) {
+            return Resp::error('请输入正确验证码');
         }
 
-        return Resp::error($Verification->getError());
+        if ($verify_code) {
+            if (!$Verification->verifyOnceCode($verify_code)) {
+                return Resp::error($Verification->getError());
+            }
+            $passport = $Verification->getHidden();
+        }
+
+        $Pam = new Pam();
+        $pam = PamAccount::passport($passport);
+        if ($Pam->setPassword($pam, $password)) {
+            return Resp::success('密码已经重新设置');
+        }
+
+        return Resp::error($Pam->getError());
     }
 
     /**
