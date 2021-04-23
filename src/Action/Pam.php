@@ -14,8 +14,10 @@ use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Classes\Contracts\PasswordContract;
+use Poppy\System\Classes\Passport\MobileCty;
 use Poppy\System\Classes\Traits\PamTrait;
 use Poppy\System\Classes\Traits\UserSettingTrait;
+use Poppy\System\Classes\Validation\SysRule;
 use Poppy\System\Events\LoginBannedEvent;
 use Poppy\System\Events\LoginFailedEvent;
 use Poppy\System\Events\LoginSuccessEvent;
@@ -279,7 +281,6 @@ class Pam
             return $this->setError($validator->errors());
         }
 
-        /** @var SessionGuard $guard */
         $guard = Auth::guard($guard_type);
 
         if ($guard->attempt($credentials)) {
@@ -412,7 +413,7 @@ class Pam
      */
     public function passportType(string $passport): string
     {
-        if (UtilHelper::isMobile($passport)) {
+        if (MobileCty::validate($passport)) {
             $type = PamAccount::REG_TYPE_MOBILE;
         }
         elseif (UtilHelper::isEmail($passport)) {

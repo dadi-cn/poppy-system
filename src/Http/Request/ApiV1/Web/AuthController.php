@@ -10,6 +10,7 @@ use Poppy\Framework\Classes\Traits\PoppyTrait;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Action\Pam;
 use Poppy\System\Action\Verification;
+use Poppy\System\Classes\Passport\MobileCty;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\Resources\PamResource;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -82,6 +83,7 @@ class AuthController extends WebApiController
      * @apiGroup               Poppy
      * @apiParam {string}      guard           登录类型;web|Web;backend|后台;
      * @apiParam {string}      passport        通行证
+     * @apiParam {int}         [country]       国家码
      * @apiParam {string}      [password]      密码
      * @apiParam {string}      [captcha]       验证码
      * @apiSuccess {string}    token           认证成功的Token
@@ -107,10 +109,13 @@ class AuthController extends WebApiController
         $captcha  = input('captcha', '');
         $password = input('password', '');
         $platform = input('platform', '');
+        $country  = (int) input('country', 0) ?: 86;
 
         if (!$captcha && !$password) {
             return Resp::error('登录密码或者验证码必须填写');
         }
+
+        $passport = MobileCty::passportCty($passport, $country);
 
         /** @var ResponseFactory $response */
         $response = app(ResponseFactory::class);

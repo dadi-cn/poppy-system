@@ -15,6 +15,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\Mixed_;
 use Poppy\System\Classes\Grid;
 
 class Model
@@ -731,5 +732,19 @@ class Model
         }
 
         throw new Exception('Related sortable only support `HasOne` and `BelongsTo` relation.');
+    }
+
+    /**
+     * Don't snake case attributes.
+     *
+     * @param EloquentModel $model
+     *
+     * @return void
+     */
+    protected static function doNotSnakeAttributes(EloquentModel $model)
+    {
+        $class = get_class($model);
+
+        $class::$snakeAttributes = false;
     }
 }

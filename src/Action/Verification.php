@@ -9,6 +9,7 @@ use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Helper\EnvHelper;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
+use Poppy\System\Classes\Passport\MobileCty;
 use Poppy\System\Classes\PySystemDef;
 
 /**
@@ -248,7 +249,7 @@ class Verification
         if (UtilHelper::isEmail($passport)) {
             $passportType = self::TYPE_MAIL;
         }
-        elseif (UtilHelper::isMobile($passport)) {
+        elseif (MobileCty::validate($passport)) {
             $passportType = self::TYPE_MOBILE;
         }
         else {

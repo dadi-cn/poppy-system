@@ -51,6 +51,33 @@ class InputFilter extends Filter
     }
 
     /**
+     * Add script to page.
+     *
+     * @return void
+     */
+    protected function addScript()
+    {
+        $options = [
+            'locale'           => config('app.locale'),
+            'allowInputToggle' => true,
+        ];
+
+        if ($this->type == 'date') {
+            $options['format'] = 'YYYY-MM-DD';
+        }
+        elseif ($this->type == 'time') {
+            $options['format'] = 'HH:mm:ss';
+        }
+        elseif ($this->type == 'datetime') {
+            $options['format'] = 'YYYY-MM-DD HH:mm:ss';
+        }
+        else {
+            return;
+        }
+
+    }
+
+    /**
      * Render this filter.
      *
      * @return string

@@ -59,6 +59,8 @@ SCRIPT;
      */
     public function render()
     {
+        $this->addScript();
+
         $modalId = '';
 
         if ($this->interactor instanceof Interactor\Form) {

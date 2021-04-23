@@ -17,6 +17,7 @@ use Poppy\Framework\Validation\Rule;
 use Poppy\System\Classes\Form as BaseForm;
 use Poppy\System\Classes\Form\Field;
 use Poppy\System\Classes\Layout\Content;
+use Url;
 
 /**
  * Class Form.
@@ -449,8 +450,7 @@ class FormWidget implements Renderable
 
         if (method_exists($this, 'handle')) {
             $this->method();
-            $Url = app('url');
-            $this->action($Url->current());
+            $this->action(Url::current());
         }
 
         if (input('_query')) {

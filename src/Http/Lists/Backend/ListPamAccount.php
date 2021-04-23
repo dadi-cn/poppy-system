@@ -4,7 +4,6 @@ namespace Poppy\System\Http\Lists\Backend;
 
 use Closure;
 use Poppy\Framework\Exceptions\ApplicationException;
-use Poppy\System\Action\Pam;
 use Poppy\System\Classes\Grid\Column;
 use Poppy\System\Classes\Grid\Displayer\Actions;
 use Poppy\System\Classes\Grid\Filter;
@@ -43,12 +42,8 @@ class ListPamAccount extends ListBase
         return function (Filter $filter) {
             $type  = input('_scope', PamAccount::TYPE_BACKEND);
             $roles = PamRole::getLinear($type);
-            $filter->column(1 / 12, function (Filter $ft) {
-                $ft->where(function ($query) {
-                    $passport = input('passport');
-                    $type     = (new Pam())->passportType($passport);
-                    $query->where($type, $passport);
-                }, '手机/用户名/邮箱', 'passport');
+            $filter->column(1 / 12, function (Filter $column) {
+                $column->equal('passport', '手机/用户名/邮箱');
             });
             $filter->column(1 / 12, function (Filter $column) use ($roles) {
                 $column->where(function ($query) {
@@ -128,7 +123,7 @@ class ListPamAccount extends ListBase
     public function edit($item): BaseButton
     {
         return new BaseButton('<i class="fa fa-edit"></i>', route('py-mgr-page:backend.pam.establish', [$item->id]), [
-            'title' => "编辑[$item->username]",
+            'title' => "编辑[{$item->username}]",
             'class' => 'J_iframe',
         ]);
     }

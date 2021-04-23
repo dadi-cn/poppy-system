@@ -6,7 +6,7 @@ use Closure;
 use Exception;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
-use Poppy\Framework\Helper\UtilHelper;
+use Illuminate\Support\Facades\URL;
 use Poppy\System\Classes\Form;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -277,7 +277,7 @@ trait UploadField
      */
     public function objectUrl($path)
     {
-        if (UtilHelper::isUrl($path)) {
+        if (URL::isValidUrl($path)) {
             return $path;
         }
 

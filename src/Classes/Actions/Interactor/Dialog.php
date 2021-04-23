@@ -140,6 +140,31 @@ class Dialog extends Interactor
 	}
 
 	/**
+	 * @return void
+	 */
+	public function addScript()
+	{
+		$parameters = json_encode($this->action->parameters());
+
+		$script = <<<SCRIPT
+
+(function ($) {
+    $('{$this->action->selector($this->action->selectorPrefix)}').off('{$this->action->event}').on('{$this->action->event}', function() {
+        var data = $(this).data();
+        var target = $(this);
+        Object.assign(data, {$parameters});
+        {$this->action->actionScript()}
+        {$this->buildActionPromise()}
+        {$this->action->handleActionPromise()}
+    });
+})(jQuery);
+
+SCRIPT;
+
+		Admin::script($script);
+	}
+
+	/**
 	 * @return string
 	 */
 	protected function buildActionPromise()
