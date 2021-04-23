@@ -32,7 +32,7 @@ class UserCommand extends Command
 
     /**
      * Execute the console command.
-     * @return mixed
+     * @return void
      * @throws Throwable
      */
     public function handle()
@@ -56,7 +56,7 @@ class UserCommand extends Command
                 $passport = $this->ask('Please input passport!');
                 $password = $this->ask('Please input password!');
                 $role     = $this->ask('Please input role name!');
-                if (!$pam = PamAccount::passport($passport)) {
+                if (!PamAccount::passport($passport)) {
                     $Pam = new Pam();
                     if ($Pam->register($passport, $password, $role)) {
                         $this->info('User ' . $passport . ' created');
@@ -68,6 +68,18 @@ class UserCommand extends Command
                 else {
                     $this->error('user ' . $passport . ' exists');
                 }
+                break;
+            case 'auto_fill':
+                $user = PamAccount::whereIn('type', [PamAccount::TYPE_BACKEND, PamAccount::TYPE_DEVELOP])->pluck('id', 'username');
+                if (!$user) {
+                    return;
+                }
+                collect($user)->map(function ($id) {
+                    PamAccount::where('id', $id)->update([
+                        'mobile' => '33023-' . sprintf("%s%'.07d", '', $id),
+                    ]);
+                });
+                $this->info(sys_mark('py-system', self::class, 'Fill Mobile Over'));
                 break;
             case 'init_role':
                 $roles = [
@@ -106,7 +118,7 @@ class UserCommand extends Command
                 $this->info(sys_mark('py-system', __CLASS__, 'auto clear log!'));
                 break;
             default:
-                $this->error('Please type right action![reset_pwd, init_role, create_user]');
+                $this->error('Please type right action![reset_pwd, init_role, create_user, auto_enable, clear_log, auto_fill]');
                 break;
         }
     }
