@@ -5,16 +5,11 @@ namespace Poppy\System\Tests\Action;
 use Poppy\System\Action\Pam;
 use Poppy\System\Action\Verification;
 use Poppy\System\Models\PamAccount;
+use Poppy\System\Models\PamRole;
 use Poppy\System\Tests\Base\SystemTestCase;
 
 class PamTest extends SystemTestCase
 {
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->initPam();
-    }
 
     /**
      * 验证码注册
@@ -51,6 +46,31 @@ class PamTest extends SystemTestCase
 
         $Pam = new Pam();
         if ($Pam->register($mobile)) {
+            $this->assertTrue(true);
+        }
+        else {
+            $this->assertTrue(false, $Pam->getError());
+        }
+    }
+
+    public function testRegisterWithUsername()
+    {
+        $passport = $this->faker()->lexify('test_????????');
+        $password = $this->faker()->lexify('????????');
+        $Pam      = new Pam();
+        if ($Pam->register($passport, $password)) {
+            $this->assertTrue(true);
+        }
+        else {
+            $this->assertTrue(false, $Pam->getError());
+        }
+    }
+
+    public function testRegisterDevelop()
+    {
+        $passport = $this->faker()->lexify('test_????????');
+        $Pam      = new Pam();
+        if ($Pam->register($passport, '', PamRole::DEV_USER)) {
             $this->assertTrue(true);
         }
         else {

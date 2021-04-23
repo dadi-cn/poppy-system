@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Poppy\Core\Rbac\Traits\RbacUserTrait;
-use Poppy\System\Action\Pam;
+use Poppy\Framework\Helper\UtilHelper;
 use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
 
 /**
@@ -125,6 +125,29 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
         ];
     }
 
+
+    /**
+     * 通行证类型(可能返回不匹配的通行证类型)
+     * @param string $passport 通行证
+     * @return string
+     */
+    public static function passportType(string $passport): string
+    {
+        if (UtilHelper::isMobile($passport)) {
+            $type = PamAccount::REG_TYPE_MOBILE;
+        }
+        elseif (UtilHelper::isEmail($passport)) {
+            $type = PamAccount::REG_TYPE_EMAIL;
+        }
+        elseif (is_numeric($passport)) {
+            $type = 'id';
+        }
+        else {
+            $type = PamAccount::REG_TYPE_USERNAME;
+        }
+        return $type;
+    }
+
     /**
      * 根据passport返回Pam
      * @param string $passport 通行证
@@ -132,8 +155,7 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
      */
     public static function passport(string $passport)
     {
-        $type = (new Pam())->passportType($passport);
-
+        $type = self::passportType($passport);
         return self::where($type, $passport)->first();
     }
 
@@ -224,6 +246,16 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
     }
 
     /**
+     * 默认手机号(国际版默认)
+     * @param $id
+     * @return string
+     */
+    public static function dftMobile($id): string
+    {
+        return '33023-' . sprintf("%s%'.07d", '', $id);
+    }
+
+    /**
      * @param int    $id    id
      * @param string $field 获取字段
      * @return \Illuminate\Database\Eloquent\Collection|Model|mixed|null|PamAccount|PamAccount[]
@@ -238,7 +270,6 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
 
         return self::find($id);
     }
-
 
     /**
      * 根据 Username 获取账户ID

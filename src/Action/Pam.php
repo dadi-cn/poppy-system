@@ -124,7 +124,7 @@ class Pam
         // 组织数据 -> 根据数据库字段来组织
         $passport = strtolower($passport);
 
-        $type = $this->passportType($passport);
+        $type = PamAccount::passportType($passport);
 
         $initDb = [
             $type          => $passport,
@@ -148,6 +148,9 @@ class Pam
 
         // 完善主账号类型规则
         if ($type === PamAccount::REG_TYPE_MOBILE) {
+            if (UtilHelper::isChMobile($passport)) {
+                $initDb['mobile'] = '86-' . substr($passport, -11);
+            }
             $rule[$type][] = Rule::mobile();
         }
         elseif ($type === PamAccount::REG_TYPE_EMAIL) {
@@ -166,11 +169,11 @@ class Pam
                 // 初始化子用户数据
                 $initDb['parent_id'] = $this->parentId;
 
-                // 注册子用户
-                array_unshift($rule[$type], 'regex:/[a-zA-Z\x{4e00}-\x{9fa5}][:a-zA-Z0-9_\x{4e00}-\x{9fa5}]/u');
+                // 注册子用户, 子用户比主账号多一个 :
+                array_unshift($rule[$type], Rule::username(true));
             }
             else {
-                array_unshift($rule[$type], 'regex:/[a-zA-Z\x{4e00}-\x{9fa5}][a-zA-Z0-9_\x{4e00}-\x{9fa5}]/u');
+                array_unshift($rule[$type], Rule::username());
             }
         }
 
@@ -232,19 +235,28 @@ class Pam
                 if (!$hasAccountName) {
                     $formatAccountName = sprintf("%s_%'.09d", $prefix, $pam->id);
                     $pam->username     = $formatAccountName;
-                    $pam->save();
+
                 }
 
-                if ($password) {
-                    // 设置密码
-                    $this->setPassword($pam, $password);
+                // 设置默认国际手机号, 后台自动生成(Backend 用户/Develop)
+                if (in_array($initDb, [PamAccount::TYPE_BACKEND, PamAccount::TYPE_DEVELOP]) && !isset($initDb['mobile'])) {
+                    $pam->mobile = PamAccount::dftMobile($pam->id);
                 }
+
+                // 设置密码
+                if ($password) {
+                    $key               = Str::random(6);
+                    $regDatetime       = $pam->created_at->toDateTimeString();
+                    $pam->password     = app(PasswordContract::class)->genPassword($password, $regDatetime, $key);
+                    $pam->password_key = $key;
+                }
+
+                $pam->save();
 
                 // 触发注册成功的事件
                 event(new PamRegisteredEvent($pam));
 
                 $this->pam = $pam;
-
                 return true;
             });
         } catch (Throwable $e) {
@@ -262,7 +274,7 @@ class Pam
      */
     public function loginCheck(string $passport, string $password, $guard_type = PamAccount::GUARD_WEB, $platform = ''): bool
     {
-        $type        = $this->passportType($passport);
+        $type        = PamAccount::passportType($passport);
         $credentials = [
             $type      => $passport,
             'password' => $password,
@@ -339,7 +351,7 @@ class Pam
     /**
      * 设置登录密码
      * @param PamAccount|mixed $pam      用户
-     * @param string     $password 密码
+     * @param string           $password 密码
      * @return bool
      */
     public function setPassword($pam, string $password): bool
@@ -369,7 +381,7 @@ class Pam
     /**
      * 设置角色
      * @param PamAccount|mixed $pam   账号数据
-     * @param array      $roles 角色名
+     * @param array            $roles 角色名
      * @return bool
      */
     public function setRoles($pam, array $roles): bool
@@ -396,7 +408,7 @@ class Pam
         $passport     = $passport ?: $credentials['mobile'] ?? '';
         $passport     = $passport ?: $credentials['username'] ?? '';
         $passport     = $passport ?: $credentials['email'] ?? '';
-        $passportType = $this->passportType($passport);
+        $passportType = PamAccount::passportType($passport);
 
         return [
             $passportType => $passport,
@@ -408,6 +420,9 @@ class Pam
      * Passport Type
      * @param string $passport 通行证
      * @return string
+     * @deprecated 3.1
+     * @removed    4.0
+     * @see        PamAccount::passportType()
      */
     public function passportType(string $passport): string
     {

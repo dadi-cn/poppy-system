@@ -5,7 +5,6 @@ namespace Poppy\System\Http\Lists\Backend;
 use Closure;
 use Illuminate\Support\Str;
 use Poppy\Framework\Exceptions\ApplicationException;
-use Poppy\System\Action\Pam;
 use Poppy\System\Classes\Grid\Column;
 use Poppy\System\Classes\Grid\Displayer\Actions;
 use Poppy\System\Classes\Grid\Filter;
@@ -47,7 +46,7 @@ class ListPamAccount extends ListBase
             $filter->column(1 / 12, function (Filter $ft) {
                 $ft->where(function ($query) {
                     $passport = input('passport');
-                    $type     = (new Pam())->passportType($passport);
+                    $type     = PamAccount::passportType($passport);
                     if ($type === PamAccount::REG_TYPE_MOBILE && !Str::contains($passport, '-')) {
                         // 默认拼接国内手机号
                         $passport = '86-' . $passport;
