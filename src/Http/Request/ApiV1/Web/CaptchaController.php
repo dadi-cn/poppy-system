@@ -4,8 +4,8 @@ namespace Poppy\System\Http\Request\ApiV1\Web;
 
 use Poppy\Framework\Classes\Resp;
 use Poppy\System\Action\Verification;
-use Poppy\System\Events\PassportVerifyEvent;
 use Poppy\System\Events\CaptchaSendEvent;
+use Poppy\System\Events\PassportVerifyEvent;
 use Throwable;
 
 /**
@@ -40,7 +40,7 @@ class CaptchaController extends WebApiController
 
             try {
                 event(new CaptchaSendEvent($passport, $captcha));
-                return Resp::success('验证码发送成功');
+                return Resp::success('验证码发送成功' . (!is_production() ? ', 验证码:' . $captcha : ''));
             } catch (Throwable $e) {
                 return Resp::error($e);
             }
