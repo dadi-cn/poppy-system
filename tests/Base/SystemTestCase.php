@@ -4,6 +4,7 @@ namespace Poppy\System\Tests\Base;
 
 use Curl\Curl;
 use DB;
+use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Log;
 use Poppy\Framework\Application\TestCase;
@@ -11,11 +12,14 @@ use Poppy\Framework\Classes\ConsoleTable;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\System\Classes\Traits\DbTrait;
 use Poppy\System\Models\PamAccount;
+use Throwable;
 
 class SystemTestCase extends TestCase
 {
 
     use DbTrait;
+
+    protected $enableDb = false;
 
     /**
      * @var PamAccount
@@ -38,6 +42,25 @@ class SystemTestCase extends TestCase
     {
         parent::setUp();
         DB::enableQueryLog();
+        if (!$this->enableDb) {
+            try {
+                DB::beginTransaction();
+            } catch (Exception $e) {
+            }
+        }
+    }
+
+
+    public function tearDown(): void
+    {
+        if (!$this->enableDb) {
+            try {
+                DB::rollBack();
+                parent::tearDown();
+            } catch (Throwable $e) {
+
+            }
+        }
     }
 
     /**
@@ -63,7 +86,6 @@ class SystemTestCase extends TestCase
                 'context' => $context ?: [],
             ]);
         }
-
         return $message;
     }
 

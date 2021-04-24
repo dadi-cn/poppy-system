@@ -82,18 +82,9 @@ class PamTest extends SystemTestCase
     public function testRebind()
     {
         $this->initPam();
-        $mobile    = $this->faker()->phoneNumber;
-        $oldMobile = $this->pam->mobile;
-        $Pam       = new Pam();
+        $mobile = $this->faker()->phoneNumber;
+        $Pam    = new Pam();
         if ($Pam->rebind($this->pam, $mobile)) {
-            $this->assertTrue(true);
-        }
-        else {
-            $this->assertTrue(false, $Pam->getError());
-        }
-
-        // 改变回去
-        if ($Pam->rebind($mobile, $oldMobile)) {
             $this->assertTrue(true);
         }
         else {
@@ -106,10 +97,18 @@ class PamTest extends SystemTestCase
      */
     public function testSetPassword(): void
     {
+        $this->initPam();
         $Pam      = new Pam();
         $password = $this->faker()->bothify('?#?#?#');
         if ($Pam->setPassword($this->pam, $password)) {
             $this->assertTrue(true);
+            if (!$Pam->loginCheck($this->pam->mobile, $password)) {
+                $this->assertTrue(false, $Pam->getError());
+            }
+            else {
+                $this->assertTrue(true);
+            }
+
         }
         else {
             $this->assertTrue(false, $Pam->getError());
