@@ -167,8 +167,17 @@ class AuthController extends WebApiController
         $captcha     = input('captcha', '');
 
         $Verification = new Verification();
-        if ($passport && $captcha && !$Verification->checkCaptcha($passport, $captcha)) {
-            return Resp::error('请输入正确验证码');
+        if (!$password) {
+            return Resp::error('密码必须填写');
+        }
+
+        if ((!$verify_code && !$passport) || ($verify_code && $passport)) {
+            return Resp::error('请选一种方式重设密码!');
+        }
+        if ($passport) {
+            if (!$captcha || !$Verification->checkCaptcha($passport, $captcha)) {
+                return Resp::error('请输入正确验证码');
+            }
         }
 
         if ($verify_code) {
@@ -202,10 +211,6 @@ class AuthController extends WebApiController
         $passport    = input('passport');
         $verify_code = input('verify_code');
 
-        if (!$this->pam()) {
-            return Resp::error('请先登录');
-        }
-
         if (!UtilHelper::isMobile($passport)) {
             return Resp::error('请输入正确手机号');
         }
@@ -219,18 +224,12 @@ class AuthController extends WebApiController
             return Resp::error($Verification->getError());
         }
 
-        if ($this->pam()->mobile === $passport) {
-            return Resp::error('手机号已绑定当前账号,请换绑手机!');
-        }
+        $hidden = $Verification->getHidden();
 
-        $id = PamAccount::where('mobile', $passport)->value('id');
-        if ($id && $id !== $this->pam()->id) {
-            return Resp::error('手机号已绑定其他账号,请换绑手机!');
+        $Pam = new Pam();
+        if (!$Pam->rebind($hidden, $passport)) {
+            return Resp::error($Pam->getError());
         }
-
-        // 绑定手机
-        $this->pam()->mobile = $passport;
-        $this->pam()->save();
         return Resp::success('成功绑定手机');
     }
 
