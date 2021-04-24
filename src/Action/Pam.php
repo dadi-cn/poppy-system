@@ -445,7 +445,8 @@ class Pam
     {
         $pam = null;
         if (is_numeric($old_passport) || is_string($old_passport)) {
-            $pam = PamAccount::passport($old_passport);
+            $old_passport = PamAccount::fullFilledPassport($old_passport);
+            $pam          = PamAccount::passport($old_passport);
         }
         else if ($old_passport instanceof PamAccount) {
             $pam = $old_passport;

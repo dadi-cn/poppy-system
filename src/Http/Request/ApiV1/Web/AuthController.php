@@ -188,8 +188,7 @@ class AuthController extends WebApiController
         }
 
         $Pam = new Pam();
-        $pam = PamAccount::passport($passport);
-        if ($Pam->setPassword($pam, $password)) {
+        if ($Pam->setPassword($passport, $password)) {
             return Resp::success('密码已经重新设置');
         }
 
