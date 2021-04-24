@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Login as AuthLoginEvent;
 use Illuminate\Console\Scheduling\Schedule;
 use Poppy\Core\Events\PermissionInitEvent;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
+use Poppy\Framework\Events\PoppyOptimized;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use Poppy\System\Classes\Api\Sign\DefaultApiSignProvider;
@@ -42,6 +43,9 @@ class ServiceProvider extends PoppyServiceProvider
         ],
         PermissionInitEvent::class      => [
             Listeners\PermissionInit\InitToDbListener::class,
+        ],
+        PoppyOptimized::class           => [
+            Listeners\PoppyOptimized\ClearCacheListener::class,
         ],
 
         // system
