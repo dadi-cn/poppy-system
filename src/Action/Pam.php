@@ -434,6 +434,7 @@ class Pam
         return $type;
     }
 
+
     /**
      * 更换账号主体, 支持除非ID外的更换方式
      * @param string|numeric|PamAccount $old_passport

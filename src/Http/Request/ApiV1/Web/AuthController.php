@@ -104,7 +104,7 @@ class AuthController extends WebApiController
             return Resp::error($validator->messages());
         }
 
-        $passport = input('passport', '');
+        $passport = PamAccount::fullFilledPassport(input('passport', ''));
         $captcha  = input('captcha', '');
         $password = input('password', '');
         $platform = input('platform', '');
