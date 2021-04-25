@@ -200,7 +200,7 @@ class Grid
         $this->columns = $List->getColumns();
         if (is_callable([$this->model(), 'orderBy'])
             &&
-            ($pk = $this->model()->getOriginalModel()->getKeyName() || $field)
+            (($pk = $this->model()->getOriginalModel()->getKeyName()) || $field)
         ) {
             $this->model()->orderBy(
                 input('_field', $field ?: $pk),
