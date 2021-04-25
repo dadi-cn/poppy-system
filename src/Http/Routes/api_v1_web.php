@@ -25,9 +25,6 @@ Route::group([
     $route->post('core/translate', 'CoreController@translate');
     $route->post('core/mock', 'CoreController@mock');
 
-    $route->any('misc/area', 'MiscController@area');
-    $route->any('misc/country', 'MiscController@country');
-
     // auth
     $route->post('auth/reset_password', 'AuthController@resetPassword');
     $route->post('auth/bind_mobile', 'AuthController@bindMobile');
