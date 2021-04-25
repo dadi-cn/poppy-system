@@ -184,7 +184,7 @@ class Grid
      * @param string $order
      * @throws ApplicationException
      */
-    public function setLists(string $grid_class, $field = 'id', $order = 'desc')
+    public function setLists(string $grid_class, $field = '', $order = 'desc')
     {
         if (!class_exists($grid_class)) {
             throw new ApplicationException('Grid Class `' . $grid_class . '` Not Exists.');
@@ -198,9 +198,12 @@ class Grid
         $List->columns();
         $List->actions();
         $this->columns = $List->getColumns();
-        if (is_callable([$this->model(), 'orderBy'])) {
+        if (is_callable([$this->model(), 'orderBy'])
+            &&
+            ($pk = $this->model()->getOriginalModel()->getKeyName() || $field)
+        ) {
             $this->model()->orderBy(
-                input('_field', $field),
+                input('_field', $field ?: $pk),
                 input('_order', $order)
             );
         }
@@ -568,7 +571,7 @@ class Grid
         $pk    = input('_pk');
         $field = input('_field');
         $value = input('_value');
-        if (!$this->model->edit($pk, $field, $value)){
+        if (!$this->model->edit($pk, $field, $value)) {
             return Resp::error('修改失败');
         }
         return Resp::success('修改成功');
