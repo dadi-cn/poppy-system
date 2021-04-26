@@ -68,6 +68,7 @@ use Url;
  * @method Field\Timezone       timezone($column, $label = '')
  * @method Field\KeyValue       keyValue($column, $label = '')
  * @method Field\Keyword        keyWord($column, $label = '')
+ * @method Field\Hook           hook($column, $label = '')
  * @method Field\ListField      list($column, $label = '')
  * @method mixed                handle(Request $request)
  */

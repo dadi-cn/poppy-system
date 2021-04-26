@@ -4,7 +4,9 @@ namespace Poppy\System\Classes\Form\Field;
 
 class Ip extends Text
 {
-    protected $rules = 'nullable|ip';
+    protected $rules = [
+        'nullable', 'ip'
+    ];
 
     /**
      * @see https://github.com/RobinHerbots/Inputmask#options
