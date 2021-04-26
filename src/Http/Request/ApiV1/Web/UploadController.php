@@ -25,6 +25,7 @@ class UploadController extends WebApiController
      * @apiParam   {string} image         图片内容(支持多张/单张上传)
      * @apiParam   {string} [type]        上传图片的类型 [form|表单(默认),base64,url]
      * @apiParam   {string} [image_type]  图片图片存储类型[default|默认]
+     * @apiParam   {string} [from]        上传来源,根据不同来源返回不同的格式 [wang-editor]
      */
     public function image()
     {
@@ -143,13 +144,32 @@ class UploadController extends WebApiController
             }
         }
 
+        $from = input('from');
         // 上传图
         if (count($urls)) {
+            if ($from === 'wang-editor') {
+                $data = collect($urls)->map(function ($url) {
+                    return [
+                        'url'  => $url,
+                        'alt'  => '',
+                        'href' => '',
+                    ];
+                });
+                return response()->json([
+                    'errno' => 0,
+                    'data'  => $data->toArray(),
+                ]);
+            }
             return Resp::success('上传成功', [
                 'url' => $urls,
             ]);
         }
-
+        if ($from === 'wang-editor') {
+            return response()->json([
+                'errno'   => 1,
+                'message' => $Image->getError(),
+            ]);
+        }
         return Resp::error($Image->getError());
     }
 

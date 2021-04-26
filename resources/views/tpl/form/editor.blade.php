@@ -1,5 +1,3 @@
-{!! app('html')->script('assets/libs/boot/simditor.min.js') !!}
-{!! app('html')->style('assets/libs/boot/simditor.css') !!}
 <div class="{{$viewClass['form-group']}} {!! (isset($errors) && !$errors->has($errorKey)) ? '' : 'has-error' !!}">
 
 	<div class="{{$viewClass['label']}}">
@@ -11,9 +9,9 @@
 
 	<div class="{{$viewClass['field']}}">
 		<div class="layui-form-auto-field">
-			{!! app('poppy.mgr-page.form')->editor($name, old($column, $value), [
-				'placeholder' => $placeholder
-			]) !!}
+			{!! app('poppy.mgr-page.form')->editor($name, old($column, $value), array_merge([
+				'placeholder' => $placeholder,
+			], $options)) !!}
 		</div>
 		@include('py-system::tpl.form.help-block')
 		@include('py-system::tpl.form.error')
