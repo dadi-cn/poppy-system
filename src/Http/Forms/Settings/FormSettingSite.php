@@ -38,10 +38,6 @@ class FormSettingSite extends FormSettingBase
             Rule::boolean(),
         ])->default(1)->help('关闭后网站将不能访问');
         $this->code('statistics_code', '统计代码');
-        $this->editor('xx', 'xx')->options([
-            'pam' => $this->pam
-        ]);
-
         $this->textarea('close_reason', '网站停止服务说明')->placeholder('网站暂停服务描述')->help('站点关闭原因');
     }
 }
