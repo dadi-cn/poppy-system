@@ -48,34 +48,41 @@ abstract class AbstractFilter extends Filter
      * @var string
      */
     protected $label;
+
     /**
      * @var array|string
      */
     protected $value;
+
     /**
      * @var array|string
      */
     protected $defaultValue;
+
     /**
      * @var string
      */
     protected $column;
+
     /**
      * Presenter object.
      *
      * @var Presenter
      */
     protected $presenter;
+
     /**
      * Query for filter.
      *
      * @var string
      */
     protected $query = 'where';
+
     /**
      * @var Filter
      */
     protected $parent;
+
     /**
      * @var string
      */
@@ -372,6 +379,20 @@ abstract class AbstractFilter extends Filter
     }
 
     /**
+     * Set presenter object of filter.
+     *
+     * @param Presenter $presenter
+     *
+     * @return mixed
+     */
+    public function setPresenter(Presenter $presenter)
+    {
+        $presenter->setParent($this);
+
+        return $this->presenter = $presenter;
+    }
+
+    /**
      * Setup default presenter.
      *
      * @return void
@@ -431,20 +452,6 @@ abstract class AbstractFilter extends Filter
     protected function formatId($columns)
     {
         return str_replace('.', '_', $columns);
-    }
-
-    /**
-     * Set presenter object of filter.
-     *
-     * @param Presenter $presenter
-     *
-     * @return mixed
-     */
-    protected function setPresenter(Presenter $presenter)
-    {
-        $presenter->setParent($this);
-
-        return $this->presenter = $presenter;
     }
 
     /**
