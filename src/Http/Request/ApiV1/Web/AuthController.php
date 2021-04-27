@@ -11,6 +11,7 @@ use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Action\Pam;
 use Poppy\System\Action\Verification;
+use Poppy\System\Events\LoginTokenPassedEvent;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\Resources\PamResource;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -141,6 +142,8 @@ class AuthController extends WebApiController
         if (!$token = app('tymon.jwt.auth')->fromUser($pam)) {
             return Resp::error('获取 Token 失败, 请联系管理员');
         }
+
+        event(new LoginTokenPassedEvent($pam, $token));
 
         return Resp::success('认证通过', [
             'token' => $token,
