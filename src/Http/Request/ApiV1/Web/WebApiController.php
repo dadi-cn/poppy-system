@@ -11,11 +11,23 @@ use Poppy\System\Models\PamAccount;
  */
 abstract class WebApiController extends ApiController
 {
-    private $pam;
+
+    protected $pam;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware(function ($request, $next) {
+            $this->pam = $request->user();
+            return $next($request);
+        });
+    }
 
     /**
      * 返回 Jwt 用户
      * @return Authenticatable|PamAccount
+     * @deprecated 使用 变量, 不使用 函数
+     * @see        $pam
      */
     protected function pam()
     {

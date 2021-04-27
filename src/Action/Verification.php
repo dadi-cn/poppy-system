@@ -10,6 +10,7 @@ use Poppy\Framework\Helper\EnvHelper;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\System\Classes\PySystemDef;
+use Poppy\System\Models\PamAccount;
 
 /**
  * 系统校验
@@ -60,6 +61,7 @@ class Verification
      */
     public function genCaptcha(string $passport, int $expired_min = 5, int $length = 6): bool
     {
+        $passport = PamAccount::fullFilledPassport($passport);
         if (!$this->checkPassport($passport)) {
             return false;
         }
@@ -91,6 +93,7 @@ class Verification
      */
     public function checkCaptcha(string $passport, string $captcha): bool
     {
+        $passport = PamAccount::fullFilledPassport($passport);
         if (!$this->checkPassport($passport)) {
             return false;
         }
@@ -113,7 +116,6 @@ class Verification
                 }, $testAccount));
                 $item        = $testAccount->where('passport', $passport)->first();
                 if ($item) {
-                    $captcha      = (string) $captcha;
                     $savedCaptcha = (string) ($item['captcha'] ?? '');
                     if ($savedCaptcha && $captcha !== $savedCaptcha) {
                         return $this->setError('验证码不正确!');
@@ -125,7 +127,7 @@ class Verification
         }
 
         if ($data = self::$db->get($this->ckCaptcha() . ':' . $key)) {
-            if ((string) $data['captcha'] === (string) $captcha) {
+            if ((string) $data['captcha'] === $captcha) {
                 self::$db->del($this->ckCaptcha() . ':' . $key);
                 return true;
             }

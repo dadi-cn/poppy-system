@@ -13,6 +13,12 @@ use Poppy\System\Models\PamAccount;
 abstract class WebController extends Controller
 {
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->withViews();
+    }
+
     /**
      * 当前用户
      * @return Authenticatable|PamAccount
