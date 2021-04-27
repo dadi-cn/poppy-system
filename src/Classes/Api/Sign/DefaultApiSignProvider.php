@@ -33,7 +33,7 @@ class DefaultApiSignProvider extends DefaultBaseApiSign
         $params      = $this->except($params);
         $token       = function ($params) {
             $token = $this->request->header('Authorization');
-            if ($token && Str::startsWith($token, 'Bearer ')) {
+            if ($token && Str::startsWith($token, 'Bearer')) {
                 $token = substr($token, 7);
             }
             if (!$token) {
