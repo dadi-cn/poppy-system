@@ -29,7 +29,7 @@ Route::group([
     $route->post('auth/reset_password', 'AuthController@resetPassword');
     $route->post('auth/bind_mobile', 'AuthController@bindMobile');
     $route->group([
-        'middleware' => ['sys-auth:jwt', 'sys-disabled_pam'],
+        'middleware' => ['sys-jwt', 'sys-disabled_pam'],
     ], function (Illuminate\Routing\Router $route) {
         $route->post('upload/image', 'UploadController@image')
             ->name('py-system:api_v1.upload.image');

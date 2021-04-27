@@ -20,7 +20,7 @@ class Authenticate extends IlluminateAuthenticate
      */
     public static function detectLocation($guards): string
     {
-        $location = '/';
+        $location = '';
         // develop
         if (in_array(PamAccount::GUARD_DEVELOP, $guards, true) && $devLogin = config('poppy.system.prefix') . '/develop/login') {
             $location = $devLogin;
