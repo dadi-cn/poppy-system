@@ -3,108 +3,118 @@
 namespace Poppy\System\Classes\Form\Field;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Arr;
 
 class Checkbox extends MultipleSelect
 {
-	protected $inline = true;
+    protected $inline = true;
 
-	protected $canCheckAll = false;
+    protected $canCheckAll = false;
 
-	/**
-	 * Set options.
-	 *
-	 * @param array|callable|string $options
-	 *
-	 * @return $this|mixed
-	 */
-	public function options($options = [])
-	{
-		if ($options instanceof Arrayable) {
-			$options = $options->toArray();
-		}
 
-		if (is_callable($options)) {
-			$this->options = $options;
-		}
-		else {
-			$this->options = (array) $options;
-		}
+    /**
+     * @inheritDoc
+     */
+    public function fill($data)
+    {
+        $this->checked = (array) Arr::get($data, $this->column);
+    }
 
-		return $this;
-	}
+    /**
+     * Set options.
+     *
+     * @param array|callable|string $options
+     *
+     * @return $this|mixed
+     */
+    public function options($options = [])
+    {
+        if ($options instanceof Arrayable) {
+            $options = $options->toArray();
+        }
 
-	/**
-	 * Set checked.
-	 *
-	 * @param array|callable|string $checked
-	 *
-	 * @return $this
-	 */
-	public function checked($checked = [])
-	{
-		if ($checked instanceof Arrayable) {
-			$checked = $checked->toArray();
-		}
+        if (is_callable($options)) {
+            $this->options = $options;
+        }
+        else {
+            $this->options = (array) $options;
+        }
 
-		$this->checked = (array) $checked;
+        return $this;
+    }
 
-		return $this;
-	}
+    /**
+     * Set checked.
+     *
+     * @param array|callable|string $checked
+     *
+     * @return $this
+     */
+    public function checked($checked = [])
+    {
+        if ($checked instanceof Arrayable) {
+            $checked = $checked->toArray();
+        }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function render()
-	{
-		$this->addVariables([
-			'checked'     => $this->checked,
-			'inline'      => $this->inline,
-			'canCheckAll' => $this->canCheckAll,
-		]);
+        $this->checked = (array) $checked;
 
-		if ($this->canCheckAll) {
-			$checkAllClass = uniqid('check-all-');
-			$this->addVariables(['checkAllClass' => $checkAllClass]);
-		}
+        return $this;
+    }
 
-		$this->attribute('lay-skin', 'primary');
+    /**
+     * @inheritDoc
+     */
+    public function render()
+    {
+        $this->addVariables([
+            'checked'     => $this->checked,
+            'inline'      => $this->inline,
+            'canCheckAll' => $this->canCheckAll,
+        ]);
 
-		return parent::render();
-	}
+        if ($this->canCheckAll) {
+            $checkAllClass = uniqid('check-all-');
+            $this->addVariables(['checkAllClass' => $checkAllClass]);
+        }
 
-	/**
-	 * Add a checkbox above this component, so you can select all checkboxes by click on it.
-	 *
-	 * @return $this
-	 */
-	public function canCheckAll()
-	{
-		$this->canCheckAll = true;
+        $this->attribute('lay-skin', 'primary');
 
-		return $this;
-	}
+        return parent::render();
+    }
 
-	/**
-	 * Draw inline checkboxes.
-	 *
-	 * @return $this
-	 */
-	public function inline()
-	{
-		$this->inline = true;
+    /**
+     * Add a checkbox above this component, so you can select all checkboxes by click on it.
+     *
+     * @return $this
+     */
+    public function canCheckAll()
+    {
+        $this->canCheckAll = true;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Draw stacked checkboxes.
-	 *
-	 * @return $this
-	 */
-	public function stacked()
-	{
-		$this->inline = false;
+    /**
+     * Draw inline checkboxes.
+     *
+     * @return $this
+     */
+    public function inline()
+    {
+        $this->inline = true;
 
-		return $this;
-	}
+        return $this;
+    }
+
+    /**
+     * Draw stacked checkboxes.
+     *
+     * @return $this
+     */
+    public function stacked()
+    {
+        $this->inline = false;
+
+        return $this;
+    }
 }
