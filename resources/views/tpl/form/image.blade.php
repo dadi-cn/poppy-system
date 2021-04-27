@@ -9,7 +9,7 @@
 
 	<div class="{{$viewClass['field']}}">
 		<div class="layui-form-auto-field">
-			{!! app('poppy.mgr-page.form')->thumb($name, $value, $attributes) !!}
+			{!! app('poppy.mgr-page.form')->thumb($name, $value, array_merge($attributes, $options)) !!}
 		</div>
 		@include('py-system::tpl.form.help-block')
 		@include('py-system::tpl.form.error')
