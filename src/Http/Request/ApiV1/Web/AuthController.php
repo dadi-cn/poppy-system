@@ -14,6 +14,7 @@ use Poppy\System\Action\Verification;
 use Poppy\System\Events\LoginTokenPassedEvent;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\Resources\PamResource;
+use Throwable;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
 
@@ -145,7 +146,16 @@ class AuthController extends WebApiController
             return Resp::error('获取 Token 失败, 请联系管理员');
         }
 
-        event(new LoginTokenPassedEvent($pam, $token));
+        /* 设备单一性登陆验证(基于 Redis + Db)
+         * ---------------------------------------- */
+        try {
+            $deviceId   = $this->pyRequest()->header('X-APP-ID') ?: input('device_id', '');
+            $deviceType = $this->pyRequest()->header('X-APP-OS') ?: input('device_type', '');
+            event(new LoginTokenPassedEvent($pam, $token, $deviceId, $deviceType));
+        } catch (Throwable $e) {
+            return Resp::error($e->getMessage());
+        }
+
 
         return Resp::success('认证通过', [
             'token' => $token,

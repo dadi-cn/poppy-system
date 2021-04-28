@@ -19,9 +19,23 @@ class LoginTokenPassedEvent
      */
     public $token;
 
-    public function __construct(PamAccount $pam, string $token)
+    /**
+     * 设备ID
+     * @var string
+     */
+    public $deviceId;
+
+    /**
+     * 设备类型
+     * @var string
+     */
+    public $deviceType;
+
+    public function __construct(PamAccount $pam, string $token, $device_id = '', $device_type = '')
     {
-        $this->pam   = $pam;
-        $this->token = $token;
+        $this->pam        = $pam;
+        $this->token      = $token;
+        $this->deviceId   = $device_id;
+        $this->deviceType = $device_type;
     }
 }
