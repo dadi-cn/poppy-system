@@ -86,6 +86,8 @@ class AuthController extends WebApiController
      * @apiParam {string}      passport        通行证
      * @apiParam {string}      [password]      密码
      * @apiParam {string}      [captcha]       验证码
+     * @apiParam {string}      [device_id]     设备ID[开启单一登录之后可用]
+     * @apiParam {string}      [device_type]   设备类型[开启单一登录之后可用]
      * @apiSuccess {string}    token           认证成功的Token
      * @apiSuccess {string}    type            账号类型
      * @apiSuccessExample      data
