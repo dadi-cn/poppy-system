@@ -68,7 +68,7 @@ class MiddlewareServiceProvider extends ServiceProvider
         $router->middlewareGroup('api-sso', [
             'sys-app_sign',
             'sys-sso',
-            'sys-auth:jwt',
+            'sys-auth:jwt_web',
             'sys-disabled_pam',
         ]);
 
