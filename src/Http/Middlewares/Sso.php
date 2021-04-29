@@ -9,7 +9,7 @@ use Poppy\System\Classes\PySystemDef;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 /**
- * Jwt 校验, 验证Token 存在以及Token 是否有效
+ * 单点登录
  */
 class Sso extends BaseMiddleware
 {
