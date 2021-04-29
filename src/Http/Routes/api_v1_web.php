@@ -31,6 +31,7 @@ Route::group([
 // Jwt 合法性验证
 Route::group([
     'middleware' => ['sys-jwt'],
+    'namespace'  => 'Poppy\System\Http\Request\ApiV1\Web',
 ], function (Illuminate\Routing\Router $route) {
     $route->post('upload/image', 'UploadController@image')
         ->name('py-system:api_v1.upload.image');
