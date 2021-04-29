@@ -210,6 +210,7 @@ class Grid
 
         $this->filter($List->filter());
         $this->appendQuickButton($List->quickButtons());
+        $this->batchActions($List->batchAction());
     }
 
     /**

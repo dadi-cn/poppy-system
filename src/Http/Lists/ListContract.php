@@ -24,6 +24,12 @@ interface ListContract
      */
     public function actions();
 
+    /**
+     * 批量操作
+     * @return array
+     */
+    public function batchAction(): array;
+
 
     /**
      * 定义右上角的快捷操作栏

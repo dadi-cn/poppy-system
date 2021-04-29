@@ -133,6 +133,11 @@ abstract class ListBase implements ListContract
         return [];
     }
 
+    public function batchAction(): array
+    {
+        return [];
+    }
+
     /**
      * Add a relation column to grid.
      *

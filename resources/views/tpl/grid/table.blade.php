@@ -33,7 +33,11 @@
         <table class="layui-hide" id="{!! $id !!}" lay-filter="{!! $id !!}-filter"></table>
     </div>
 </div>
-
+<script type="text/html" id="{!! $filter_id !!}-toolbar">
+<div class="layui-btn-container">
+    {!! $grid->renderBatchActions() !!}
+</div>
+</script>
 
 <script>
 layui.table.render($.extend({!! $lay !!}, {
@@ -46,7 +50,7 @@ layui.table.render($.extend({!! $lay !!}, {
     autoSort : false,
     id : '{!! $filter_id !!}-table',
     loading : true,
-    toolbar : true,
+    toolbar : '#{!! $filter_id !!}-toolbar',
     even : true,
     parseData : function(resp) {
         return {
@@ -84,6 +88,44 @@ layui.table.on('sort({!! $id !!}-filter)', function(obj) {
             _order : obj.type,
             _query : 1
         }
+    });
+});
+
+layui.table.on('toolbar({!! $id !!}-filter)', function(obj) {
+    if (obj.event.indexOf('LAYTABLE') > -1) {
+        return false;
+    }
+    let url = $(this).attr('data-url');
+    if (!url) {
+        layui.layer.msg('输入要处理的地址')
+        return false;
+    }
+    let status = layui.table.checkStatus(obj.config.id);
+    let data   = status.data;
+    if (!data.length) {
+        layui.layer.msg('你尚未选中数据, 请选择');
+        return false;
+    }
+
+    // confirm
+    let str_confirm = $(this).attr('data-confirm');
+    console.log(str_confirm);
+    if (str_confirm && !confirm(str_confirm)) return false;
+
+    let ids = [];
+    for (let i in data) {
+        let id = data[i]['{!! $model_pk !!}'];
+        if (!id) {
+            layui.layer.msg('数据中无主键, 无法进行删除操作')
+            return false;
+        }
+        ids.push(data[i]['{!! $model_pk !!}']);
+    }
+
+    Util.makeRequest(url, {
+        {!! $model_pk !!} : ids
+    }, function(data) {
+        Util.splash(data);
     });
 });
 

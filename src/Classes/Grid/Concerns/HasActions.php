@@ -3,7 +3,6 @@
 namespace Poppy\System\Classes\Grid\Concerns;
 
 use Closure;
-use Illuminate\Config\Repository;
 use Poppy\System\Classes\Grid;
 
 trait HasActions
@@ -21,6 +20,12 @@ trait HasActions
      * @var string
      */
     protected $actionsClass;
+
+
+    /**
+     * @var array
+     */
+    protected $batchActions;
 
     /**
      * Set grid action callback.
@@ -41,16 +46,12 @@ trait HasActions
     /**
      * Get action display class.
      *
-     * @return Repository|mixed|string
+     * @return string
      */
     public function getActionClass()
     {
         if ($this->actionsClass) {
             return $this->actionsClass;
-        }
-
-        if ($class = config('admin.grid_action_class')) {
-            return $class;
         }
 
         return Grid\Displayer\Actions::class;
@@ -73,16 +74,12 @@ trait HasActions
     /**
      * Set grid batch-action callback.
      *
-     * @param Closure $closure
      *
      * @return $this
      */
-    public function batchActions(Closure $closure)
+    public function batchActions(array $array): self
     {
-        $this->tools(function (Grid\Tools $tools) use ($closure) {
-            $tools->batch($closure);
-        });
-
+        $this->batchActions = $array;
         return $this;
     }
 
@@ -96,5 +93,20 @@ trait HasActions
         $this->tools->disableBatchActions($disable);
 
         return $this->option('show_row_selector', !$disable);
+    }
+
+
+    /**
+     * Render create button for grid.
+     *
+     * @return string
+     */
+    public function renderBatchActions(): string
+    {
+        $append = '';
+        foreach ($this->batchActions as $button) {
+            $append .= $button->render();
+        }
+        return $append;
     }
 }
