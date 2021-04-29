@@ -155,6 +155,20 @@ class Ban
         ]);
     }
 
+
+    /**
+     * 取消用户 Token 的访问权限
+     * @param int $account_id
+     */
+    public function unToken(int $account_id)
+    {
+        $Rds = RdsDb::instance();
+        $Rds->hDel('py-system:' . PySystemDef::ckSso('valid'), $account_id);
+        $Rds->zRem('py-system:' . PySystemDef::ckSso('expired'), [
+            $account_id,
+        ]);
+    }
+
     /**
      * 初始化
      */
