@@ -25,16 +25,20 @@ Route::group([
     // auth
     $route->post('auth/reset_password', 'AuthController@resetPassword');
     $route->post('auth/bind_mobile', 'AuthController@bindMobile');
-    $route->group([
-        'middleware' => ['sys-jwt'],
-    ], function (Illuminate\Routing\Router $route) {
-        $route->post('upload/image', 'UploadController@image')
-            ->name('py-system:api_v1.upload.image');
-        $route->post('upload/file', 'UploadController@file')
-            ->name('py-system:api_v1.upload.file');
-    });
+
 });
 
+// Jwt 合法性验证
+Route::group([
+    'middleware' => ['sys-jwt'],
+], function (Illuminate\Routing\Router $route) {
+    $route->post('upload/image', 'UploadController@image')
+        ->name('py-system:api_v1.upload.image');
+    $route->post('upload/file', 'UploadController@file')
+        ->name('py-system:api_v1.upload.file');
+});
+
+// 单点登录
 Route::group([
     'middleware' => ['api-sso'],
     'namespace'  => 'Poppy\System\Http\Request\ApiV1\Web',
