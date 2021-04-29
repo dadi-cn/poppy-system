@@ -19,6 +19,7 @@ use Poppy\System\Classes\Contracts\ApiSignContract;
 use Poppy\System\Classes\Contracts\PasswordContract;
 use Poppy\System\Classes\Contracts\UploadContract;
 use Poppy\System\Classes\Uploader\DefaultUploadProvider;
+use Poppy\System\Events\LoginTokenPassedEvent;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamRole;
 use Poppy\System\Models\Policies\PamAccountPolicy;
@@ -46,6 +47,9 @@ class ServiceProvider extends PoppyServiceProvider
         ],
         PoppyOptimized::class           => [
             Listeners\PoppyOptimized\ClearCacheListener::class,
+        ],
+        LoginTokenPassedEvent::class    => [
+            Listeners\LoginTokenPassed\CreateUserDeviceListener::class,
         ],
 
         // system
@@ -104,12 +108,15 @@ class ServiceProvider extends PoppyServiceProvider
     {
         app('events')->listen('console.schedule', function (Schedule $schedule) {
             $schedule->command('py-system:user', ['auto_enable'])
-                ->everyFiveMinutes()->appendOutputTo($this->consoleLog());
+                ->everyFifteenMinutes()->appendOutputTo($this->consoleLog());
             $schedule->command('py-system:user', ['clear_log'])
-                ->everyFiveMinutes()->appendOutputTo($this->consoleLog());
+                ->dailyAt('04:00')->appendOutputTo($this->consoleLog());
+            // 每周清理一次
+            $schedule->command('py-system:user', ['clear_expired'])
+                ->saturdays()->appendOutputTo($this->consoleLog());
 
             // 开发平台去生成文档
-            if (env('APP_ENV', 'production') !== 'production') {
+            if (!is_production()) {
                 // 自动生成文档
                 $schedule->command('py-core:doc api')
                     ->everyMinute()->appendOutputTo($this->consoleLog());

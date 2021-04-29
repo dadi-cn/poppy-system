@@ -50,7 +50,7 @@ class Verification
 
     public function __construct()
     {
-        self::$db = new RdsDb();
+        self::$db = RdsDb::instance();
     }
 
     /**

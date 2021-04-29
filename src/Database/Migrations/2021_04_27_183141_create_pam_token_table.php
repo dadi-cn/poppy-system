@@ -22,6 +22,9 @@ class CreatePamTokenTable extends Migration
             $table->string('token_hash')->default('')->comment('token 的md5值');
             $table->string('push_id')->default('')->comment('推送ID');
             $table->string('expired_at')->default('')->comment('过期时间');
+
+            $table->index(['account_id', 'device_type'], 'k_user_device');
+
             $table->timestamps();
         });
     }

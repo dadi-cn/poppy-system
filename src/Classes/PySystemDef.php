@@ -49,4 +49,23 @@ class PySystemDef
     {
         return 'verification-captcha';
     }
+
+    /**
+     * 单点登录的Hash(允许访问的)
+     * @param string $type 类型
+     * @return string
+     */
+    public static function ckSso(string $type): string
+    {
+        return 'sso-' . $type;
+    }
+
+    /**
+     * 用户禁用
+     * @return string
+     */
+    public static function ckBan(): string
+    {
+        return 'ban';
+    }
 }

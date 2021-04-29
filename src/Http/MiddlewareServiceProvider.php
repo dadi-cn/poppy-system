@@ -14,6 +14,7 @@ class MiddlewareServiceProvider extends ServiceProvider
         /* Single
          * ---------------------------------------- */
         $router->aliasMiddleware('sys-auth', Middlewares\Authenticate::class);
+        $router->aliasMiddleware('sys-ban', Middlewares\Ban::class);
         $router->aliasMiddleware('sys-jwt', Middlewares\JwtAuthenticate::class);
         $router->aliasMiddleware('sys-auth_session', Middlewares\AuthenticateSession::class);
         $router->aliasMiddleware('sys-disabled_pam', Middlewares\DisabledPam::class);
@@ -58,8 +59,15 @@ class MiddlewareServiceProvider extends ServiceProvider
         */
 
         $router->middlewareGroup('api-sign', [
+            'sys-ban',
             'sys-app_sign',
             'sys-site_open',
+        ]);
+
+        $router->middlewareGroup('api-sso', [
+            'sys-app_sign',
+            'sys-jwt',
+            'sys-auth:jwt',
         ]);
 
 

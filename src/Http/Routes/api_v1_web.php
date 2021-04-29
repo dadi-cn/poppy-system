@@ -7,13 +7,10 @@
 */
 Route::group([
     'middleware' => ['api-sign'],
-    'prefix'     => 'system',
     'namespace'  => 'Poppy\System\Http\Request\ApiV1\Web',
 ], function (Illuminate\Routing\Router $route) {
     $route->post('auth/login', 'AuthController@login')
         ->name('py-system:pam.auth.login');
-    $route->post('auth/access', 'AuthController@access')
-        ->name('py-system:pam.auth.access');
 
     // captcha
     $route->post('captcha/verify_code', 'CaptchaController@verifyCode');
@@ -29,7 +26,7 @@ Route::group([
     $route->post('auth/reset_password', 'AuthController@resetPassword');
     $route->post('auth/bind_mobile', 'AuthController@bindMobile');
     $route->group([
-        'middleware' => ['sys-jwt', 'sys-disabled_pam'],
+        'middleware' => ['sys-jwt'],
     ], function (Illuminate\Routing\Router $route) {
         $route->post('upload/image', 'UploadController@image')
             ->name('py-system:api_v1.upload.image');
@@ -38,3 +35,10 @@ Route::group([
     });
 });
 
+Route::group([
+    'middleware' => ['api-sso'],
+    'namespace'  => 'Poppy\System\Http\Request\ApiV1\Web',
+], function (Illuminate\Routing\Router $route) {
+    $route->post('auth/access', 'AuthController@access')
+        ->name('py-system:pam.auth.access');
+});

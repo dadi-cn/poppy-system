@@ -2,8 +2,11 @@
 
 namespace Poppy\System\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Poppy\Core\Redis\RdsDb;
 use Poppy\System\Action\Pam;
+use Poppy\System\Classes\PySystemDef;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamRole;
 use Poppy\System\Models\SysConfig;
@@ -80,6 +83,18 @@ class UserCommand extends Command
                     ]);
                 });
                 $this->info(sys_mark('py-system', self::class, 'Fill Mobile Over'));
+                break;
+            case 'clear_expired':
+                // 移除过期的 Jwt Token
+                $Rds    = RdsDb::instance();
+                $endTtl = Carbon::now()->timestamp;
+                $items  = $Rds->zRange('py-system:' . PySystemDef::ckSso('expired'), 0, $endTtl);
+                $num    = 0;
+                if (is_array($items) && $num = count($items)) {
+                    $Rds->hDel('py-system:' . PySystemDef::ckSso('valid'), $items);
+                    $Rds->zRemRangeByScore('py-system:' . PySystemDef::ckSso('expired'), 0, $endTtl);
+                }
+                $this->info(sys_mark('py-system', self::class, 'Delete Expired Token, Num : ' . $num));
                 break;
             case 'init_role':
                 $roles = [

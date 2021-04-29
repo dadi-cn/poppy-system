@@ -17,6 +17,9 @@ class CreatePamBanTable extends Migration
             $table->bigIncrements('id');
             $table->string('type')->default('')->comment('类型');
             $table->string('value')->default('')->comment('值');
+
+            $table->index('value', 'k_val');
+
             $table->timestamps();
         });
     }

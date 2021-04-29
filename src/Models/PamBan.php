@@ -37,7 +37,7 @@ class PamBan extends Eloquent
      * @param bool        $check_key
      * @return array|string
      */
-    public static function kvBinType($key = null, $check_key = false)
+    public static function kvType($key = null, $check_key = false)
     {
         $desc = [
             self::TYPE_IP     => 'IP',
