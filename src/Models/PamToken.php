@@ -15,7 +15,7 @@ use Illuminate\Support\Carbon;
  * @property string      $device_type  设备类型
  * @property string      $login_ip     token 登录IP
  * @property string      $token_hash   token 的md5值
- * @property string      $ali_push_id  ali push ID
+ * @property string      $push_id      push ID
  * @property string      $expired_at   过期时间
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -37,18 +37,9 @@ class PamToken extends Eloquent
         'device_type',
         'login_ip',
         'token_hash',
-        'ali_push_id',
+        'push_id',
         'expired_at',
     ];
-
-    /**
-     * 设置示例
-     * @param $instance
-     */
-    public static function setInstance($instance)
-    {
-        self::$instance = $instance;
-    }
 
     /**
      * 获取示例, 用于中间件的数据传输
@@ -57,6 +48,15 @@ class PamToken extends Eloquent
     public static function getInstance(): ?self
     {
         return self::$instance;
+    }
+
+    /**
+     * 设置示例
+     * @param $instance
+     */
+    public static function setInstance($instance)
+    {
+        self::$instance = $instance;
     }
 
     /**
