@@ -145,7 +145,7 @@ class Ban
      * @param string $md5Token
      * @param Carbon $expired_at
      */
-    public function token(int $account_id, string $md5Token, Carbon $expired_at)
+    public function allow(int $account_id, string $md5Token, Carbon $expired_at)
     {
         // 记录可用Token/记录过期时间
         $Rds = RdsDb::instance();
@@ -160,7 +160,7 @@ class Ban
      * 取消用户 Token 的访问权限
      * @param int $account_id
      */
-    public function unToken(int $account_id)
+    public function forbidden(int $account_id)
     {
         $Rds = RdsDb::instance();
         $Rds->hDel('py-system:' . PySystemDef::ckSso('valid'), $account_id);
@@ -179,7 +179,7 @@ class Ban
         }
         $items = PamBan::get();
         // 保障KEY存在
-        self::$rds->hSet(self::$banKey, str_repeat('111111', 4), md5('duoli') . '|init|' . Carbon::now()->toDateTimeString());
+        self::$rds->hSet(self::$banKey, str_repeat('11111111', 4), md5('duoli') . '|init|' . Carbon::now()->toDateTimeString());
         $values = collect();
         $now    = Carbon::now()->toDateTimeString();
         collect($items)->each(function ($item) use ($values, $now) {

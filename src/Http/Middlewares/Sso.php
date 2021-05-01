@@ -3,6 +3,7 @@
 namespace Poppy\System\Http\Middlewares;
 
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Poppy\Core\Redis\RdsDb;
 use Poppy\System\Classes\PySystemDef;
@@ -13,11 +14,11 @@ use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
  */
 class Sso extends BaseMiddleware
 {
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        $token = $this->auth->setRequest($request)->getToken();
+        $token = $request->bearerToken() ?: $request->input('token');
 
-        if (!$token || !$payload = $this->auth->check(true)) {
+        if (!$token || !$payload = $this->auth->setToken($token)->check(true)) {
             return response('Unauthorized Jwt.', 401);
         }
 

@@ -3,11 +3,9 @@
 namespace Poppy\System\Listeners\LoginTokenPassed;
 
 use Carbon\Carbon;
-use Poppy\Core\Redis\RdsDb;
 use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\Framework\Helper\EnvHelper;
 use Poppy\System\Action\Ban;
-use Poppy\System\Classes\PySystemDef;
 use Poppy\System\Events\LoginTokenPassedEvent;
 use Poppy\System\Events\PamSsoEvent;
 use Poppy\System\Models\PamToken;
@@ -50,9 +48,7 @@ class CreateUserDeviceListener
         ]);
 
         $Ban = new Ban();
-        $Ban->token($event->pam->id, $tokenMd5, $expiredAt);
-
-
+        $Ban->allow($event->pam->id, $tokenMd5, $expiredAt);
 
         $logoutUsers = PamToken::where('account_id', $event->pam->id)
             ->where('device_type', '!=', $event->deviceType)

@@ -12,6 +12,9 @@ use Poppy\System\Models\PamAccount;
 abstract class WebApiController extends ApiController
 {
 
+    /**
+     * @var PamAccount
+     */
     protected $pam;
 
     public function __construct()
