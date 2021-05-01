@@ -111,9 +111,9 @@ class ServiceProvider extends PoppyServiceProvider
                 ->everyFifteenMinutes()->appendOutputTo($this->consoleLog());
             $schedule->command('py-system:user', ['clear_log'])
                 ->dailyAt('04:00')->appendOutputTo($this->consoleLog());
-            // 每周清理一次
+            // 每天清理一次
             $schedule->command('py-system:user', ['clear_expired'])
-                ->saturdays()->appendOutputTo($this->consoleLog());
+                ->dailyAt('06:00')->appendOutputTo($this->consoleLog());
 
             // 开发平台去生成文档
             if (!is_production()) {

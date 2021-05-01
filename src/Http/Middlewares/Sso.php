@@ -19,6 +19,9 @@ class Sso extends BaseMiddleware
         $token = $request->bearerToken() ?: $request->input('token');
 
         if (!$token || !$payload = $this->auth->setToken($token)->check(true)) {
+            sys_info('py-system', __CLASS__, [
+                'token' => $token,
+            ]);
             return response('Unauthorized Jwt.', 401);
         }
 

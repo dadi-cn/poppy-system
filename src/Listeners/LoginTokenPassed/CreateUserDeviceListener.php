@@ -56,7 +56,7 @@ class CreateUserDeviceListener
 
         if ($logoutUsers->count()) {
             PamToken::where('account_id', $event->pam->id)->where('device_type', '!=', $event->deviceType)->delete();
+            event(new PamSsoEvent($event->pam, $logoutUsers));
         }
-        event(new PamSsoEvent($event->pam, $logoutUsers));
     }
 }
