@@ -80,7 +80,7 @@ class Ban
         try {
             // 删除与类型相关的Hash
             $key = md5($ban->value);
-            self::$rds->hSet(self::$banKey, $key, $ban->value . '|ban|' . Carbon::now()->toDateTimeString());
+            self::$rds->hDel(self::$banKey, $key);
 
             $ban->delete();
             return true;
