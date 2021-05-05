@@ -29,16 +29,22 @@ class Select extends Field
      *
      * @param array|callable|string $options
      *
-     * @return $this|mixed
+     * @return $this
      */
-    public function options($options = [])
+    public function options($options = []): self
     {
         if ($options instanceof Arrayable) {
             $options = $options->toArray();
         }
 
-        $this->options = array_merge([$this->placeholder], (array) $options);
+        $opts = collect([
+            '' => $this->placeholder,
+        ]);
+        collect($options)->each(function ($option, $k) use ($opts) {
+            $opts->offsetSet($k, $option);
+        });
 
+        $this->options = $opts->toArray();
         return $this;
     }
 
