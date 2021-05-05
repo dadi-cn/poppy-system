@@ -33,6 +33,7 @@ class PamLog extends Eloquent
         'account_type',
         'type',
         'ip',
+        'note',
         'area_text',   // 山东济南联通
         'area_name',   // 济南
     ];
