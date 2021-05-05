@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string          $ip           IP
  * @property string          $area_text    地区方式
  * @property string          $area_name    地区名字
+ * @property string          $note         备注
  * @property Carbon          $created_at   创建时间
  * @property Carbon          $updated_at   修改时间
  * @property-read PamAccount $pam
