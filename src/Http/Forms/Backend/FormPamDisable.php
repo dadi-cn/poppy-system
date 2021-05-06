@@ -45,7 +45,7 @@ class FormPamDisable extends FormWidget
             return Resp::error('您尚未选择用户!');
         }
 
-        $date   = input('date', '');
+        $date   = input('datetime', '');
         $reason = input('reason', '');
         $Pam    = (new Pam())->setPam($this->pam);
         if (!$Pam->disable($this->id, $date, $reason)) {
@@ -74,10 +74,9 @@ class FormPamDisable extends FormWidget
         if ($this->id) {
             $this->hidden('id', 'ID');
         }
-        $this->date('date', '解禁日期')->rules([
+        $this->datetime('datetime', '解禁时间')->rules([
             Rule::required(),
-            Rule::date(),
-        ]);
+        ])->placeholder('选择解禁时间');
         $this->textarea('reason', '封禁原因');
     }
 }

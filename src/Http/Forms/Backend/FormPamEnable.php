@@ -2,15 +2,11 @@
 
 namespace Poppy\System\Http\Forms\Backend;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\System\Action\Pam;
 use Poppy\System\Classes\Widgets\FormWidget;
 use Poppy\System\Models\PamAccount;
-use Response;
 
 class FormPamEnable extends FormWidget
 {
@@ -48,8 +44,8 @@ class FormPamEnable extends FormWidget
             return Resp::error('您尚未选择用户!');
         }
 
-        $Pam      = (new Pam())->setPam($this->pam);
-        $reason   = input('reason', '');
+        $Pam    = (new Pam())->setPam($this->pam);
+        $reason = input('reason', '');
         if (!$Pam->enable($this->id, $reason)) {
             return Resp::error($Pam->getError());
         }
@@ -77,7 +73,7 @@ class FormPamEnable extends FormWidget
         if ($this->id) {
             $this->hidden('id', 'ID');
         }
-        $this->date('date', '解禁日期')->disable();
-        $this->textarea('reason', '原因');
+        $this->datetime('date', '解禁日期')->disable();
+        $this->textarea('reason', '解禁原因');
     }
 }

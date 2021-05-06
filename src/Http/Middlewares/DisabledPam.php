@@ -4,6 +4,7 @@ namespace Poppy\System\Http\Middlewares;
 
 use Closure;
 use Illuminate\Http\Request;
+use Poppy\Framework\Classes\Resp;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\SysConfig;
 use Response;
@@ -29,11 +30,14 @@ class DisabledPam
             /** @var PamAccount $user */
             $user = $guard->user();
             if ($user->is_enable === SysConfig::NO) {
-                $defaultReason = '用户被禁用, 原因 : ' . $user->disable_reason . ', 解禁时间 : ' . $user->disable_end_at;
-                if ($disableReason = sys_setting('py-system::pam.disable_reason')) {
-                    $defaultReason = $disableReason;
+                $reason = '用户被禁用, 原因 : ' . ($user->disable_reason ? ', 原因: ' . $user->disable_reason : '') . ', 解禁时间 : ' . $user->disable_end_at;
+                $isJwt  = jwt_token();
+                if ($isJwt) {
+                    return Response::make($reason, 401);
                 }
-                return Response::make($defaultReason, 401);
+                else {
+                    return Resp::error($reason);
+                }
             }
         }
 

@@ -470,11 +470,11 @@ class Pam
      * @param string $reason 禁用原因
      * @return bool
      */
-    public function disable($id, $to, $reason): bool
+    public function disable(int $id, string $to, string $reason): bool
     {
         $data      = [
-            'disable_reason' => (string) $reason,
-            'disable_to'     => (string) $to,
+            'disable_reason' => $reason,
+            'disable_to'     => $to,
         ];
         $validator = Validator::make($data, [
             'disable_reason' => [
@@ -482,7 +482,7 @@ class Pam
             ],
             'disable_to'     => [
                 Rule::string(),
-                Rule::dateFormat('Y-m-d'),
+                Rule::dateFormat('Y-m-d H:i:s'),
             ], [], [
                 'disable_reason' => trans('py-system::action.pam.disable_reason'),
                 'disable_to'     => trans('py-system::action.pam.disable_to'),
@@ -499,12 +499,15 @@ class Pam
             return $this->setError(trans('py-system::action.pam.account_disabled'));
         }
 
-        $disable_end_at = Carbon::createFromFormat('Y-m-d', $data['disable_to'])->startOfDay();
+        $disableTo = Carbon::parse($data['disable_to']);
+        if ($disableTo->lessThan(Carbon::now())){
+            return $this->setError('解禁日期需要大于当前日期');
+        }
         $pam->update([
             'is_enable'        => SysConfig::DISABLE,
             'disable_reason'   => $data['disable_reason'],
             'disable_start_at' => Carbon::now(),
-            'disable_end_at'   => $disable_end_at,
+            'disable_end_at'   => $disableTo->toDateTimeString(),
         ]);
 
         event(new PamDisableEvent($pam, $this->pam, $reason));
