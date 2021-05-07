@@ -11,6 +11,8 @@ use Illuminate\View\View;
 use InvalidArgumentException;
 use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\System\Classes\Grid\Filter\AbstractFilter;
+use Poppy\System\Classes\Grid\Filter\Between;
+use Poppy\System\Classes\Grid\Filter\BetweenDate;
 use Poppy\System\Classes\Grid\Filter\Layout\Layout;
 use Poppy\System\Classes\Grid\Filter\Scope;
 use Poppy\System\Classes\Grid\Tools\FilterButton;
@@ -29,7 +31,8 @@ use Throwable;
  * @method AbstractFilter ilike($column, $label = '')
  * @method AbstractFilter gt($column, $label = '')
  * @method AbstractFilter lt($column, $label = '')
- * @method AbstractFilter between($column, $label = '')
+ * @method Between between($column, $label = '')
+ * @method BetweenDate betweenDate($column, $label = '')
  * @method AbstractFilter in($column, $label = '')
  * @method AbstractFilter notIn($column, $label = '')
  * @method AbstractFilter where($callback, $label = '', $column = null)
@@ -116,24 +119,25 @@ class Filter extends FilterButton
      * @var array
      */
     protected static $supports = [
-        'equal'      => Filter\Equal::class,
-        'notEqual'   => Filter\NotEqual::class,
-        'like'       => Filter\Like::class,
-        'gt'         => Filter\Gt::class,
-        'lt'         => Filter\Lt::class,
-        'between'    => Filter\Between::class,
-        'group'      => Filter\Group::class,
-        'where'      => Filter\Where::class,
-        'in'         => Filter\In::class,
-        'notIn'      => Filter\NotIn::class,
-        'date'       => Filter\Date::class,
-        'day'        => Filter\Day::class,
-        'month'      => Filter\Month::class,
-        'year'       => Filter\Year::class,
-        'hidden'     => Filter\Hidden::class,
-        'contains'   => Filter\Like::class,
-        'startsWith' => Filter\StartsWith::class,
-        'endsWith'   => Filter\EndsWith::class,
+        'equal'       => Filter\Equal::class,
+        'notEqual'    => Filter\NotEqual::class,
+        'like'        => Filter\Like::class,
+        'gt'          => Filter\Gt::class,
+        'lt'          => Filter\Lt::class,
+        'between'     => Filter\Between::class,
+        'betweenDate' => Filter\BetweenDate::class,
+        'group'       => Filter\Group::class,
+        'where'       => Filter\Where::class,
+        'in'          => Filter\In::class,
+        'notIn'       => Filter\NotIn::class,
+        'date'        => Filter\Date::class,
+        'day'         => Filter\Day::class,
+        'month'       => Filter\Month::class,
+        'year'        => Filter\Year::class,
+        'hidden'      => Filter\Hidden::class,
+        'contains'    => Filter\Like::class,
+        'startsWith'  => Filter\StartsWith::class,
+        'endsWith'    => Filter\EndsWith::class,
     ];
 
     /**

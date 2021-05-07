@@ -85,32 +85,4 @@ class Between extends AbstractFilter
 
         return $this->buildCondition($this->column, $this->value);
     }
-
-    /**
-     * @param array $options
-     *
-     * @return $this
-     */
-    public function datetime($options = [])
-    {
-        $this->view = 'py-system::tpl.filter.betweenDatetime';
-
-        $this->setupDatetime($options);
-
-        return $this;
-    }
-
-    /**
-     * @param array $options
-     */
-    protected function setupDatetime($options = [])
-    {
-        $options['format'] = Arr::get($options, 'format', 'YYYY-MM-DD HH:mm:ss');
-        $options['locale'] = Arr::get($options, 'locale', config('app.locale'));
-
-        $startOptions = json_encode($options);
-        $endOptions   = json_encode($options + ['useCurrent' => false]);
-
-
-    }
 }
