@@ -51,6 +51,7 @@ layui.table.render($.extend({!! $lay !!}, {
     id : '{!! $filter_id !!}-table',
     loading : true,
     toolbar : '#{!! $filter_id !!}-toolbar',
+    defaultToolbar : ['filter', 'print'],
     even : true,
     parseData : function(resp) {
         return {

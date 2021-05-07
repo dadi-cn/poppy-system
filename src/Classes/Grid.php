@@ -201,10 +201,13 @@ class Grid
         if (is_callable([$this->model(), 'orderBy'])
             &&
             (($pk = $this->model()->getOriginalModel()->getKeyName()) || $field)
+            &&
+            $order
         ) {
+            $order = input('_order') ?: $order;
             $this->model()->orderBy(
                 input('_field', $field ?: $pk),
-                input('_order', $order)
+                $order
             );
         }
 

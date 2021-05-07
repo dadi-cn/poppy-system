@@ -20,15 +20,17 @@ class CaptchaController extends WebApiController
      * @apiName          SysCaptchaSend
      * @apiGroup         Poppy
      *
-     * @apiParam {string}  passport            通行证
+     * @apiParam {string}  passport       通行证
+     * @apiParam {string}  [type]         exist : 如果给已经存在的发送验证码, 需要传值
      */
     public function send()
     {
         $input    = input();
         $passport = sys_get($input, 'passport');
+        $type     = sys_get($input, 'type');
 
         try {
-            event(new PassportVerifyEvent($passport));
+            event(new PassportVerifyEvent($passport, $type));
         } catch (Throwable $e) {
             return Resp::error($e);
         }

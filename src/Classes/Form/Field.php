@@ -339,7 +339,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    public function options($options = [])
+    public function options(array $options = [])
     {
         if ($options instanceof Arrayable) {
             $options = $options->toArray();

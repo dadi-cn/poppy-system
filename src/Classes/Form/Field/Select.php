@@ -31,7 +31,7 @@ class Select extends Field
      *
      * @return $this
      */
-    public function options($options = []): self
+    public function options($options = [])
     {
         if ($options instanceof Arrayable) {
             $options = $options->toArray();

@@ -3,19 +3,25 @@
 namespace Poppy\System\Events;
 
 /**
- * 发送验证码前的校验, 用于验证国际手机号
+ * 发送验证码前的校验, 用于发送前的校验
  */
 class PassportVerifyEvent
 {
-
     /**
      * 通行证
      * @var string
      */
     public $passport;
 
-    public function __construct($passport)
+    /**
+     * 类型
+     * @var string
+     */
+    public $type;
+
+    public function __construct($passport, $type = '')
     {
         $this->passport = $passport;
+        $this->type     = $type;
     }
 }

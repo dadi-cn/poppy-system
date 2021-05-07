@@ -25,7 +25,7 @@ class Checkbox extends MultipleSelect
      *
      * @param array|callable|string $options
      *
-     * @return $this|mixed
+     * @return $this
      */
     public function options($options = [])
     {
