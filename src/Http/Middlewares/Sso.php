@@ -26,7 +26,7 @@ class Sso extends BaseMiddleware
         }
 
         // 是否开启单点登录
-        if (!config('poppy.system.sso')) {
+        if (!\Poppy\System\Action\Sso::isEnable()) {
             return $next($request);
         }
 

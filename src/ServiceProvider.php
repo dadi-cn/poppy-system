@@ -49,7 +49,7 @@ class ServiceProvider extends PoppyServiceProvider
             Listeners\PoppyOptimized\ClearCacheListener::class,
         ],
         LoginTokenPassedEvent::class    => [
-            Listeners\LoginTokenPassed\CreateUserDeviceListener::class,
+            Listeners\LoginTokenPassed\SsoListener::class,
         ],
 
         // system

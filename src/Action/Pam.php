@@ -626,12 +626,8 @@ class Pam
     private function checkIsEnable($pam): bool
     {
         if ($pam->is_enable === SysConfig::NO) {
-            // 账户被禁用
-            $reason = sys_setting('py-system::pam.disabled_reason') ?: trans('py-system::action.pam.account_disable_not_login');
-
-            return $this->setError($reason);
+            return $this->setError($pam->disable_reason);
         }
-
         return true;
     }
 }
