@@ -500,7 +500,7 @@ class Pam
         }
 
         $disableTo = Carbon::parse($data['disable_to']);
-        if ($disableTo->lessThan(Carbon::now())){
+        if ($disableTo->lessThan(Carbon::now())) {
             return $this->setError('解禁日期需要大于当前日期');
         }
         $pam->update([
@@ -626,7 +626,7 @@ class Pam
     private function checkIsEnable($pam): bool
     {
         if ($pam->is_enable === SysConfig::NO) {
-            return $this->setError($pam->disable_reason);
+            return $this->setError("该账号因 $pam->disable_reason 被封禁至 $pam->disable_end_at");
         }
         return true;
     }

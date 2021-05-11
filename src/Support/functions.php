@@ -322,9 +322,9 @@ if (!function_exists('sys_api_demo')) {
      */
     function sys_api_demo(): bool
     {
-        $input = input('_py_sys_secret');
-        if ($input) {
-            return $input === config('poppy.system.secret');
+        $all = input();
+        if(isset($all['_py_sys_secret']) && $all['_py_sys_secret']) {
+            return $all['_py_sys_secret'] === config('poppy.system.secret');
         }
         return false;
     }

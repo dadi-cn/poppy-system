@@ -93,6 +93,9 @@ class Verification
      */
     public function checkCaptcha(string $passport, string $captcha): bool
     {
+        if (!$captcha) {
+            return $this->setError('请输入验证码');
+        }
         $passport = PamAccount::fullFilledPassport($passport);
         if (!$this->checkPassport($passport)) {
             return false;
@@ -133,7 +136,7 @@ class Verification
             }
         }
         else {
-            return $this->setError('验证码已过期, 请重新发送');
+            return $this->setError('验证码已失效');
         }
 
         return $this->setError(trans('py-system::action.verification.check_captcha_error'));

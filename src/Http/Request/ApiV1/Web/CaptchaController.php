@@ -62,9 +62,6 @@ class CaptchaController extends WebApiController
      */
     public function fetch()
     {
-        if (!sys_api_demo()) {
-            return Resp::error('非测试模式不返回数据');
-        }
         if (is_production()) {
             return Resp::error('Prod 环境不返回数据');
         }

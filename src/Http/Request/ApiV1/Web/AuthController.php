@@ -157,7 +157,7 @@ class AuthController extends WebApiController
         }
 
 
-        return Resp::success('认证通过', [
+        return Resp::success('登录成功', [
             'token' => $token,
             'type'  => $pam->type,
         ]);
