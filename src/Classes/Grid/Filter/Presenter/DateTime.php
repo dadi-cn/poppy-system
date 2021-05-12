@@ -7,17 +7,20 @@ class DateTime extends Presenter
     /**
      * @var array
      */
-    protected $options = [];
+    protected $options = [
+        'layui-type' => 'datetime',
+    ];
 
     /**
      * DateTime constructor.
      *
      * @param array $options
      */
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         $this->options = $this->getOptions($options);
     }
+
 
     public function variables(): array
     {
@@ -34,6 +37,6 @@ class DateTime extends Presenter
      */
     protected function getOptions(array $options): array
     {
-        return $options;
+        return array_merge($this->options, $options);
     }
 }

@@ -236,7 +236,7 @@ abstract class AbstractFilter extends Filter
      */
     public function date()
     {
-        return $this->datetime(['type' => 'date']);
+        return $this->datetime(['layui-type' => 'date']);
     }
 
     /**
@@ -246,7 +246,7 @@ abstract class AbstractFilter extends Filter
      */
     public function day()
     {
-        return $this->datetime(['type' => 'date']);
+        return $this->datetime(['layui-type' => 'date']);
     }
 
     /**
@@ -256,7 +256,7 @@ abstract class AbstractFilter extends Filter
      */
     public function month()
     {
-        return $this->datetime(['type' => 'month']);
+        return $this->datetime(['layui-type' => 'month']);
     }
 
     /**
@@ -266,7 +266,7 @@ abstract class AbstractFilter extends Filter
      */
     public function year()
     {
-        return $this->datetime(['type' => 'year']);
+        return $this->datetime(['layui-type' => 'year']);
     }
 
     /**
@@ -313,7 +313,7 @@ abstract class AbstractFilter extends Filter
      */
     public function time()
     {
-        return $this->datetime(['type' => 'time']);
+        return $this->datetime(['layui-type' => 'time']);
     }
 
     /**
