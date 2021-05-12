@@ -214,7 +214,7 @@ class UploadController extends WebApiController
             $Uploader->setExtension(['mp3', 'm4a', 'wav', 'aac']);
         }
         if ($type === 'file') {
-            $Uploader->setExtension(['zip', 'svga']);
+            $Uploader->setExtension(['zip', 'svga', 'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'pdf', 'rp', 'rplib']);
         }
         if ($type === 'images') {
             $Uploader->setExtension(['jpg', 'png', 'gif', 'jpeg', 'bmp']);
