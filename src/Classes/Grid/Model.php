@@ -539,8 +539,7 @@ class Model
             $lastPageUrl = Request::fullUrlWithQuery([
                 $paginator->getPageName() => $paginator->lastPage(),
             ]);
-
-            Pjax::respond(redirect($lastPageUrl));
+            redirect($lastPageUrl)->header('X-PJAX-URL', $lastPageUrl)->send();
         }
     }
 

@@ -63,19 +63,8 @@ layui.table.render($.extend({!! $lay !!}, {
     }
 }));
 $('#{!! $filter_id !!}-reload').on('click', function() {
-    let values = $('#{!! $filter_id !!}-form').serializeArray();
-    let query  = {
-        _query : 1
-    };
-    $.each(values, function(i, field) {
-        query[field.name] = field.value;
-    });
-    layui.table.reload('{!! $filter_id !!}-table', {
-        page : {
-            curr : 1 //重新从第 1 页开始
-        },
-        where : query
-    }, 'data');
+    // after 2.6.0 => 支持 Reload
+    layui.table.reload('{!! $filter_id !!}-table', {}, true);
     return false;
 });
 
