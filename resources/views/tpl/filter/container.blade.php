@@ -8,8 +8,9 @@
             </div>
         @endforeach
         <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-info" id="{{ $filter_id }}-reload"><i class="fa fa-search"></i></button>
-            <a href="{!! $action !!}" class="layui-btn layui-btn-primary J_ignore"><i class="fa fa-undo"></i></a>
+            <button class="layui-btn layui-btn-info" id="{{ $filter_id }}-search"><i class="fa fa-search"></i></button>
+            <button class="layui-btn layui-btn-warm" style="margin-left: 5px" id="{{ $filter_id }}-reload"><i class="fa fa-sync"></i></button>
+            <button class="layui-btn layui-btn-primary" style="margin-left: 5px" id="{{ $filter_id }}-reset"><i class="fa fa-undo"></i></button>
         </div>
     </div>
 </form>
