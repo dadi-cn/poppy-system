@@ -85,7 +85,7 @@ class Sso
                 break;
             case self::SSO_SINGLE:
                 // 单点登录(Sso), 移除其他端所有设备
-                $logoutUsers = PamToken::where('account_id', $pam->id)->where('device_type', '!=', $device_type)->get();
+                $logoutUsers = PamToken::where('account_id', $pam->id)->get();
                 break;
             case self::SSO_GROUP:
                 // 同组内登录
@@ -95,7 +95,7 @@ class Sso
                         $total = $group;
                     }
                 }
-                $logoutUsers = PamToken::where('account_id', $pam->id)->where('device_type', '!=', $device_type)
+                $logoutUsers = PamToken::where('account_id', $pam->id)
                     ->whereIn('device_type', $total)
                     ->get();
                 break;
