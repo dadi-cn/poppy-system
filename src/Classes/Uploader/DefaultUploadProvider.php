@@ -32,61 +32,57 @@ class DefaultUploadProvider implements UploadContract
      * @var string 目标磁盘
      */
     protected $disk = 'public';
+
     /**
      * 图片扩展的描述
      * @var array
+     * @deprecated 3.1
+     * @removed    4.0
      */
     protected static $extensions = [
-        'image' => [
-            'extension'   => 'jpg,jpeg,png,gif',
+        'images' => [
+            'extension'   => ['jpg', 'jpeg', 'png', 'gif'],
             'description' => '请选择图片',
         ],
-        'zip'   => [
-            'extension'   => 'zip',
-            'description' => '选择压缩包',
+        'file'   => [
+            'extension'   => ['zip', 'rp', 'rplib', 'svga', 'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'pdf'],
+            'description' => '选择文件',
         ],
-        'rp'    => [
-            'extension'   => 'rp',
-            'description' => '请选择 Rp 文件',
-        ],
-        'rplib' => [
-            'extension'   => 'rplib',
-            'description' => '请选择原型组件',
-        ],
-        'xls'   => [
-            'extension'   => 'xls,xlsx',
-            'description' => '请选择Excel文件',
-        ],
-        'video' => [
-            'extension'   => 'mp3',
-            'description' => '请选择音频文件',
-        ],
-        'audio' => [
-            'extension'   => 'mp4,rmvb,rm',
+        'video'  => [
+            'extension'   => ['mp4', 'rm', 'rmvb', 'wmv'],
             'description' => '请选择视频文件',
+        ],
+        'audio'  => [
+            'extension'   => ['mp3', 'm4a', 'wav', 'aac'],
+            'description' => '请选择音频文件',
         ],
     ];
     /**
      * @var string 文件夹
      */
     private $folder;
+
     /**
      * @var string 返回地址
      */
     private $returnUrl;
+
     /**
      * @var array 允许上传的扩展
      */
     private $allowedExtensions = ['zip'];
+
     /**
      * @var int 默认图片质量
      */
     private $quality = 70;
+
     /**
      * 重新设置大小时候的阈值
      * @var int
      */
     private $resizeDistrict = 1920;
+
     /**
      * @var string 图片mime类型
      */
@@ -102,6 +98,19 @@ class DefaultUploadProvider implements UploadContract
     public function setFolder($folder = 'uploads')
     {
         $this->folder = (is_production() ? '' : 'dev/') . $folder;
+    }
+
+    /**
+     * 设置类型
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->folder = (is_production() ? '' : 'dev/') . $type;
+        $extensions   = UploaderTypes::kvExt($type);
+        if ($extensions) {
+            $this->setExtension($extensions);
+        }
     }
 
     /**
@@ -175,7 +184,7 @@ class DefaultUploadProvider implements UploadContract
 
             /* 图片进行压缩, 其他不进行处理
              * ---------------------------------------- */
-            if (in_array($extension, self::type('image', 'ext_array'), true)) {
+            if (in_array($extension, UploaderTypes::kvExt(UploaderTypes::TYPE_IMAGES), true)) {
                 if (!$extension) {
                     $extension = 'png';
                 }
@@ -308,11 +317,13 @@ class DefaultUploadProvider implements UploadContract
 
     /**
      * @inheritDoc
+     * @deprecated 3.1
+     * @removed    4.0
      */
     public static function type(string $type, $return_type = 'ext_string')
     {
         if (!isset(self::$extensions[$type])) {
-            $ext = self::$extensions['image'];
+            $ext = self::$extensions['images'];
         }
         else {
             $ext = self::$extensions[$type];
@@ -340,7 +351,7 @@ class DefaultUploadProvider implements UploadContract
      * @param string $extension 扩展名
      * @return string
      */
-    private function genRelativePath($extension = 'png'): string
+    private function genRelativePath(string $extension = 'png'): string
     {
         $now      = Carbon::now();
         $fileName = $now->format('is') . Str::random(8) . '.' . $extension;
@@ -357,7 +368,7 @@ class DefaultUploadProvider implements UploadContract
     private function resizeContent(string $extension, $img_stream)
     {
         // 缩放图片
-        if ($extension !== 'gif' && in_array($extension, self::type('image', 'ext_array'), true)) {
+        if ($extension !== 'gif' && in_array($extension, UploaderTypes::kvExt(UploaderTypes::TYPE_IMAGES), true)) {
             $Image  = \Image::make($img_stream);
             $width  = $Image->width();
             $height = $Image->height();

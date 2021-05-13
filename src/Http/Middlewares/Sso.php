@@ -16,7 +16,7 @@ class Sso extends BaseMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        $token = $request->bearerToken() ?: $request->input('token');
+        $token = jwt_token();
 
         if (!$token || !$payload = $this->auth->setToken($token)->check(true)) {
             sys_info('py-system', __CLASS__, [

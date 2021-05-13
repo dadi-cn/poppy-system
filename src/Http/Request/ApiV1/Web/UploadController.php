@@ -180,11 +180,15 @@ class UploadController extends WebApiController
      * @apiName             SysUploadFile
      * @apiGroup            Poppy
      * @apiParam   {string} file        内容
-     * @apiParam   {string} type        上传类型[audio|音频;video|视频;images|图片]
+     * @apiParam   {string} type        上传类型[audio|音频;video|视频;images|图片;file|文件上传]
+     * @apiParam   {string} [ext]       上传限制扩展(后台进行限制), 多个使用 ',' 分隔, 默认是 后台进行限制
+     * @apiParam   {string} [district]  图片大小限制(最高边, 默认是 1440)
      */
     public function file()
     {
-        $type = input('type', 'audio');
+        $type     = input('type', 'audio');
+        $ext      = input('ext', '');
+        $district = (int) input('district', 1440);
 
         $input = input();
 
@@ -204,21 +208,16 @@ class UploadController extends WebApiController
         }
 
         $Uploader = app(UploadContract::class);
-        $Uploader->setFolder($type);
-
+        $Uploader->setType($type);
         $urls = [];
-        if ($type === 'video') {
-            $Uploader->setExtension(['mp4', 'rm', 'rmvb', 'wmv']);
+        if ($ext) {
+            $extensions = explode(',', $ext);
+            $Uploader->setExtension($extensions);
         }
-        if ($type === 'audio') {
-            $Uploader->setExtension(['mp3', 'm4a', 'wav', 'aac']);
-        }
-        if ($type === 'file') {
-            $Uploader->setExtension(['zip', 'svga', 'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'pdf', 'rp', 'rplib']);
-        }
+
+        // 默认图片压缩到 1440 宽度
         if ($type === 'images') {
-            $Uploader->setExtension(['jpg', 'png', 'gif', 'jpeg', 'bmp']);
-            $Uploader->setResizeDistrict(1440);
+            $Uploader->setResizeDistrict($district);
         }
         $file = Request::file('file');
         if (!is_array($file)) {
@@ -247,7 +246,7 @@ class UploadController extends WebApiController
         try {
             return Resp::success('上传成功', [
                 'url' => [
-                    'https://oss.wulicode.com/demo/480x640/0' . random_int(0, 6) . '.jpg',
+                    'https://jdc.jd.com/img/400',
                 ],
             ]);
         } catch (Throwable $e) {

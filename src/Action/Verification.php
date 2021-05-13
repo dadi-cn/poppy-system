@@ -150,6 +150,7 @@ class Verification
      */
     public function fetchCaptcha(string $passport): bool
     {
+        $passport = PamAccount::fullFilledPassport($passport);
         if (!$this->checkPassport($passport)) {
             return false;
         }

@@ -36,6 +36,13 @@ interface UploadContract
     public function setFolder($folder);
 
     /**
+     * 类型
+     * @param string $type
+     * @return mixed
+     */
+    public function setType(string $type);
+
+    /**
      * District Size.
      * @param int $resize 设置resize 的区域
      */
@@ -99,6 +106,8 @@ interface UploadContract
      * @param string $type        类型
      * @param string $return_type 返回的类型
      * @return mixed
+     * @deprecated
+     * @see \Poppy\System\Classes\Uploader\UploaderTypes::kvExt()
      */
     public static function type(string $type, $return_type = 'ext_string');
 }
