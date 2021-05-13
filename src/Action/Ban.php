@@ -22,12 +22,9 @@ class Ban
 
     static $rds;
 
-    static $banKey;
-
     public function __construct()
     {
-        self::$rds    = RdsDb::instance();
-        self::$banKey = 'py-system:' . PySystemDef::ckBan();
+        self::$rds = RdsDb::instance();
     }
 
 
@@ -61,7 +58,7 @@ class Ban
 
         $this->init();
         $key = md5($value);
-        self::$rds->hSet(self::$banKey, $key, $value . '|ban|' . Carbon::now()->toDateTimeString());
+        self::$rds->hSet(PySystemDef::ckBan(), $key, $value . '|ban|' . Carbon::now()->toDateTimeString());
         return true;
     }
 
@@ -80,7 +77,7 @@ class Ban
         try {
             // 删除与类型相关的Hash
             $key = md5($ban->value);
-            self::$rds->hDel(self::$banKey, $key);
+            self::$rds->hDel(PySystemDef::ckBan(), $key);
 
             $ban->delete();
             return true;
@@ -119,7 +116,7 @@ class Ban
                 'type'  => PamBan::TYPE_IP,
                 'value' => $ip,
             ]);
-            self::$rds->hSet(self::$banKey, $key, $item->login_ip . '|user|' . $value);
+            self::$rds->hSet(PySystemDef::ckBan(), $key, $item->login_ip . '|user|' . $value);
         }
         if ($type === PamBan::TYPE_DEVICE) {
             $deviceId = $item->device_id;
@@ -128,7 +125,7 @@ class Ban
             }
             $key   = md5($item->device_id);
             $value = Carbon::now()->toDateTimeString();
-            self::$rds->hSet(self::$banKey, $key, $item->device_id . '|' . $item->device_type . '|' . $value);
+            self::$rds->hSet(PySystemDef::ckBan(), $key, $item->device_id . '|' . $item->device_type . '|' . $value);
         }
         try {
             $item->delete();
@@ -149,8 +146,8 @@ class Ban
     {
         // 记录可用Token/记录过期时间
         $Rds = RdsDb::instance();
-        $Rds->hSet('py-system:' . PySystemDef::ckSso('valid'), $account_id, $md5Token . '|' . $expired_at->toDateTimeString());
-        $Rds->zAdd('py-system:' . PySystemDef::ckSso('expired'), [
+        $Rds->hSet(PySystemDef::ckSso('valid'), $account_id, $md5Token . '|' . $expired_at->toDateTimeString());
+        $Rds->zAdd(PySystemDef::ckSso('expired'), [
             $account_id => $expired_at->timestamp,
         ]);
     }
@@ -163,8 +160,8 @@ class Ban
     public function forbidden(int $account_id)
     {
         $Rds = RdsDb::instance();
-        $Rds->hDel('py-system:' . PySystemDef::ckSso('valid'), $account_id);
-        $Rds->zRem('py-system:' . PySystemDef::ckSso('expired'), [
+        $Rds->hDel(PySystemDef::ckSso('valid'), $account_id);
+        $Rds->zRem(PySystemDef::ckSso('expired'), [
             $account_id,
         ]);
     }
@@ -174,17 +171,17 @@ class Ban
      */
     public function init()
     {
-        if (self::$rds->exists(self::$banKey)) {
+        if (self::$rds->exists(PySystemDef::ckBan())) {
             return;
         }
         $items = PamBan::get();
         // 保障KEY存在
-        self::$rds->hSet(self::$banKey, str_repeat('11111111', 4), md5('duoli') . '|init|' . Carbon::now()->toDateTimeString());
+        self::$rds->hSet(PySystemDef::ckBan(), str_repeat('11111111', 4), md5('duoli') . '|init|' . Carbon::now()->toDateTimeString());
         $values = collect();
         $now    = Carbon::now()->toDateTimeString();
         collect($items)->each(function ($item) use ($values, $now) {
             $values->offsetSet(md5($item->value), $item->value . '|init|' . $now);
         });
-        self::$rds->hMSet(self::$banKey, $values->toArray());
+        self::$rds->hMSet(PySystemDef::ckBan(), $values->toArray());
     }
 }

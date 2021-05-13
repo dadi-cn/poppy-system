@@ -38,7 +38,7 @@ class PySystemDef
      */
     public static function ckVerificationOnce(): string
     {
-        return 'verification-once_code';
+        return 'py-system:verification-once_code';
     }
 
     /**
@@ -47,7 +47,7 @@ class PySystemDef
      */
     public static function ckVerificationCaptcha(): string
     {
-        return 'verification-captcha';
+        return 'py-system:verification-captcha';
     }
 
     /**
@@ -57,7 +57,7 @@ class PySystemDef
      */
     public static function ckSso(string $type): string
     {
-        return 'sso-' . $type;
+        return 'py-system:sso-' . $type;
     }
 
     /**
@@ -66,6 +66,6 @@ class PySystemDef
      */
     public static function ckBan(): string
     {
-        return 'ban';
+        return 'py-system:ban';
     }
 }

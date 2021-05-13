@@ -29,21 +29,20 @@ class Ban
 
         $rds = RdsDb::instance();
         $md5 = md5($ip);
-        $key = 'py-system:' . PySystemDef::ckBan();
 
         // 初始化这个KEY, 这个初始化可能会放到系统中
-        if (!$rds->exists($key)) {
+        if (!$rds->exists(PySystemDef::ckBan())) {
             (new \Poppy\System\Action\Ban())->init();
         }
 
-        if ($rds->hExists($key, $md5)) {
+        if ($rds->hExists(PySystemDef::ckBan(), $md5)) {
             return Resp::error('当前ip被封禁，请联系客服处理');
         }
 
         $deviceId = request()->header('X-APP-ID') ?: input('device_id');
         if ($deviceId) {
             $md5 = md5($deviceId);
-            if ($rds->hExists($key, $md5)) {
+            if ($rds->hExists(PySystemDef::ckBan(), $md5)) {
                 return Resp::error('当前设备被封禁，请联系客服处理');
             }
         }
