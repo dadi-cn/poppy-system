@@ -453,8 +453,8 @@ class FormWidget implements Renderable
             $this->action(app('url')->current());
         }
 
-        if (input('_query')) {
-            return Resp::success('Success', $this->getFeVariables());
+        if (input('_skeleton')) {
+            return Resp::success('Success', $this->fetchSkeleton());
         }
 
         if (is_post()) {
@@ -561,13 +561,24 @@ class FormWidget implements Renderable
     }
 
 
-    protected function getFeVariables(): array
+    protected function fetchSkeleton(): array
     {
         collect($this->fields())->each->fill($this->data());
 
         $fields = [];
         foreach ($this->fields() as $field) {
             $variable = $field->variables();
+            $options  = (array) $variable['options'];
+            if (count($options)) {
+                $newOption = [];
+                foreach ($options as $key => $option) {
+                    $newOption[] = [
+                        'key'   => $key,
+                        'value' => $option,
+                    ];
+                }
+                $options = $newOption;
+            }
             $fields[] = [
                 'name'        => $variable['name'],
                 'type'        => $field->getType(),
@@ -575,7 +586,7 @@ class FormWidget implements Renderable
                 'label'       => $variable['label'],
                 'placeholder' => $variable['placeholder'],
                 'rules'       => $variable['rules'],
-                'options'     => $variable['options'],
+                'options'     => $options,
             ];
         }
         return [
