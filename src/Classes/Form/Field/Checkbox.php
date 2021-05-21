@@ -31,10 +31,8 @@ class Checkbox extends MultipleSelect
      */
     public function fill($data)
     {
-        $this->value = (array) Arr::get($data, $this->column);
-        if (!$this->value) {
-            $this->value = $this->default;
-        }
+        $value       = Arr::get($data, $this->column);
+        $this->value = is_null($value) ? $this->default : $value;
     }
 
     /**
@@ -61,10 +59,8 @@ class Checkbox extends MultipleSelect
     }
 
     /**
-     * Set Default.
-     *
+     * 默认值, 当没有数据做填充的时候会取这个默认值(null 值的时候)
      * @param array|callable|string $default
-     *
      * @return $this
      */
     public function default($default)
