@@ -586,6 +586,7 @@ class FormWidget implements Renderable
                 'label'       => $variable['label'],
                 'placeholder' => $variable['placeholder'],
                 'rules'       => $variable['rules'],
+                'help'        => $variable['help']['text'] ?? '',
                 'options'     => $options,
             ];
         }

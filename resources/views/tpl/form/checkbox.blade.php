@@ -9,7 +9,7 @@
                 ]) !!}
                 <script>
                 // 实现 全选 反选
-                layui.form.on('checkbox(_check_all_{!! $name !!})', function(data) {
+                layui.form.on('checkbox(_check_all_{!! $name !!})', function() {
                     $("input:checkbox[name='{!! $name !!}[]']").prop("checked", this.checked);
                 });
                 </script>

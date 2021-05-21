@@ -71,14 +71,6 @@ class Checkbox extends MultipleSelect
             'inline'      => $this->inline,
             'canCheckAll' => $this->canCheckAll,
         ]);
-
-        if ($this->canCheckAll) {
-            $checkAllClass = uniqid('check-all-');
-            $this->addVariables(['checkAllClass' => $checkAllClass]);
-        }
-
-        $this->attribute('lay-skin', 'primary');
-
         return parent::render();
     }
 
