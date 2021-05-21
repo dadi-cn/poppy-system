@@ -7,17 +7,34 @@ use Illuminate\Support\Arr;
 
 class Checkbox extends MultipleSelect
 {
+    /**
+     * 是否行内显示
+     * @var bool
+     */
     protected $inline = true;
 
-    protected $canCheckAll = false;
 
+    /**
+     * 默认值
+     * @var array
+     */
+    protected $default = [];
+
+    /**
+     * 是否可以全选
+     * @var bool
+     */
+    protected $canCheckAll = false;
 
     /**
      * @inheritDoc
      */
     public function fill($data)
     {
-        $this->checked = (array) Arr::get($data, $this->column);
+        $this->value = (array) Arr::get($data, $this->column);
+        if (!$this->value) {
+            $this->value = $this->default;
+        }
     }
 
     /**
@@ -44,20 +61,15 @@ class Checkbox extends MultipleSelect
     }
 
     /**
-     * Set checked.
+     * Set Default.
      *
-     * @param array|callable|string $checked
+     * @param array|callable|string $default
      *
      * @return $this
      */
-    public function checked($checked = [])
+    public function default($default)
     {
-        if ($checked instanceof Arrayable) {
-            $checked = $checked->toArray();
-        }
-
-        $this->checked = (array) $checked;
-
+        $this->default = (array) $default;
         return $this;
     }
 
@@ -67,11 +79,18 @@ class Checkbox extends MultipleSelect
     public function render()
     {
         $this->addVariables([
-            'checked'     => $this->checked,
             'inline'      => $this->inline,
             'canCheckAll' => $this->canCheckAll,
         ]);
         return parent::render();
+    }
+
+    public function skeleton(): array
+    {
+        return [
+            'display'   => $this->inline ? 'inline' : 'stack',
+            'check_all' => $this->canCheckAll ? 'Y' : 'N',
+        ];
     }
 
     /**

@@ -579,7 +579,7 @@ class FormWidget implements Renderable
                 }
                 $options = $newOption;
             }
-            $fields[] = [
+            $fields[] = array_merge([
                 'name'        => $variable['name'],
                 'type'        => $field->getType(),
                 'value'       => $variable['value'],
@@ -588,7 +588,8 @@ class FormWidget implements Renderable
                 'rules'       => $variable['rules'],
                 'help'        => $variable['help']['text'] ?? '',
                 'options'     => $options,
-            ];
+            ], $field->skeleton());
+
         }
         return [
             'fields'  => $fields,

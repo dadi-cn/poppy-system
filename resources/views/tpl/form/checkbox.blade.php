@@ -25,7 +25,7 @@
                     {!! app('form')->checkbox(
                     $name.'[]',
                     $option,
-                    ($option == old($column, $value)) || (in_array($option, $checked)),
+                    in_array($option, $value),
                     array_merge($attributes , [
                         'class' => 'layui-field-checkbox',
                         'id' => $column.'-'.$option,
