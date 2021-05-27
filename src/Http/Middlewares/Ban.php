@@ -39,7 +39,7 @@ class Ban
             return Resp::error('当前ip被封禁，请联系客服处理');
         }
 
-        $deviceId = request()->header('X-APP-ID') ?: input('device_id');
+        $deviceId = x_app('id') ?: input('device_id');
         if ($deviceId) {
             $md5 = md5($deviceId);
             if ($rds->hExists(PySystemDef::ckBan(), $md5)) {

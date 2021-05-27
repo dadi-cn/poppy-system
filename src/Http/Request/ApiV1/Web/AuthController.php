@@ -149,8 +149,8 @@ class AuthController extends WebApiController
         /* 设备单一性登陆验证(基于 Redis + Db)
          * ---------------------------------------- */
         try {
-            $deviceId   = $this->pyRequest()->header('X-APP-ID') ?: input('device_id', '');
-            $deviceType = $this->pyRequest()->header('X-APP-OS') ?: input('device_type', '');
+            $deviceId   = x_app('id') ?: input('device_id', '');
+            $deviceType = x_app('os') ?: input('device_type', '');
             event(new LoginTokenPassedEvent($pam, $token, $deviceId, $deviceType));
         } catch (Throwable $e) {
             return Resp::error($e->getMessage());

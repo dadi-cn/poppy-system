@@ -11,8 +11,8 @@ use Poppy\System\Events\LoginTokenPassedEvent;
 | 单点登录监听
 |--------------------------------------------------------------------------
 | 单点登录必须传递 DeviceId/DeviceType
-| HeaderOfDeviceId   : X-APP-ID (device_id)
-| HeaderOfDeviceTYPE : X-APP-OS (device_type)
+| HeaderOfDeviceId   : X-APP-ID/X-APP[id] (device_id)
+| HeaderOfDeviceTYPE : X-APP-OS/X-APP[os] (device_type)
 */
 
 class SsoListener
