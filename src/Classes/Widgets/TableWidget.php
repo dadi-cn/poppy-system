@@ -4,43 +4,38 @@ namespace Poppy\System\Classes\Widgets;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Arr;
+use Poppy\Framework\Classes\Resp;
+use Poppy\System\Classes\Layout\Content;
 
 class TableWidget extends Widget implements Renderable
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $view = 'py-system::tpl.widgets.table';
+    private $headers = [];
 
     /**
      * @var array
      */
-    protected $headers = [];
+    private $rows = [];
 
     /**
-     * @var array
+     * @var bool
      */
-    protected $rows = [];
-
-    /**
-     * @var array
-     */
-    protected $style = [];
+    private $withContent;
 
     /**
      * Table constructor.
      *
      * @param array $headers
      * @param array $rows
-     * @param array $style
      */
-    public function __construct($headers = [], $rows = [], $style = [])
+    public function __construct(array $headers = [], array $rows = [])
     {
+        parent::__construct();
         $this->setHeaders($headers);
         $this->setRows($rows);
-        $this->setStyle($style);
-
-        $this->class('layui-table ' . implode(' ', $this->style));
+        $this->withContent = true;
     }
 
     /**
@@ -57,6 +52,17 @@ class TableWidget extends Widget implements Renderable
         return $this;
     }
 
+
+    /**
+     * 不使用容器显示
+     * @return $this
+     */
+    public function withoutContent(): self
+    {
+        $this->withContent = false;
+        return $this;
+    }
+
     /**
      * Set table rows.
      *
@@ -64,7 +70,7 @@ class TableWidget extends Widget implements Renderable
      *
      * @return $this
      */
-    public function setRows($rows = [])
+    public function setRows(array $rows = []): self
     {
         if (Arr::isAssoc($rows)) {
             foreach ($rows as $key => $item) {
@@ -73,40 +79,35 @@ class TableWidget extends Widget implements Renderable
 
             return $this;
         }
-
         $this->rows = $rows;
-
-        return $this;
-    }
-
-    /**
-     * Set table style.
-     *
-     * @param array $style
-     *
-     * @return $this
-     */
-    public function setStyle($style = [])
-    {
-        $this->style = $style;
-
         return $this;
     }
 
     /**
      * Render the table.
-     *
-     * @return string
+     * @throws \Throwable
      */
     public function render()
     {
-        $vars = [
+        if ($this->isSkeleton()) {
+            return Resp::success('获取数据成功', [
+                'type'   => Widget::TYPE_STAITC_TABLE,
+                'fields' => [
+                    'headers' => $this->headers,
+                    'rows'    => $this->rows,
+                ],
+            ]);
+        }
+
+        $content = view('py-system::tpl.widgets.table', [
             'headers'    => $this->headers,
             'rows'       => $this->rows,
-            'style'      => $this->style,
-            'attributes' => $this->formatAttributes(),
-        ];
-
-        return view($this->view, $vars)->render();
+        ])->render();
+        if ($this->withContent) {
+            return (new Content())->body($content);
+        }
+        else {
+            return $content;
+        }
     }
 }

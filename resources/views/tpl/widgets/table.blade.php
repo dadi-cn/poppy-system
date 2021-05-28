@@ -1,4 +1,4 @@
-<table {!! $attributes !!}>
+<table class="layui-table">
     <thead>
     <tr>
         @foreach($headers as $header)
