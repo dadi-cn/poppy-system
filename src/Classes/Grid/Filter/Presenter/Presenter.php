@@ -40,6 +40,15 @@ abstract class Presenter
     }
 
     /**
+     * @throws \ReflectionException
+     */
+    public function type(): string
+    {
+        $reflect = new ReflectionClass(get_called_class());
+        return strtolower($reflect->getShortName());
+    }
+
+    /**
      * Set default value for filter.
      *
      * @param $default

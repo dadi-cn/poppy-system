@@ -412,6 +412,10 @@ class Grid
 
         $variables = $this->variables();
 
+        if (input('_skeleton')) {
+            return $this->skeleton();
+        }
+
         $content = view($this->view, $variables)->render();
         return (new Content())->body($content);
     }
@@ -419,6 +423,41 @@ class Grid
     public function getPerPage(): int
     {
         return $this->perPage;
+    }
+
+    public function skeleton()
+    {
+        $columns = [];
+        collect($this->visibleColumns())->each(function (Column $column) use (&$columns) {
+            $defines = [
+                'field' => $column->name,
+                'title' => $column->label,
+                'sort'  => $column->sortable,
+                'style' => $column->style,
+            ];
+
+            if ($width = $column->width) {
+                $defines += ['width' => $width];
+            }
+            if ($fixed = $column->fixed) {
+                $defines += ['fixed' => $fixed];
+            }
+            if ($column->editable) {
+                $defines += ['edit' => 'text'];
+            }
+            $columns[] = $defines;
+        });
+        $columns = array_merge($this->layCols[0], $columns);
+
+        return Resp::success('Grid Skeleton', [
+            'type'    => 'grid',
+            'title'   => $this->variables['title'],
+            'actions' => $this->skeletonQuickButton(),
+            'filter'  => $this->getFilter()->renderSkeleton(),
+            'scopes'  => $this->variables['scopes'],
+            'fields'  => $columns,
+            'pk'      => $this->variables['model_pk'],
+        ]);
     }
 
     /**

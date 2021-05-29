@@ -423,6 +423,24 @@ class Filter extends FilterButton
         ])->render();
     }
 
+
+    public function renderSkeleton(): array
+    {
+        $layout  = $this->layout;
+        $columns = [];
+        foreach ($layout->columns() as $column) {
+            $colDef = [
+                'width' => $column->width(),
+            ];
+            foreach ($column->filters() as $filter) {
+                $colDef = array_merge($colDef, $filter->renderSkeleton());
+            }
+
+            $columns[] = $colDef;
+        }
+        return $columns;
+    }
+
     /**
      * Get url without filter queryString.
      *

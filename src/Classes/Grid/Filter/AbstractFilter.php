@@ -279,6 +279,16 @@ abstract class AbstractFilter extends Filter
         return view($this->view, $this->variables());
     }
 
+
+    public function renderSkeleton(): array
+    {
+        return [
+            'name'  => $this->column,
+            'label' => $this->label,
+            'type'  => $this->presenter->type(),
+        ];
+    }
+
     /**
      * Render this filter.
      *

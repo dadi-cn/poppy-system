@@ -109,4 +109,18 @@ trait HasActions
         }
         return $append;
     }
+
+    /**
+     * Render create button for grid.
+     *
+     * @return string
+     */
+    public function skeletonBatchActions(): string
+    {
+        $append = '';
+        foreach ($this->batchActions as $button) {
+            $append .= $button->render();
+        }
+        return $append;
+    }
 }

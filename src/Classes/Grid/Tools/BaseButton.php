@@ -64,13 +64,12 @@ class BaseButton
         return ' ' . Html::link($this->url, $this->title, $this->attribute, null, false) . ' ';
     }
 
-
-    public function data(): array
+    public function renderSkeleton(): array
     {
         return [
             'title' => $this->title,
             'url'   => $this->url,
-            'type'  => $this->type,
+            'type'  => 'button-' . $this->type,
         ];
     }
 }

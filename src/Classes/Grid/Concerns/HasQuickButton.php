@@ -38,4 +38,13 @@ trait HasQuickButton
         }
         return $append;
     }
+
+    public function skeletonQuickButton(): array
+    {
+        $append = [];
+        foreach ($this->quickButtons as $quickButton) {
+            $append[] = $quickButton->renderSkeleton();
+        }
+        return $append;
+    }
 }
