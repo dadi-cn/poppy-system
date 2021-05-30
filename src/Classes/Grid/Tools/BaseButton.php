@@ -66,10 +66,16 @@ class BaseButton
 
     public function renderSkeleton(): array
     {
+        $icon = '';
+        if (preg_match('/class="(.*?)"/', $this->title, $matches)) {
+            $icon = $matches[1];
+        }
+
         return [
-            'title' => $this->title,
+            'icon'  => $icon,
+            'title' => trim(strip_tags($this->title)),
             'url'   => $this->url,
-            'type'  => 'button-' . $this->type,
+            'type'  => Str::contains($this->attribute['class'] ?? '', 'J_iframe') ? 'dialog' : '',
         ];
     }
 }

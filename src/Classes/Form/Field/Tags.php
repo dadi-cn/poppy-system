@@ -112,6 +112,20 @@ class Tags extends Field
     }
 
 
+    public function skeleton(): array
+    {
+        $options = [];
+        collect($this->options)->map(function ($value, $id) use (&$options) {
+            $options[] = [
+                'id'    => $id,
+                'value' => $value,
+            ];
+        })->toArray();
+        return [
+            'options' => $options,
+        ];
+    }
+
     /**
      * Set visible column and key of data.
      *

@@ -136,6 +136,10 @@ class FormWidget implements Renderable
         'label' => 3,
         'field' => 9,
     ];
+    /**
+     * @var bool
+     */
+    private $plainSkeleton = false;
 
     /**
      * Form constructor.
@@ -439,6 +443,11 @@ class FormWidget implements Renderable
         return $this;
     }
 
+    public function plainSkeleton()
+    {
+        $this->plainSkeleton = true;
+    }
+
     /**
      * Render the form.
      */
@@ -454,6 +463,9 @@ class FormWidget implements Renderable
         }
 
         if (input('_skeleton')) {
+            if ($this->plainSkeleton) {
+                return $this->fetchSkeleton();
+            }
             return Resp::success('Success', $this->fetchSkeleton());
         }
 
@@ -523,6 +535,45 @@ class FormWidget implements Renderable
         return $this->title;
     }
 
+    public function fetchSkeleton(): array
+    {
+        collect($this->fields())->each->fill($this->data());
+
+        $fields = [];
+        foreach ($this->fields() as $field) {
+            $variable = $field->variables();
+            $options  = (array) $variable['options'];
+            if (count($options)) {
+                $newOption = [];
+                foreach ($options as $key => $option) {
+                    $newOption[] = [
+                        'key'   => $key,
+                        'value' => $option,
+                    ];
+                }
+                $options = $newOption;
+            }
+            $fields[] = array_merge([
+                'name'        => $variable['name'],
+                'type'        => $field->getType(),
+                'value'       => $variable['value'],
+                'label'       => $variable['label'],
+                'placeholder' => $variable['placeholder'],
+                'rules'       => $variable['rules'],
+                'help'        => $variable['help']['text'] ?? '',
+                'options'     => $options,
+            ], $field->skeleton());
+
+        }
+        return [
+            'title'   => $this->title,
+            'fields'  => $fields,
+            'action'  => $this->attributes['action'],
+            'method'  => $this->attributes['method'],
+            'buttons' => $this->buttons,
+        ];
+    }
+
     /**
      * Initialize the form attributes.
      */
@@ -557,45 +608,6 @@ class FormWidget implements Renderable
             'width'      => $this->width,
             'ajax'       => $this->ajax,
             'id'         => $this->attributes['id'],
-        ];
-    }
-
-
-    protected function fetchSkeleton(): array
-    {
-        collect($this->fields())->each->fill($this->data());
-
-        $fields = [];
-        foreach ($this->fields() as $field) {
-            $variable = $field->variables();
-            $options  = (array) $variable['options'];
-            if (count($options)) {
-                $newOption = [];
-                foreach ($options as $key => $option) {
-                    $newOption[] = [
-                        'key'   => $key,
-                        'value' => $option,
-                    ];
-                }
-                $options = $newOption;
-            }
-            $fields[] = array_merge([
-                'name'        => $variable['name'],
-                'type'        => $field->getType(),
-                'value'       => $variable['value'],
-                'label'       => $variable['label'],
-                'placeholder' => $variable['placeholder'],
-                'rules'       => $variable['rules'],
-                'help'        => $variable['help']['text'] ?? '',
-                'options'     => $options,
-            ], $field->skeleton());
-
-        }
-        return [
-            'fields'  => $fields,
-            'action'  => $this->attributes['action'],
-            'method'  => $this->attributes['method'],
-            'buttons' => $this->buttons,
         ];
     }
 
