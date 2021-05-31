@@ -542,7 +542,18 @@ class FormWidget implements Renderable
         $fields = [];
         foreach ($this->fields() as $field) {
             $variable = $field->variables();
-            $options  = (array) $variable['options'];
+            $opts     = [
+                'name'        => $variable['name'],
+                'type'        => $field->getType(),
+                'value'       => $variable['value'],
+                'label'       => $variable['label'],
+                'placeholder' => $variable['placeholder'],
+                'rules'       => $variable['rules'],
+                'help'        => $variable['help']['text'] ?? '',
+            ];
+
+            // options
+            $options = (array) $variable['options'];
             if (count($options)) {
                 $newOption = [];
                 foreach ($options as $key => $option) {
@@ -552,20 +563,15 @@ class FormWidget implements Renderable
                     ];
                 }
                 $options = $newOption;
+                $opts    = array_merge($opts, [
+                    'options' => $options,
+                ]);
             }
-            $fields[] = array_merge([
-                'name'        => $variable['name'],
-                'type'        => $field->getType(),
-                'value'       => $variable['value'],
-                'label'       => $variable['label'],
-                'placeholder' => $variable['placeholder'],
-                'rules'       => $variable['rules'],
-                'help'        => $variable['help']['text'] ?? '',
-                'options'     => $options,
-            ], $field->skeleton());
+            $fields[] = array_merge($opts, $field->skeleton());
 
         }
         return [
+            'type'    => 'form',
             'title'   => $this->title,
             'fields'  => $fields,
             'action'  => $this->attributes['action'],

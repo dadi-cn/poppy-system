@@ -14,6 +14,7 @@ use Poppy\Framework\Exceptions\ApplicationException;
 use Poppy\Framework\Http\Pagination\PageInfo;
 use Poppy\System\Classes\Grid\Column;
 use Poppy\System\Classes\Grid\Concerns;
+use Poppy\System\Classes\Grid\Filter\Scope;
 use Poppy\System\Classes\Grid\Model;
 use Poppy\System\Classes\Grid\Row;
 use Poppy\System\Classes\Layout\Content;
@@ -448,13 +449,18 @@ class Grid
             $columns[] = $defines;
         });
         $columns = array_merge($this->layCols[0], $columns);
-
+        $scopes  = $this->getFilter()->getScopes()->map(function (Scope $scope) {
+            return [
+                'key'   => $scope->key,
+                'label' => $scope->getLabel(),
+            ];
+        });
         return Resp::success('Grid Skeleton', [
             'type'    => 'grid',
             'title'   => $this->variables['title'],
             'actions' => $this->skeletonQuickButton(),
             'filter'  => $this->getFilter()->renderSkeleton(),
-            'scopes'  => $this->variables['scopes'],
+            'scopes'  => $scopes,
             'fields'  => $columns,
             'pk'      => $this->variables['model_pk'],
         ]);
