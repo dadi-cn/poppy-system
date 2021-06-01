@@ -21,7 +21,7 @@ class CaptchaController extends WebApiController
      * @apiGroup         Poppy
      *
      * @apiParam {string}  passport       通行证
-     * @apiParam {string}  [type]         exist : 如果给已经存在的发送验证码, 需要传值
+     * @apiParam {string}  [type]         是否存在[exist:验证必须存在;no-exist:验证必须不存在]
      */
     public function send()
     {
