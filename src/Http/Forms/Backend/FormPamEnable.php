@@ -44,7 +44,7 @@ class FormPamEnable extends FormWidget
             return Resp::error('您尚未选择用户!');
         }
 
-        $Pam    = (new Pam())->setPam($this->pam);
+        $Pam    = (new Pam())->setPam(request()->user());
         $reason = input('reason', '');
         if (!$Pam->enable($this->id, $reason)) {
             return Resp::error($Pam->getError());

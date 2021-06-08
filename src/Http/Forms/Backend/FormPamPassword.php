@@ -45,7 +45,6 @@ class FormPamPassword extends FormWidget
         $id = input('id');
         if (is_post()) {
             $this->setId($id);
-            // todo li 规则验证
             $validator = Validator::make(input(), [
                 'password' => [
                     Rule::required(),
@@ -59,7 +58,7 @@ class FormPamPassword extends FormWidget
             $password = input('password');
 
             $actPam = new Pam();
-            $actPam->setPam($this->pam);
+            $actPam->setPam(request()->user());
             if (sys_is_demo()) {
                 return Resp::error('演示模式下无法修改密码');
             }

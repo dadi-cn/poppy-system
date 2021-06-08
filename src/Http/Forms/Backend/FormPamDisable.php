@@ -47,7 +47,7 @@ class FormPamDisable extends FormWidget
 
         $date   = input('datetime', '');
         $reason = input('reason', '');
-        $Pam    = (new Pam())->setPam($this->pam);
+        $Pam    = (new Pam())->setPam(request()->user());
         if (!$Pam->disable($this->id, $date, $reason)) {
             return Resp::error($Pam->getError());
         }
