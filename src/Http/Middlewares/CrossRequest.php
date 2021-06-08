@@ -37,7 +37,10 @@ class CrossRequest extends EnableCrossRequest
                 return Resp::error('跨域访问, 访问受限');
             }
         }
-        $header  = config('poppy.system.cross_headers');
+        $header = config('poppy.system.cross_headers');
+        if (is_array($header)) {
+            $header = implode(',', $header);
+        }
         $headers = collect([
             'Access-Control-Allow-Origin'      => $origin,
             'Access-Control-Allow-Headers'     => 'Origin,Content-Type,Cookie,Accept,Authorization,X-Requested-With' . ($header ? ',' . $header : ''),
