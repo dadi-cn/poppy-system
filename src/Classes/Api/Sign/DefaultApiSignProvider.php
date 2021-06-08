@@ -2,8 +2,6 @@
 
 namespace Poppy\System\Classes\Api\Sign;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Poppy\Framework\Helper\ArrayHelper;
 
 /**
@@ -11,17 +9,6 @@ use Poppy\Framework\Helper\ArrayHelper;
  */
 class DefaultApiSignProvider extends DefaultBaseApiSign
 {
-
-    /**
-     * @var Request 请求内容
-     */
-    private $request;
-
-    public function __construct()
-    {
-        $this->request = app('request');
-    }
-
     /**
      * 获取Sign
      * @param array $params 请求参数
@@ -31,20 +18,7 @@ class DefaultApiSignProvider extends DefaultBaseApiSign
     {
         $dirtyParams = $params;
         $params      = $this->except($params);
-        $token       = function ($params) {
-            $token = $this->request->header('Authorization');
-            if ($token && Str::startsWith($token, 'Bearer')) {
-                $token = substr($token, 7);
-            }
-            if (!$token) {
-                $token = $this->request->input('token');
-            }
-
-            if (!$token) {
-                $token = $params['token'] ?? '';
-            }
-            return $token;
-        };
+        $token       = jwt_token($params);
         ksort($params);
         $kvStr    = ArrayHelper::toKvStr($params);
         $signLong = md5(md5($kvStr) . $token($dirtyParams));
