@@ -16,12 +16,11 @@ class DefaultApiSignProvider extends DefaultBaseApiSign
      */
     public function sign(array $params): string
     {
-        $dirtyParams = $params;
-        $params      = $this->except($params);
         $token       = jwt_token($params);
+        $params      = $this->except($params);
         ksort($params);
         $kvStr    = ArrayHelper::toKvStr($params);
-        $signLong = md5(md5($kvStr) . $token($dirtyParams));
+        $signLong = md5(md5($kvStr) . $token);
         return $signLong[1] . $signLong[3] . $signLong[15] . $signLong[31];
     }
 }
