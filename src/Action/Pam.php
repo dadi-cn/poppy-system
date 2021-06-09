@@ -523,16 +523,19 @@ class Pam
      */
     public function enable($id, $reason = ''): bool
     {
-        if (PamAccount::where('id', $id)->where('is_enable', 1)->exists()) {
+        $pam = PamAccount::find($id);
+        if (!$pam) {
+            return $this->setError('用户不存在');
+        }
+        if ($pam->is_enable === SysConfig::YES) {
             return $this->setError(trans('py-system::action.pam.account_enabled'));
         }
 
         try {
-            PamAccount::where('id', $id)->update([
-                'is_enable' => SysConfig::ENABLE,
-            ]);
+            $pam->is_enable = SysConfig::ENABLE;
+            $pam->save();
 
-            event(new PamEnableEvent(PamAccount::find($id), $this->pam, $reason));
+            event(new PamEnableEvent($pam, $this->pam, $reason));
 
             return true;
         } catch (Throwable $e) {
@@ -546,9 +549,18 @@ class Pam
     public function autoEnable(): bool
     {
         try {
-            PamAccount::where('disable_end_at', '<', Carbon::now())->update([
-                'is_enable' => SysConfig::ENABLE,
-            ]);
+            $Db  = PamAccount::where([
+                'is_enable' => SysConfig::DISABLE,
+            ])->where('disable_end_at', '<=', Carbon::now());
+            $res = (clone $Db)->exists();
+            if ($res) {
+                $items = $Db->get();
+                foreach ($items as $item) {
+                    $item->is_enable = SysConfig::ENABLE;
+                    $item->save();
+                    event(new PamEnableEvent($item, null, '系统自动解禁'));
+                }
+            }
 
             return true;
         } catch (Exception $e) {
