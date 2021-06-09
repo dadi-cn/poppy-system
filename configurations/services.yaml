@@ -16,3 +16,7 @@ poppy.system.upload_type:
 poppy.system.settings:
   title: 配置项
   type: array
+poppy.system.custom_settings:
+  title: 自定义配置项
+  description: 可以自己定义配置的权限以及显示
+  type: array
