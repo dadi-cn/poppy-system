@@ -125,6 +125,10 @@ class UserCommand extends Command
                 $this->info('Init Role success');
                 break;
             case 'auto_enable':
+                if (!sys_setting('py-system::pam.auto_enable')) {
+                    $this->info(sys_mark('py-system', __CLASS__, 'auto enable disabled!'));
+                    return;
+                }
                 (new Pam())->autoEnable();
                 $this->info(sys_mark('py-system', __CLASS__, 'auto enable pam!'));
                 break;
