@@ -34,7 +34,7 @@ class SysConfig extends Eloquent
     public const ENABLE  = 1;
     public const DISABLE = 0;
 
-    // time define
+    // 时间定义, 时间使用 PyCoreDef 类替换
     public const MIN_DEBUG     = 0;
     public const MIN_ONE_HOUR  = 60;
     public const MIN_SIX_HOUR  = 360;
