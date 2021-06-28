@@ -26,7 +26,7 @@ interface UploadContract
      * Set Extension
      * @param array $extension 支持的扩展
      */
-    public function setExtension($extension = []);
+    public function setExtension(array $extension = []);
 
     /**
      * 重新设置存储文件夹
@@ -101,13 +101,33 @@ interface UploadContract
      */
     public function getUrl(): string;
 
+
+    /**
+     * 前缀Url
+     * @return string
+     */
+    public function getReturnUrl(): string;
+
+    /**
+     * 将上传成功的文件复制到另外一个位置
+     * @param string $dist 目标路径
+     * @return bool
+     */
+    public function copyTo(string $dist): bool;
+
+    /**
+     * 删除目标文件
+     * @return bool
+     */
+    public function delete(): bool;
+
     /**
      * 类型
      * @param string $type        类型
      * @param string $return_type 返回的类型
      * @return mixed
      * @deprecated
-     * @see \Poppy\System\Classes\Uploader\UploaderTypes::kvExt()
+     * @see \Poppy\System\Classes\Uploader\Uploader::kvExt()
      */
     public static function type(string $type, $return_type = 'ext_string');
 }

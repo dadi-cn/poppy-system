@@ -387,10 +387,6 @@ class FormWidget implements Renderable
      */
     public function validate(Request $request)
     {
-        if (method_exists($this, 'form')) {
-            $this->form();
-        }
-
         $failedValidators = [];
 
         foreach ($this->fields() as $field) {
@@ -404,7 +400,6 @@ class FormWidget implements Renderable
         }
 
         $message = $this->mergeValidationMessages($failedValidators);
-
         return $message->any() ? $message : false;
     }
 

@@ -2,10 +2,12 @@
 
 namespace Poppy\System\Classes\Uploader;
 
+use Poppy\System\Classes\Contracts\UploadContract;
+
 /**
  * 图片上传类
  */
-class UploaderTypes
+class Uploader
 {
 
     public const TYPE_IMAGES = 'images';
@@ -29,6 +31,7 @@ class UploaderTypes
                 'txt', 'md', 'csv', 'nfo', 'ini', 'json', 'js', 'css', 'ts', 'sql',
                 'zip', 'rp', 'rplib', 'svga',
                 'pdf',
+                'apk', 'ipa',
             ],
             self::TYPE_VIDEO  => ['mp4', 'rm', 'rmvb', 'wmv', 'webm', 'mpg', 'mov', '3gp'],
             self::TYPE_AUDIO  => ['mp3', 'm4a', 'wav', 'aac'],
@@ -50,5 +53,15 @@ class UploaderTypes
             self::TYPE_FILE   => '选择文件',
         ];
         return kv($desc, $type);
+    }
+
+
+    /**
+     * 上传的前缀地址
+     * @return string
+     */
+    public static function prefix():string
+    {
+        return app(UploadContract::class)->getReturnUrl();
     }
 }
