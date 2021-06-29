@@ -67,7 +67,7 @@ class Verification
         }
         $key = $this->passportKey;
 
-        if ($data = self::$db->get(PySystemDef::ckVerificationCaptcha() . ':' . $key)) {
+        if ($data = self::$db->get(PySystemDef::ckTagVerificationCaptcha() . ':' . $key)) {
             if ($data['silence'] > Carbon::now()->timestamp) {
                 $captcha = $data['captcha'];
             }
@@ -79,7 +79,7 @@ class Verification
             'captcha' => $captcha,
             'silence' => Carbon::now()->timestamp + 60,
         ];
-        self::$db->set(PySystemDef::ckVerificationCaptcha() . ':' . $key, $data, 'ex', $expired_min * 60);
+        self::$db->set(PySystemDef::ckTagVerificationCaptcha() . ':' . $key, $data, 'ex', $expired_min * 60);
 
         $this->captcha = $captcha;
         return true;
@@ -129,9 +129,9 @@ class Verification
             }
         }
 
-        if ($data = self::$db->get(PySystemDef::ckVerificationCaptcha() . ':' . $key)) {
+        if ($data = self::$db->get(PySystemDef::ckTagVerificationCaptcha() . ':' . $key)) {
             if ((string) $data['captcha'] === $captcha) {
-                self::$db->del(PySystemDef::ckVerificationCaptcha() . ':' . $key);
+                self::$db->del(PySystemDef::ckTagVerificationCaptcha() . ':' . $key);
                 return true;
             }
         }
@@ -152,7 +152,7 @@ class Verification
         }
         $key = $this->passportKey;
 
-        if ($data = self::$db->get(PySystemDef::ckVerificationCaptcha() . ':' . $key)) {
+        if ($data = self::$db->get(PySystemDef::ckTagVerificationCaptcha() . ':' . $key)) {
             $this->captcha = $data['captcha'];
             return true;
         }
@@ -176,7 +176,7 @@ class Verification
             'random' => $randStr . '@' . Carbon::now()->timestamp,
         ];
         $code = md5(json_encode($str) . microtime());
-        self::$db->set(PySystemDef::ckVerificationOnce() . ':' . $code, $str, 'ex', $expired_min * 60);
+        self::$db->set(PySystemDef::ckTagVerificationOnce() . ':' . $code, $str, 'ex', $expired_min * 60);
         return $code;
     }
 
@@ -188,10 +188,10 @@ class Verification
      */
     public function verifyOnceCode(string $code, $forget = true): bool
     {
-        if ($data = self::$db->get(PySystemDef::ckVerificationOnce() . ':' . $code, true)) {
+        if ($data = self::$db->get(PySystemDef::ckTagVerificationOnce() . ':' . $code, true)) {
             $this->hidden = unserialize($data['hidden']);
             if ($forget) {
-                self::$db->del(PySystemDef::ckVerificationOnce() . ':' . $code);
+                self::$db->del(PySystemDef::ckTagVerificationOnce() . ':' . $code);
             }
             return true;
         }
@@ -200,7 +200,7 @@ class Verification
 
     public function removeOnceCode($code): bool
     {
-        self::$db->del(PySystemDef::ckVerificationOnce() . ':' . $code);
+        self::$db->del(PySystemDef::ckTagVerificationOnce() . ':' . $code);
         return true;
     }
 

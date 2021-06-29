@@ -88,11 +88,11 @@ class UserCommand extends Command
                 // 移除过期的 Jwt Token
                 $Rds    = RdsDb::instance();
                 $endTtl = Carbon::now()->timestamp;
-                $items  = $Rds->zRangeByScore(PySystemDef::ckSso('expired'), 0, $endTtl);
+                $items  = $Rds->zRangeByScore(PySystemDef::ckTagSso('expired'), 0, $endTtl);
                 $num    = 0;
                 if (is_array($items) && $num = count($items)) {
-                    $Rds->hDel(PySystemDef::ckSso('valid'), $items);
-                    $Rds->zRemRangeByScore(PySystemDef::ckSso('expired'), 0, $endTtl);
+                    $Rds->hDel(PySystemDef::ckTagSso('valid'), $items);
+                    $Rds->zRemRangeByScore(PySystemDef::ckTagSso('expired'), 0, $endTtl);
                 }
                 $this->info(sys_mark('py-system', self::class, 'Delete Expired Token, Num : ' . $num));
                 break;

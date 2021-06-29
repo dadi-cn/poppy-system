@@ -31,18 +31,18 @@ class Ban
         $md5 = md5($ip);
 
         // 初始化这个KEY, 这个初始化可能会放到系统中
-        if (!$rds->exists(PySystemDef::ckBan())) {
+        if (!$rds->exists(PySystemDef::ckTagBan())) {
             (new \Poppy\System\Action\Ban())->init();
         }
 
-        if ($rds->hExists(PySystemDef::ckBan(), $md5)) {
+        if ($rds->hExists(PySystemDef::ckTagBan(), $md5)) {
             return Resp::error('当前ip被封禁，请联系客服处理');
         }
 
         $deviceId = x_app('id') ?: input('device_id');
         if ($deviceId) {
             $md5 = md5($deviceId);
-            if ($rds->hExists(PySystemDef::ckBan(), $md5)) {
+            if ($rds->hExists(PySystemDef::ckTagBan(), $md5)) {
                 return Resp::error('当前设备被封禁，请联系客服处理');
             }
         }

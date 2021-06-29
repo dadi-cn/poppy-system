@@ -36,18 +36,18 @@ class PySystemDef
      * 一次验证码
      * @return string
      */
-    public static function ckVerificationOnce(): string
+    public static function ckTagVerificationOnce(): string
     {
-        return 'py-system:verification-once_code';
+        return 'tag:py-system:verification-once_code';
     }
 
     /**
      * 验证码
      * @return string
      */
-    public static function ckVerificationCaptcha(): string
+    public static function ckTagVerificationCaptcha(): string
     {
-        return 'py-system:verification-captcha';
+        return 'tag:py-system:verification-captcha';
     }
 
     /**
@@ -55,17 +55,17 @@ class PySystemDef
      * @param string $type 类型
      * @return string
      */
-    public static function ckSso(string $type): string
+    public static function ckTagSso(string $type): string
     {
-        return 'py-system:sso-' . $type;
+        return 'tag:py-system:sso-' . $type;
     }
 
     /**
      * 用户禁用
      * @return string
      */
-    public static function ckBan(): string
+    public static function ckTagBan(): string
     {
-        return 'py-system:ban';
+        return 'tag:py-system:ban';
     }
 }

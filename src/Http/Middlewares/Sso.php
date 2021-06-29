@@ -31,7 +31,7 @@ class Sso extends BaseMiddleware
         $md5Token = md5($token);
         $pamId    = data_get($payload, 'user.id');
         $Rds      = RdsDb::instance();
-        $hash     = $Rds->hGet(PySystemDef::ckSso('valid'), $pamId);
+        $hash     = $Rds->hGet(PySystemDef::ckTagSso('valid'), $pamId);
         if (Str::contains($hash, '|')) {
             $rdsHash = Str::before($hash, '|');
             if ($rdsHash === $md5Token) {
