@@ -10,8 +10,9 @@ use Illuminate\Support\Carbon;
  * User\Models\PamBin
  *
  * @property int         $id
- * @property string      $type  类型
- * @property string      $value 值
+ * @property string      $type          类型
+ * @property string      $account_type  账号类型
+ * @property string      $value         值
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @method static Builder|PamBan newModelQuery()
@@ -21,6 +22,10 @@ use Illuminate\Support\Carbon;
  */
 class PamBan extends Eloquent
 {
+    // 黑白名单类型
+    const WB_TYPE_BLACK = 'black';
+    const WB_TYPE_WHITE = 'white';
+
     // 封禁类型
     const TYPE_IP     = 'ip';
     const TYPE_DEVICE = 'device';
@@ -28,8 +33,12 @@ class PamBan extends Eloquent
     protected $table = 'pam_ban';
 
     protected $fillable = [
+        'account_type',
         'type',
         'value',
+        'ip_start',
+        'ip_end',
+        'note',
     ];
 
     /**

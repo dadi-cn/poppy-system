@@ -26,6 +26,17 @@ class FormBanEstablish extends FormWidget
     private $item;
 
     /**
+     * 账号类型
+     * @var string
+     */
+    private $accountType;
+
+    public function setAccountType($type)
+    {
+        $this->accountType = $type;
+    }
+
+    /**
      * 设置id
      * @param $id
      * @return $this
@@ -56,14 +67,20 @@ class FormBanEstablish extends FormWidget
 
     public function data(): array
     {
+        $data = [];
         if ($this->id) {
             return [
-                'id'    => $this->item->id,
-                'type'  => $this->item->type,
-                'value' => $this->item->value,
+                'id'           => $this->item->id,
+                'account_type' => $this->item->account_type,
+                'type'         => $this->item->type,
+                'value'        => $this->item->value,
             ];
         }
-        return [];
+        else {
+            return array_merge($data, [
+                'account_type' => $this->accountType,
+            ]);
+        }
     }
 
     public function form()
@@ -71,10 +88,10 @@ class FormBanEstablish extends FormWidget
         if ($this->id) {
             $this->hidden('id', '设备id');
         }
-
+        $this->hidden('account_type', '账号类型');
         $this->select('type', '类型')->options(PamBan::kvType());
         $this->text('value', '限制值')->rules([
             Rule::nullable(),
-        ]);
+        ])->help('如果是Ip支持如下几种格式 : <br> 固定IP(192.168.1.1) ; IP段 : (192.168.1.1-192.168.1.21); <br> IP 掩码(192.168.1.1/24); IP 通配符(192.168.1.*)');
     }
 }

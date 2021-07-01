@@ -4,11 +4,15 @@ namespace Poppy\System\Action;
 
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use IPLib\Factory;
 use Poppy\Core\Redis\RdsDb;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\System\Classes\PySystemDef;
 use Poppy\System\Events\PamTokenBanEvent;
+use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamBan;
 use Poppy\System\Models\PamToken;
 use Throwable;
@@ -27,7 +31,6 @@ class Ban
         self::$rds = RdsDb::instance();
     }
 
-
     /**
      *  封禁
      * @param array $input
@@ -35,30 +38,61 @@ class Ban
      */
     public function establish(array $input): bool
     {
-        $type  = data_get($input, 'type', '');
-        $value = trim(data_get($input, 'value', ''));
+        $account_type = data_get($input, 'account_type', '');
+        $type         = data_get($input, 'type', '');
+        $value        = trim(data_get($input, 'value', ''));
+        $note         = trim(data_get($input, 'note', ''));
 
+        $DbBan = PamBan::where('account_type', $account_type);
         if (!array_key_exists($type, PamBan::kvType())) {
             return $this->setError('请选择正确的类型');
         }
 
+        $isRange = false;
+        $startIp = 0;
+        $endIp   = 0;
         // ip 合法性
-        if ($type === PamBan::TYPE_IP && !UtilHelper::isIp($value)) {
-            return $this->setError('IP地址不合法');
+        if ($type === PamBan::TYPE_IP) {
+            // ip 范围 : 192.168.1.21-192.168.1.255
+            if (!$passed = $this->parseIpRange($value)) {
+                return false;
+            }
+            [$isRange, $startIp, $endIp] = $passed;
+
+            $DbIp  = (clone $DbBan)->where('type', PamBan::TYPE_IP);
+            $first = (clone $DbIp)->where(function ($q) use ($startIp, $endIp) {
+                $q->orWhere(function ($q) use ($startIp) {
+                    $q->where('ip_start', '<=', $startIp)->where('ip_end', '>=', $startIp);
+                });
+                $q->orWhere(function ($q) use ($endIp) {
+                    $q->where('ip_start', '<=', $endIp)->where('ip_end', '>=', $endIp);
+                });
+            })->first();
+            if ($first) {
+                return $this->setError('此 IP 和 ' . $first->value . ' 存在IP段重复, 请检查后再添加');
+            }
+        }
+        else {
+            if ((clone $DbBan)->where('type', PamBan::TYPE_DEVICE)->where('value', $value)->exists()) {
+                return $this->setError('封禁设备已存在!');
+            }
         }
 
-        if (PamBan::where('type', $type)->where('value', $value)->exists()) {
-            return $this->setError('条目已存在!');
-        }
-
-        PamBan::create([
-            'type'  => $type,
-            'value' => $value,
+        $item = PamBan::create([
+            'account_type' => $account_type,
+            'type'         => $type,
+            'value'        => $value,
+            'ip_start'     => $startIp,
+            'ip_end'       => $endIp,
+            'note'         => $note,
         ]);
 
-        $this->init();
-        $key = md5($value);
-        self::$rds->hSet(PySystemDef::ckTagBan(), $key, $value . '|ban|' . Carbon::now()->toDateTimeString());
+        if ($isRange) {
+            $this->saveRanges(PySystemDef::ckTagBanIpRange($account_type), collect([$item]));
+        }
+        else {
+            $this->saveOnes(PySystemDef::ckTagBanOne($account_type), collect([$item]));
+        }
         return true;
     }
 
@@ -73,17 +107,68 @@ class Ban
             return $this->setError('条目不存在');
         }
 
-        $this->init();
         try {
-            // 删除与类型相关的Hash
-            $key = md5($ban->value);
-            self::$rds->hDel(PySystemDef::ckTagBan(), $key);
+            $isRange = false;
+            if ($ban->type === PamBan::TYPE_IP) {
+                [$isRange] = $this->parseIpRange($ban->value);
+            }
+
+            if ($isRange) {
+                $this->removeRanges(PySystemDef::ckTagBanIpRange($ban->account_type), collect([$ban]));
+            }
+            else {
+                $this->removeOnes(PySystemDef::ckTagBanOne($ban->account_type), collect([$ban]));
+            }
 
             $ban->delete();
             return true;
         } catch (Exception $e) {
-            return $this->setError('删除失败');
+            return $this->setError($e->getMessage());
         }
+    }
+
+    /**
+     * 检测给定内容是否在缓存中
+     * @param string $account_type 账号类型
+     * @param string $type         需要检测的类型
+     * @param string $value        需要检测的值
+     * @return bool
+     */
+    public function checkIn(string $account_type, string $type, string $value): bool
+    {
+        $oneKey    = PySystemDef::ckTagBanOne($account_type);
+        $rangesKey = PySystemDef::ckTagBanIpRange($account_type);
+        if (!self::$rds->exists($oneKey) || !self::$rds->exists($rangesKey)) {
+            $this->init($account_type);
+        }
+
+        // 存在固定的设备类型或者是固定的IP
+        $hashKey = "{$type}|{$value}";
+        if (self::$rds->hExists($oneKey, $hashKey)) {
+            return true;
+        }
+
+        // 检测是否窜在范围中
+        if ($type === PamBan::TYPE_IP) {
+            // check in one
+            $ipLong  = ip2long($value);
+            $members = self::$rds->sMembers($rangesKey);
+            if (!$members) {
+                return false;
+            }
+            foreach ($members as $member) {
+                if (!Str::contains($member, '|')) {
+                    continue;
+                }
+                $mExp = explode('|', $member);
+                [$start, $end] = explode('-', $mExp[1]);
+                if ($start <= $ipLong && $ipLong <= $end) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
     }
 
     /**
@@ -100,33 +185,14 @@ class Ban
             return $this->setError('封禁类型错误');
         }
 
-        $this->init();
+        if (!$this->establish([
+            'account_type' => PamAccount::TYPE_USER,
+            'type'         => $type,
+            'value'        => $type === PamBan::TYPE_IP ? $item->login_ip : $item->device_id,
+        ])) {
+            return false;
+        }
 
-        if ($type === PamBan::TYPE_IP) {
-            $ip = $item->login_ip;
-            if (!$ip || UtilHelper::isLocalIp($ip)) {
-                return $this->setError('用户IP不存在或者是局域网IP, 不可封禁');
-            }
-            if (PamBan::where('type', PamBan::TYPE_IP)->where('value', $ip)->exists()) {
-                return $this->setError('该IP已经被封禁');
-            }
-            $key   = md5($item->login_ip);
-            $value = Carbon::now()->toDateTimeString();
-            PamBan::create([
-                'type'  => PamBan::TYPE_IP,
-                'value' => $ip,
-            ]);
-            self::$rds->hSet(PySystemDef::ckTagBan(), $key, $item->login_ip . '|user|' . $value);
-        }
-        if ($type === PamBan::TYPE_DEVICE) {
-            $deviceId = $item->device_id;
-            if (!$deviceId) {
-                return $this->setError('用户设备ID号为空, 不得操作');
-            }
-            $key   = md5($item->device_id);
-            $value = Carbon::now()->toDateTimeString();
-            self::$rds->hSet(PySystemDef::ckTagBan(), $key, $item->device_id . '|' . $item->device_type . '|' . $value);
-        }
         try {
             $item->delete();
             event(new PamTokenBanEvent($item, $type));
@@ -152,7 +218,6 @@ class Ban
         ]);
     }
 
-
     /**
      * 取消用户 Token 的访问权限
      * @param int $account_id
@@ -167,21 +232,192 @@ class Ban
     }
 
     /**
-     * 初始化
+     * 初始化所有
      */
-    public function init()
+    public function initAll()
     {
-        if (self::$rds->exists(PySystemDef::ckTagBan())) {
-            return;
+        foreach (PamAccount::kvType() as $key => $value) {
+            $this->init($key);
         }
-        $items = PamBan::get();
-        // 保障KEY存在
-        self::$rds->hSet(PySystemDef::ckTagBan(), str_repeat('11111111', 4), md5('duoli') . '|init|' . Carbon::now()->toDateTimeString());
-        $values = collect();
-        $now    = Carbon::now()->toDateTimeString();
-        collect($items)->each(function ($item) use ($values, $now) {
-            $values->offsetSet(md5($item->value), $item->value . '|init|' . $now);
+    }
+
+    /**
+     * 数据重新初始化到缓存中
+     */
+    public function init($account_type)
+    {
+        $items  = PamBan::where('account_type', $account_type)->get();
+        $ones   = collect();
+        $ranges = collect();
+        collect($items)->each(function ($item) use ($ones, $ranges) {
+            if (
+                // 单IP
+                ($item->type === PamBan::TYPE_IP && UtilHelper::isIp($item->value))
+                ||
+                // 单设备
+                $item->type === PamBan::TYPE_DEVICE
+            ) {
+                $ones->push($item);
+            }
+            else {
+                $ranges->push($item);
+            }
         });
-        self::$rds->hMSet(PySystemDef::ckTagBan(), $values->toArray());
+        $this->initOne($account_type, $ones);
+        $this->initRanges($account_type, $ranges);
+    }
+
+    private function parseIpRange($value)
+    {
+        $isRange = false;
+        // ip 范围 : 192.168.1.21-192.168.1.255
+        if (Str::contains($value, '-')) {
+            [$start, $end] = explode('-', $value);
+            if (is_null(Factory::rangesFromBoundaries($start, $end))) {
+                return $this->setError('错误的IP段写法');
+            }
+            $isRange = true;
+            $startIp = ip2long($start);
+            $endIp   = ip2long($end);
+        }
+        //  192.168.1.*
+        else if (Str::contains($value, '*') || Str::contains($value, '/')) {
+            if (is_null($range = Factory::rangeFromString($value))) {
+                return $this->setError('错误的IP格式写法');
+            }
+            $isRange = true;
+            $startIp = ip2long($range->getStartAddress());
+            $endIp   = ip2long($range->getEndAddress());
+        }
+        // 192.168.1.1
+        else {
+            if (!UtilHelper::isIp($value)) {
+                return $this->setError('IP地址不合法');
+            }
+            $startIp = ip2long($value);
+            $endIp   = ip2long($value);
+        }
+        return [
+            $isRange, $startIp, $endIp,
+        ];
+    }
+
+    /**
+     * 初始化Ip/设备
+     * @param string     $account_type
+     * @param Collection $items
+     */
+    private function initOne(string $account_type, Collection $items)
+    {
+        $key = PySystemDef::ckTagBanOne($account_type);
+        self::$rds->del($key);
+        // 保障KEY存在
+        self::$rds->hSet($key, 'init|duoli', 'duoli' . '|init|' . Carbon::now()->toDateTimeString());
+        $this->saveOnes($key, $items);
+    }
+
+
+    /**
+     * 初始化范围
+     * @param string     $account_type 账号类型
+     * @param Collection $items
+     */
+    private function initRanges(string $account_type, Collection $items)
+    {
+        $key = PySystemDef::ckTagBanIpRange($account_type);
+        self::$rds->del($key);
+        // 保障KEY存在
+        self::$rds->sAdd($key, [
+            'range-0',
+        ]);
+        $this->saveRanges($key, $items);
+    }
+
+    /**
+     * 保存IP段数据
+     * @param string     $key
+     * @param Collection $items
+     */
+    private function saveRanges(string $key, Collection $items): void
+    {
+        $ranges = $this->ranges($items);
+        if ($ranges->count()) {
+            self::$rds->sAdd($key, $ranges->toArray());
+        }
+    }
+
+    /**
+     * 移除范围值
+     * @param string     $key
+     * @param Collection $items
+     */
+    private function removeRanges(string $key, Collection $items): void
+    {
+        $ranges = $this->ranges($items);
+        if ($ranges->count()) {
+            self::$rds->sRem($key, $ranges->toArray());
+        }
+    }
+
+    /**
+     * 获取范围值
+     * @param Collection $items
+     * @return Collection
+     */
+    private function ranges(Collection $items): Collection
+    {
+        $ranges = collect();
+        collect($items)->each(function ($item) use ($ranges) {
+            $value   = $item->value;
+            $passed  = $this->parseIpRange($value);
+            $startIp = $passed[1];
+            $endIp   = $passed[2];
+            $ranges->push("range-{$item->id}|{$startIp}-{$endIp}");
+        });
+        return $ranges;
+    }
+
+
+    /**
+     * 保存单条数据
+     * @param string     $key
+     * @param Collection $items
+     * @param string     $type
+     */
+    private function saveOnes(string $key, Collection $items, string $type = 'init'): void
+    {
+        $ones = $this->ones($items, $type);
+        if ($ones->count()) {
+            self::$rds->hMSet($key, $ones->toArray());
+        }
+    }
+
+    /**
+     * 移除指定的设备类型
+     * @param string     $key
+     * @param Collection $items
+     */
+    private function removeOnes(string $key, Collection $items): void
+    {
+        $ones = $this->ones($items);
+        if ($ones->count()) {
+            self::$rds->hDel($key, $ones->keys()->toArray());
+        }
+    }
+
+    /**
+     * 格式化Ones
+     * @param Collection $items
+     * @param string     $type
+     * @return Collection
+     */
+    private function ones(Collection $items, string $type = 'init'): Collection
+    {
+        $ones = collect();
+        $now  = Carbon::now()->toDateTimeString();
+        collect($items)->each(function ($item) use ($now, $ones, $type) {
+            $ones->put($item->type . '|' . $item->value, $item->value . '|' . $type . '|' . $now);
+        });
+        return $ones;
     }
 }

@@ -61,11 +61,22 @@ class PySystemDef
     }
 
     /**
-     * 用户禁用
+     * 用户单一设备禁用
+     * @param string $type 账号类型
      * @return string
      */
-    public static function ckTagBan(): string
+    public static function ckTagBanOne(string $type): string
     {
-        return 'tag:py-system:ban';
+        return 'tag:py-system:ban-one-' . $type;
+    }
+
+    /**
+     * Ip 范围
+     * @param string $type
+     * @return string
+     */
+    public static function ckTagBanIpRange(string $type): string
+    {
+        return 'tag:py-system:ban-ip-range-' . $type;
     }
 }

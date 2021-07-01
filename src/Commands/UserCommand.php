@@ -5,6 +5,7 @@ namespace Poppy\System\Commands;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Poppy\Core\Redis\RdsDb;
+use Poppy\System\Action\Ban;
 use Poppy\System\Action\Pam;
 use Poppy\System\Classes\PySystemDef;
 use Poppy\System\Models\PamAccount;
@@ -22,7 +23,7 @@ class UserCommand extends Command
      * @var string
      */
     protected $signature = 'py-system:user 
-		{do : actions in "reset_pwd"}
+		{do : actions}
 		{--account= : Account Name}
 		{--pwd= : Account password}
 		';
@@ -136,8 +137,12 @@ class UserCommand extends Command
                 (new Pam())->clearLog();
                 $this->info(sys_mark('py-system', __CLASS__, 'auto clear log!'));
                 break;
+            case 'ban_init':
+                (new Ban())->initAll();
+                $this->info(sys_mark('py-system', __CLASS__, 'Init Ban Cache!'));
+                break;
             default:
-                $this->error('Please type right action![reset_pwd, init_role, create_user, auto_enable, clear_log, auto_fill]');
+                $this->error('Please type right action![reset_pwd, init_role, create_user, clear_expired, ban_init, auto_enable, clear_log, auto_fill]');
                 break;
         }
     }

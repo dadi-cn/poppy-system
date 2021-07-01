@@ -204,7 +204,7 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
     {
         $desc = [
             self::TYPE_USER    => '用户',
-            self::TYPE_BACKEND => '后台管理员',
+            self::TYPE_BACKEND => '管理员',
             self::TYPE_DEVELOP => '开发者',
         ];
 
