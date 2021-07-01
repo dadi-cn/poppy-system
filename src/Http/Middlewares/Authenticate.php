@@ -56,8 +56,8 @@ class Authenticate extends IlluminateAuthenticate
     public function handle($request, Closure $next, ...$guards)
     {
         try {
-            $this->authenticate($request, $guards);
 
+            $this->authenticate($request, $guards);
         } catch (AuthenticationException $e) {
             if ($request->expectsJson()) {
                 return response()->json([

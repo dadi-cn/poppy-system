@@ -10,6 +10,7 @@ use Poppy\Framework\Classes\Traits\PoppyTrait;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
 use Poppy\System\Action\Pam;
+use Poppy\System\Action\Sso;
 use Poppy\System\Action\Verification;
 use Poppy\System\Events\LoginTokenPassedEvent;
 use Poppy\System\Models\PamAccount;
@@ -245,6 +246,22 @@ class AuthController extends WebApiController
             return Resp::error($Pam->getError());
         }
         return Resp::success('成功绑定手机');
+    }
+
+    /**
+     * @api                    {post} api_v1/system/auth/logout [Sys]退出登录
+     * @apiVersion             1.0.0
+     * @apiName                SysAuthLogout
+     * @apiGroup               Poppy
+     */
+    public function logout()
+    {
+        $token = jwt_token();
+        $Sso   = new Sso();
+        if (!$Sso->logout($token)) {
+            return Resp::error($Sso->getError());
+        }
+        return Resp::success('已退出登录');
     }
 
     protected function username(): string

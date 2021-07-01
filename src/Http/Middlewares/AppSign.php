@@ -21,7 +21,7 @@ class AppSign
      * @param Closure $next    后续处理
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $Sign = app(ApiSignContract::class);
 

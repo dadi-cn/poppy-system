@@ -3,12 +3,14 @@
 namespace Poppy\System\Action;
 
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Arr;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Helper\EnvHelper;
 use Poppy\System\Events\PamSsoEvent;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamToken;
+use Throwable;
 
 /**
  * 单点登录
@@ -36,7 +38,7 @@ class Sso
      * @param            $device_type
      * @param            $token
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(PamAccount $pam, $device_id, $device_type, $token): bool
     {
@@ -126,6 +128,22 @@ class Sso
             'updated_at' => Carbon::now(),
         ]);
         return true;
+    }
+
+    /**
+     * SSO 退出登录
+     * @param $token
+     * @return bool
+     */
+    public function logout($token): bool
+    {
+        try {
+            $tokenHash = md5($token);
+            PamToken::where('token_hash', $tokenHash)->delete();
+            return true;
+        } catch (Throwable $e) {
+            return $this->setError($e->getMessage());
+        }
     }
 
     /**

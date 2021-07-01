@@ -70,15 +70,15 @@ JS;
 
     public function check(Request $request): bool
     {
+        // 加密 debug, 不验证签名
+        if (config('poppy.system.secret') && (string) $request->input('_py_sys_secret') === (string) config('poppy.system.secret')) {
+            return true;
+        }
+
         // check token
         $timestamp = $request->input('timestamp');
         if (!$timestamp) {
             return $this->setError(new Resp(Resp::PARAM_ERROR, '未传递时间戳'));
-        }
-
-        // 加密 debug, 不验证签名
-        if (config('poppy.system.secret') && (string) $request->input('_py_sys_secret') === (string) config('poppy.system.secret')) {
-            return true;
         }
 
         // check token

@@ -46,4 +46,6 @@ Route::group([
 ], function (Illuminate\Routing\Router $route) {
     $route->post('auth/access', 'AuthController@access')
         ->name('py-system:pam.auth.access');
+    $route->post('auth/logout', 'AuthController@logout')
+        ->name('py-system:pam.auth.logout');
 });
