@@ -30,7 +30,7 @@ trait PamTrait
      * @param PamAccount|Authenticatable|int $pam 用户
      * @return $this
      */
-    public function setPam($pam): PamTrait
+    public function setPam($pam): self
     {
         if (is_numeric($pam)) {
             $this->pam = PamAccount::find($pam);
