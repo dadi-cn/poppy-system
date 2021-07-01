@@ -27,5 +27,12 @@ class FormSettingPam extends FormSettingBase
         $this->text('sso_device_num', '最大设备数量')->help('启用多端登录时候允许的最大设备数量, 没有配置则默认最大数量为10')->rules([
             Rule::max(10), Rule::required(), Rule::numeric(),
         ]);
+        $this->divider('账号验证码');
+        $this->text('captcha_expired', '验证码有效期(分钟)')->rules([
+            Rule::integer(),
+        ])->default(5)->help('默认有效期 5 分钟');
+        $this->text('captcha_length', '验证码长度')->help('验证码长度, 默认是 6 位, 可以设置的长度值是 4-10 位')->rules([
+            Rule::between(4, 10), Rule::integer(),
+        ])->default(6);
     }
 }

@@ -36,10 +36,10 @@ class CaptchaController extends WebApiController
         }
 
         $Verification = new Verification();
-        if ($Verification->genCaptcha($passport)) {
-
+        $expired      = (int) sys_setting('py-system::pam.captcha_expired', 5);
+        $length       = (int) sys_setting('py-system::pam.captcha_length', 6);
+        if ($Verification->genCaptcha($passport, $expired, $length)) {
             $captcha = $Verification->getCaptcha();
-
             try {
                 event(new CaptchaSendEvent($passport, $captcha));
                 return Resp::success('验证码发送成功' . (!is_production() ? ', 验证码:' . $captcha : ''));
