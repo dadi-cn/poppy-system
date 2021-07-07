@@ -108,7 +108,6 @@ class PamTest extends SystemTestCase
             else {
                 $this->assertTrue(true);
             }
-
         }
         else {
             $this->assertTrue(false, $Pam->getError());

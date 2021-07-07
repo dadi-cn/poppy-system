@@ -18,17 +18,33 @@ final class MultiImage extends Field
      */
     private $token;
 
+    /**
+     * 上传数量
+     * @var int
+     */
+    private $number;
+
     public function token($token): self
     {
         $this->token = $token;
         return $this;
     }
 
+    /**
+     * 最大上传数量
+     * @param $number
+     */
+    public function number($number)
+    {
+        $this->number = $number;
+    }
+
 
     public function render()
     {
         $this->attribute([
-            'token' => $this->token,
+            'token'  => $this->token,
+            'number' => $this->number,
         ]);
         return parent::render();
     }

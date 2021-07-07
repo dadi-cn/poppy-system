@@ -190,6 +190,16 @@ class AuthController extends WebApiController
         if ((!$verify_code && !$passport) || ($verify_code && $passport)) {
             return Resp::error('请选一种方式重设密码!');
         }
+
+        $validator = Validator::make([
+            'password' => $password,
+        ], [
+            'password' => 'required|between:6,20',
+        ]);
+        if ($validator->fails()) {
+            return Resp::error($validator->messages());
+        }
+
         if ($passport) {
             if (!$captcha || !$Verification->checkCaptcha($passport, $captcha)) {
                 return Resp::error('请输入正确验证码');

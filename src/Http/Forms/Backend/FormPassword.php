@@ -15,10 +15,8 @@ class FormPassword extends FormWidget
 
     use PamTrait;
 
-    protected $title = '修改密码';
-
     public $ajax = true;
-
+    protected $title = '修改密码';
 
     public function handle()
     {
@@ -37,7 +35,9 @@ class FormPassword extends FormWidget
             return Resp::error('演示模式下无法修改密码');
         }
 
-        $Pam->setPassword($this->pam, $password);
+        if (!$Pam->setPassword($this->pam, $password)) {
+            return Resp::error($Pam->getError());
+        }
         app('auth')->guard(PamAccount::GUARD_BACKEND)->logout();
 
         return Resp::success('密码修改成功, 请重新登录', '_location|' . route('py-mgr-page:backend.home.login'));

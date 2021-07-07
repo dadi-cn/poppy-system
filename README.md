@@ -50,3 +50,7 @@ $reg_datetime : 注册时间(datetime) 类型
 $randomKey    : 六位随机值
 md5(sha1($password . $reg_datetime) . $randomKey);
 ```
+
+## 更新记录
+
+查看 [build.md](./docs/build.md)

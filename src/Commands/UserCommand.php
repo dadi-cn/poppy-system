@@ -49,8 +49,12 @@ class UserCommand extends Command
                 if ($pam = PamAccount::passport($passport)) {
                     $pwd = trim($this->ask('Your aim password'));
                     $Pam = new Pam();
-                    $Pam->setPassword($pam, $pwd);
-                    $this->info('Reset user password success');
+                    if (!$Pam->setPassword($pam, $pwd)) {
+                        $this->error($Pam->getError());
+                    }
+                    else {
+                        $this->info('Reset user password success');
+                    }
                 }
                 else {
                     $this->error('Your account not exists');
