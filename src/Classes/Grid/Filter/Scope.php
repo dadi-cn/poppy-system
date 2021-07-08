@@ -28,13 +28,13 @@ class Scope implements Renderable
     /**
      * Scope constructor.
      *
-     * @param        $key
-     * @param string $label
+     * @param string|int $key
+     * @param string     $label
      */
     public function __construct($key, $label = '')
     {
-        $this->key   = $key;
-        $this->label = $label ? $label : Str::studly($key);
+        $this->key   = (string) $key;
+        $this->label = $label ?: Str::studly($key);
 
         $this->queries = new Collection();
     }
@@ -69,7 +69,7 @@ class Scope implements Renderable
     public function render(): string
     {
         $url       = request()->fullUrlWithQuery([static::QUERY_NAME => $this->key]);
-        $className = input(static::QUERY_NAME) === $this->key ? 'class="layui-this"' : '';
+        $className = (string) input(static::QUERY_NAME) === $this->key ? 'class="layui-this"' : '';
         return "<li {$className}><a class=\"J_ignore\" href=\"{$url}\">{$this->label}</a></li>";
     }
 
