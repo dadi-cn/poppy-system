@@ -28,9 +28,10 @@ trait PamTrait
     /**
      * Set Pam Account.
      * @param PamAccount|Authenticatable|int $pam 用户
-     * @return $this
+     * @return $this|PamTrait
+     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function setPam($pam): self
+    public function setPam($pam)
     {
         if (is_numeric($pam)) {
             $this->pam = PamAccount::find($pam);
