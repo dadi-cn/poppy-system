@@ -2,6 +2,7 @@
 
 namespace Poppy\System\Classes\Auth\Password;
 
+use Carbon\Carbon;
 use Poppy\System\Classes\Contracts\PasswordContract;
 use Poppy\System\Models\PamAccount;
 
@@ -15,7 +16,13 @@ class DefaultPasswordProvider implements PasswordContract
      */
     public function check(PamAccount $pam, string $password, $type = 'plain'): bool
     {
-        return $this->genPassword($password, $pam->created_at, $pam->password_key) === $pam->password;
+        if ($pam->created_at instanceof Carbon) {
+            $datetime = $pam->created_at->toDateTimeString();
+        }
+        else {
+            $datetime = $pam->created_at;
+        }
+        return $this->genPassword($password, $datetime, $pam->password_key) === $pam->password;
     }
 
     /**
