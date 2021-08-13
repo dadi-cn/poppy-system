@@ -20,6 +20,7 @@ use Poppy\System\Events\LoginFailedEvent;
 use Poppy\System\Events\LoginSuccessEvent;
 use Poppy\System\Events\PamDisableEvent;
 use Poppy\System\Events\PamEnableEvent;
+use Poppy\System\Events\PamRebindEvent;
 use Poppy\System\Events\PamRegisteredEvent;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamLog;
@@ -460,6 +461,8 @@ class Pam
         }
         $pam->{$newPassportType} = PamAccount::fullFilledPassport($new_passport);
         $pam->save();
+
+        event(new PamRebindEvent($pam));
         return true;
     }
 
