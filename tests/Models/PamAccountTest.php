@@ -26,13 +26,20 @@ class PamAccountTest extends SystemTestCase
     public function testJwtToken()
     {
         /** @var JWTGuard $Jwt */
-        $Jwt = auth('jwt_web');
+        $Jwt   = auth('jwt_web');
         $token = $Jwt->tokenById($this->pam->id);
 
-        if ($Jwt->setToken($token)->authenticate()){
+        if ($Jwt->setToken($token)->authenticate()) {
             $this->assertTrue(true);
-        } else {
+        }
+        else {
             $this->assertTrue(false, 'use `jwt:secret` generate token');
         }
+    }
+
+    public function testType()
+    {
+        $type = PamAccount::passportType('a-zhou9999@qq.com');
+        $this->assertEquals('email', $type);
     }
 }
