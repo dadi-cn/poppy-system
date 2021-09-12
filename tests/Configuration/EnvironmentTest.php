@@ -16,12 +16,14 @@ class EnvironmentTest extends SystemTestCase
     public function testEnv()
     {
         $env = [
-            'JWT_SECRET',
+            'JWT_SECRET' => 'Jwt Token 授权会出现获取Token 认证失败的情况',
+            'APP_ENV'    => '会出现 logger 无法使用的情况',
+            'APP_KEY'    => '会出现 RuntimeException 错误 (The only supported ciphers are AES-128-CBC and AES-256-CBC with the correct key lengths)',
         ];
 
-        foreach ($env as $_env) {
+        foreach ($env as $_env => $desc) {
             if (!env($_env)) {
-                $this->assertTrue(false, "Env {$_env} need to set");
+                $this->fail("Env {$_env} 未设置, {$desc}");
             }
             else {
                 $this->assertTrue(true);
@@ -38,7 +40,7 @@ class EnvironmentTest extends SystemTestCase
 
         foreach ($env as $_env) {
             if (!command_exist($_env)) {
-                $this->assertTrue(false, "Command {$_env} need to install");
+                $this->fail("Command {$_env} need to install");
             }
             else {
                 $this->assertTrue(true);
@@ -62,7 +64,7 @@ class EnvironmentTest extends SystemTestCase
 
         foreach ($env as $_env) {
             if (!extension_loaded($_env)) {
-                $this->assertTrue(false, "Php extension {$_env} need to load");
+                $this->fail("Php extension {$_env} need to load");
             }
             else {
                 $this->assertTrue(true);
