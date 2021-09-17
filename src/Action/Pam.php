@@ -445,6 +445,9 @@ class Pam
     public function rebind($old_passport, string $new_passport): bool
     {
         $pam = null;
+        if (PamAccount::passportExists($new_passport)) {
+            return $this->setError('账号已存在, 无法更换');
+        }
         if (is_numeric($old_passport) || is_string($old_passport)) {
             $old_passport = PamAccount::fullFilledPassport($old_passport);
             $pam          = PamAccount::passport($old_passport);
