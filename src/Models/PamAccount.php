@@ -179,6 +179,19 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
 
 
     /**
+     * 验证通行证是否存在, 自动补足 86
+     * @param $passport
+     * @return bool
+     */
+    public static function passportExists($passport): bool
+    {
+        $passport = self::fullFilledPassport($passport);
+        $type     = self::passportType($passport);
+        return self::where($type, $passport)->exists();
+    }
+
+
+    /**
      * 获取用户所有的 permission
      * @param self $pam pam
      * @return Collection

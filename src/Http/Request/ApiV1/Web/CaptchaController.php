@@ -5,7 +5,7 @@ namespace Poppy\System\Http\Request\ApiV1\Web;
 use Poppy\Framework\Classes\Resp;
 use Poppy\System\Action\Verification;
 use Poppy\System\Events\CaptchaSendEvent;
-use Poppy\System\Events\PassportVerifyEvent;
+use Poppy\System\Models\PamAccount;
 use Throwable;
 
 /**
@@ -29,10 +29,20 @@ class CaptchaController extends WebApiController
         $passport = sys_get($input, 'passport');
         $type     = sys_get($input, 'type');
 
-        try {
-            event(new PassportVerifyEvent($passport, $type));
-        } catch (Throwable $e) {
-            return Resp::error($e);
+        if ($type) {
+            if ($type === 'exist') {
+                if (!PamAccount::passportExists($passport)) {
+                    return Resp::error('输入的账号不存在, 请检查输入');
+                }
+            }
+            elseif ($type === 'no-exist') {
+                if (PamAccount::passportExists($passport)) {
+                    return Resp::error('输入的账号已存在, 请检查输入');
+                }
+            }
+            else {
+                return Resp::error('验证类型有误,请检查输入');
+            }
         }
 
         $Verification = new Verification();
