@@ -46,8 +46,6 @@ class Handler extends ExceptionHandler
             ], 401);
         }
 
-        return Resp::error('无权限访问', [
-            'location' => url('/'),
-        ]);
+        return Resp::error('无权限访问');
     }
 }

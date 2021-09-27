@@ -10,7 +10,6 @@ use Poppy\Framework\Helper\EnvHelper;
 use Poppy\System\Events\PamSsoEvent;
 use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamToken;
-use Throwable;
 
 /**
  * 单点登录
@@ -137,13 +136,9 @@ class Sso
      */
     public function logout($token): bool
     {
-        try {
-            $tokenHash = md5($token);
-            PamToken::where('token_hash', $tokenHash)->delete();
-            return true;
-        } catch (Throwable $e) {
-            return $this->setError($e->getMessage());
-        }
+        $tokenHash = md5($token);
+        PamToken::where('token_hash', $tokenHash)->delete();
+        return true;
     }
 
     /**

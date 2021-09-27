@@ -5,7 +5,6 @@ namespace Poppy\System\Action;
 use Auth;
 use Carbon\Carbon;
 use DB;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -26,7 +25,6 @@ use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamLog;
 use Poppy\System\Models\PamRole;
 use Poppy\System\Models\SysConfig;
-use Throwable;
 use Tymon\JWTAuth\JWTGuard;
 use Validator;
 
@@ -211,46 +209,42 @@ class Pam
         $initDb['type']      = $role->first()->type;
         $initDb['is_enable'] = SysConfig::ENABLE;
 
-        try {
-            // 处理数据库
-            return DB::transaction(function () use ($initDb, $role, $password, $hasAccountName, $prefix) {
-                /** @var PamAccount $pam pam */
-                $pam = PamAccount::create($initDb);
+        // 处理数据库
+        return DB::transaction(function () use ($initDb, $role, $password, $hasAccountName, $prefix) {
+            /** @var PamAccount $pam pam */
+            $pam = PamAccount::create($initDb);
 
-                // 给用户默认角色
-                $pam->roles()->attach($role->pluck('id'));
+            // 给用户默认角色
+            $pam->roles()->attach($role->pluck('id'));
 
-                // 如果没有设置账号, 则根据规范生成用户名
-                if (!$hasAccountName) {
-                    $formatAccountName = sprintf("%s_%'.09d", $prefix, $pam->id);
-                    $pam->username     = $formatAccountName;
+            // 如果没有设置账号, 则根据规范生成用户名
+            if (!$hasAccountName) {
+                $formatAccountName = sprintf("%s_%'.09d", $prefix, $pam->id);
+                $pam->username     = $formatAccountName;
 
-                }
+            }
 
-                // 设置默认国际手机号, 后台自动生成(Backend 用户/Develop)
-                if (in_array($initDb['type'], [PamAccount::TYPE_BACKEND, PamAccount::TYPE_DEVELOP]) && !isset($initDb['mobile'])) {
-                    $pam->mobile = PamAccount::dftMobile($pam->id);
-                }
+            // 设置默认国际手机号, 后台自动生成(Backend 用户/Develop)
+            if (in_array($initDb['type'], [PamAccount::TYPE_BACKEND, PamAccount::TYPE_DEVELOP]) && !isset($initDb['mobile'])) {
+                $pam->mobile = PamAccount::dftMobile($pam->id);
+            }
 
-                // 设置密码
-                if ($password) {
-                    $key               = Str::random(6);
-                    $regDatetime       = $pam->created_at->toDateTimeString();
-                    $pam->password     = app(PasswordContract::class)->genPassword($password, $regDatetime, $key);
-                    $pam->password_key = $key;
-                }
+            // 设置密码
+            if ($password) {
+                $key               = Str::random(6);
+                $regDatetime       = $pam->created_at->toDateTimeString();
+                $pam->password     = app(PasswordContract::class)->genPassword($password, $regDatetime, $key);
+                $pam->password_key = $key;
+            }
 
-                $pam->save();
+            $pam->save();
 
-                // 触发注册成功的事件
-                event(new PamRegisteredEvent($pam));
+            // 触发注册成功的事件
+            event(new PamRegisteredEvent($pam));
 
-                $this->pam = $pam;
-                return true;
-            });
-        } catch (Throwable $e) {
-            return $this->setError($e->getMessage());
-        }
+            $this->pam = $pam;
+            return true;
+        });
     }
 
     /**
@@ -299,11 +293,7 @@ class Pam
             }
 
 
-            try {
-                event(new LoginBannedEvent($pam, $guard));
-            } catch (Throwable $e) {
-                return $this->setError($e);
-            }
+            event(new LoginBannedEvent($pam, $guard));
 
             if (method_exists($this, 'loginAllowIpCheck') && !$this->loginAllowIpCheck()) {
                 $guard->logout();
@@ -537,16 +527,12 @@ class Pam
             return $this->setError(trans('py-system::action.pam.account_enabled'));
         }
 
-        try {
-            $pam->is_enable = SysConfig::ENABLE;
-            $pam->save();
+        $pam->is_enable = SysConfig::ENABLE;
+        $pam->save();
 
-            event(new PamEnableEvent($pam, $this->pam, $reason));
+        event(new PamEnableEvent($pam, $this->pam, $reason));
 
-            return true;
-        } catch (Throwable $e) {
-            return $this->setError($e->getMessage());
-        }
+        return true;
     }
 
     /**
@@ -554,24 +540,20 @@ class Pam
      */
     public function autoEnable(): bool
     {
-        try {
-            $Db  = PamAccount::where([
-                'is_enable' => SysConfig::DISABLE,
-            ])->where('disable_end_at', '<=', Carbon::now());
-            $res = (clone $Db)->exists();
-            if ($res) {
-                $items = $Db->get();
-                foreach ($items as $item) {
-                    $item->is_enable = SysConfig::ENABLE;
-                    $item->save();
-                    event(new PamEnableEvent($item, null, '系统自动解禁'));
-                }
+        $Db  = PamAccount::where([
+            'is_enable' => SysConfig::DISABLE,
+        ])->where('disable_end_at', '<=', Carbon::now());
+        $res = (clone $Db)->exists();
+        if ($res) {
+            $items = $Db->get();
+            foreach ($items as $item) {
+                $item->is_enable = SysConfig::ENABLE;
+                $item->save();
+                event(new PamEnableEvent($item, null, '系统自动解禁'));
             }
-
-            return true;
-        } catch (Exception $e) {
-            return $this->setError($e->getMessage());
         }
+
+        return true;
     }
 
     /**
@@ -580,14 +562,9 @@ class Pam
      */
     public function clearLog(): bool
     {
-        try {
-            // 删除 60 天以外的登录日志
-            PamLog::where('created_at', '<', Carbon::now()->subDays(60))->delete();
-
-            return true;
-        } catch (Throwable $e) {
-            return $this->setError($e->getMessage());
-        }
+        // 删除 60 天以外的登录日志
+        PamLog::where('created_at', '<', Carbon::now()->subDays(60))->delete();
+        return true;
     }
 
     /**
