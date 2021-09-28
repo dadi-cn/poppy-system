@@ -25,6 +25,7 @@ use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamLog;
 use Poppy\System\Models\PamRole;
 use Poppy\System\Models\SysConfig;
+use Throwable;
 use Tymon\JWTAuth\JWTGuard;
 use Validator;
 
@@ -93,6 +94,12 @@ class Pam
         // 检测权限, 是否被禁用
         if (!$this->checkIsEnable($this->pam)) {
             return false;
+        }
+
+        try {
+            event(new LoginBannedEvent($this->pam, PamAccount::GUARD_USER));
+        } catch (Throwable $e) {
+            return $this->setError($e);
         }
 
         event(new LoginSuccessEvent($this->pam, $platform));
