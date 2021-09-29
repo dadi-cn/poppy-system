@@ -2,10 +2,10 @@
 
 namespace Poppy\System\Http\Request\ApiV1\Web;
 
-use Illuminate\Http\UploadedFile;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\System\Classes\Contracts\UploadContract;
+use Poppy\System\Classes\Uploader\DefaultUploadProvider;
 use Request;
 use Throwable;
 use Validator;
@@ -53,6 +53,7 @@ class UploadController extends WebApiController
             return $this->demo();
         }
 
+        /** @var DefaultUploadProvider $Image */
         $Image = app(UploadContract::class);
         $Image->setFolder($image_type);
 
@@ -72,18 +73,11 @@ class UploadController extends WebApiController
             }
 
             foreach ($image as $_img) {
-
-                if ($_img instanceof UploadedFile) {
-                    $mime_info = $_img->getMimeType();
-
-                    $slashes_index = strpos($mime_info, '/');
-                    $mime_type     = substr($mime_info, $slashes_index + 1);
-
-                    $Image->setMimeType($mime_type);
-                }
-
                 if ($Image->saveFile($_img)) {
                     $urls[] = $Image->getUrl();
+                }
+                else {
+                    return Resp::error($Image->getError());
                 }
             }
         }
