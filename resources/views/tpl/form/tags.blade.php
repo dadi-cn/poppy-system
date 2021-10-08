@@ -1,5 +1,3 @@
-{!! app('html')->script('assets/libs/jquery/tokenize2/jquery.tokenize2.js') !!}
-{!! app('html')->style('assets/libs/jquery/tokenize2/tokenize2.css') !!}
 <div class="{{$viewClass['form-group']}} {!! (isset($errors) && !$errors->has($errorKey)) ? '' : 'has-error' !!}">
 	<div class="{{$viewClass['label']}}">
 		<label for="{{$id}}" class="layui-form-auto-label {{$viewClass['label_element']}}">
