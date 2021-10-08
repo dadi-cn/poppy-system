@@ -24,6 +24,12 @@ final class MultiImage extends Field
      */
     private $number;
 
+
+    /**
+     * @var bool 自动上传
+     */
+    private $auto = false;
+
     public function token($token): self
     {
         $this->token = $token;
@@ -39,12 +45,18 @@ final class MultiImage extends Field
         $this->number = $number;
     }
 
+    public function auto($auto = false)
+    {
+        $this->auto = $auto;
+    }
+
 
     public function render()
     {
         $this->attribute([
             'token'  => $this->token,
             'number' => $this->number,
+            'auto'   => $this->auto,
         ]);
         return parent::render();
     }
