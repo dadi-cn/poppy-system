@@ -58,7 +58,7 @@ use Poppy\System\Classes\Layout\Content;
  * @method Field\Divider        divider($title = '')
  * @method Field\Editor         editor($name, $label = '')
  * @method Field\Decimal        decimal($column, $label = '')
- * @method Field\Html           html($html)
+ * @method Field\Html           html($html, $arguments)
  * @method Field\Tags           tags($column, $label = '')
  * @method Field\Icon           icon($column, $label = '')
  * @method Field\Captcha        captcha($column, $label = '')
