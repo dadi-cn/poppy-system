@@ -72,7 +72,7 @@ class Html extends Field
 		</label>
 	</div>
 
-	<div class="{{$viewClass['field']}}">
+	<div class="{$viewClass['field']}">
 		<div class="layui-form-auto-field pt5">
 			{$this->html}
 		</div>
