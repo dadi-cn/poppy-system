@@ -217,7 +217,7 @@ class Pam
         $initDb['is_enable'] = SysConfig::ENABLE;
 
         // 处理数据库
-        return DB::transaction(function () use ($initDb, $role, $password, $hasAccountName, $prefix) {
+        DB::transaction(function () use ($initDb, $role, $password, $hasAccountName, $prefix) {
             /** @var PamAccount $pam pam */
             $pam = PamAccount::create($initDb);
 
@@ -250,8 +250,9 @@ class Pam
             event(new PamRegisteredEvent($pam));
 
             $this->pam = $pam;
-            return true;
+
         });
+        return true;
     }
 
     /**

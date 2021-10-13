@@ -139,9 +139,6 @@ class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenti
         elseif (UtilHelper::isEmail($passport)) {
             $type = PamAccount::REG_TYPE_EMAIL;
         }
-        elseif (is_numeric($passport)) {
-            $type = 'id';
-        }
         else {
             $type = PamAccount::REG_TYPE_USERNAME;
         }
