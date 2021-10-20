@@ -343,7 +343,7 @@ class Pam
      */
     public function setPassword($pam, string $password): bool
     {
-        if (is_string($pam) || is_numeric($pam)) {
+        if (is_string($pam)) {
             $pam = PamAccount::passport($pam);
         }
 

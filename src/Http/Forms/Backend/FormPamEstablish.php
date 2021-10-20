@@ -33,7 +33,7 @@ class FormPamEstablish extends FormWidget
         $this->id = $id;
 
         if ($id) {
-            $this->item = PamAccount::passport($this->id);
+            $this->item = PamAccount::find($this->id);
             if ($this->item) {
                 $this->type = $this->item->type;
             }

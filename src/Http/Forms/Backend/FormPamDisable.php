@@ -29,7 +29,7 @@ class FormPamDisable extends FormWidget
     {
         $this->id = $id;
         if ($id) {
-            $this->pam = PamAccount::passport($this->id);
+            $this->pam = PamAccount::find($this->id);
 
             if (!$this->pam) {
                 throw  new ApplicationException('无用户数据');
