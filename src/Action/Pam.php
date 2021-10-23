@@ -347,7 +347,7 @@ class Pam
             $pam = PamAccount::passport($pam);
         }
 
-        if (!$pam && !($pam instanceof PamAccount)) {
+        if (!($pam instanceof PamAccount)) {
             return $this->setError(trans('py-system::action.pam.pam_error'));
         }
         $validator = Validator::make([
