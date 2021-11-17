@@ -66,8 +66,7 @@ class SysConfig extends Eloquent
     {
         [$namespace, $group, $item] = $this->parseKey($key);
 
-        $query = $query
-            ->where('namespace', $namespace)
+        $query->where('namespace', $namespace)
             ->where('group', $group)
             ->where('item', $item);
 

@@ -2,11 +2,10 @@
 
 namespace Poppy\System\Setting\Repository;
 
-use DB;
 use Exception;
 use Illuminate\Support\Str;
 use Poppy\Core\Classes\Contracts\SettingContract;
-use Poppy\Core\Classes\Traits\CoreTrait;
+use Poppy\Core\Redis\RdsDb;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
 use Poppy\System\Classes\PySystemDef;
@@ -19,37 +18,17 @@ use Throwable;
  */
 class SettingRepository implements SettingContract
 {
-    use KeyParserTrait, AppTrait, CoreTrait;
+    use KeyParserTrait, AppTrait;
 
     /**
-     * @var bool 检查是否存在这个数据表
+     * @var RdsDb
      */
-    private $hasTable = false;
-
-    /**
-     * @var bool 是否重新读取
-     */
-    private $reRead = false;
-
-    /**
-     * @var array 查询缓存
-     */
-    private static $cache;
+    private static $rds;
 
     public function __construct()
     {
-        $tableName = (new SysConfig())->getTable();
-
-        static::$cache = (array) sys_cache('py-system')->get(PySystemDef::ckSetting());
-        if (static::$cache) {
-            $this->hasTable = true;
-        }
-        else {
-            $hasDb   = py_container()->hasDatabase();
-            $builder = DB::getSchemaBuilder();
-            if ($hasDb && $builder->hasTable($tableName)) {
-                $this->hasTable = true;
-            }
+        if (!self::$rds) {
+            self::$rds = RdsDb::instance();
         }
     }
 
@@ -64,17 +43,14 @@ class SettingRepository implements SettingContract
             ]));
         }
         $record = $this->findRecord($key);
-        if (!$record) {
-            return false;
+        if ($record) {
+            try {
+                $record->delete();
+            } catch (Exception $e) {
+                return false;
+            }
         }
 
-        try {
-            $record->delete();
-        } catch (Exception $e) {
-            return false;
-        }
-
-        unset(static::$cache[$key]);
         return true;
     }
 
@@ -83,59 +59,25 @@ class SettingRepository implements SettingContract
      */
     public function get(string $key, $default = '')
     {
-        if ($this->reRead) {
-            static::$cache = (array) sys_cache('py-system')->get(PySystemDef::ckSetting());
-        }
-
-        if (array_key_exists($key, static::$cache)) {
-            return static::$cache[$key];
-        }
-
         if (!$this->keyParserMatch($key)) {
             return $this->setError(trans('py-system::util.setting.key_not_match', [
                 'key' => $key,
             ]));
         }
 
-        if (!$this->hasTable) {
-            return '';
+        if ($val = self::$rds->hGet(PySystemDef::ckSetting(), $key, false)) {
+            return unserialize($val);
         }
 
         $record = $this->findRecord($key);
         if (!$record) {
-            // get default by setting.yaml
-            $settingItem = $this->coreModule()->settings()->get($key);
-            if ($settingItem) {
-                $type           = $settingItem['type'] ?? 'string';
-                $defaultSetting = $settingItem['default'] ?? '';
-                switch ($type) {
-                    case 'string':
-                    default:
-                        $default = $defaultSetting;
-                        break;
-                    case 'int':
-                        $default = (int) $defaultSetting;
-                        break;
-                    case 'bool':
-                    case 'boolean':
-                        $default = (bool) $defaultSetting;
-                        break;
-                }
-            }
-
-            static::$cache[$key] = $default;
-
-            // save to record
             $this->set($key, $default);
-
-            return static::$cache[$key];
+            return $default;
         }
 
-        static::$cache[$key] = unserialize($record->value);
+        self::$rds->hSet(PySystemDef::ckSetting(), $key, $record->value);
 
-        $this->save();
-
-        return static::$cache[$key];
+        return unserialize($record->value);
     }
 
     /**
@@ -145,7 +87,9 @@ class SettingRepository implements SettingContract
     {
         if (is_array($key)) {
             foreach ($key as $_key => $_value) {
-                $this->set($_key, $_value);
+                if (!$this->set($_key, $_value)) {
+                    return false;
+                }
             }
 
             return true;
@@ -159,19 +103,20 @@ class SettingRepository implements SettingContract
 
         $record = $this->findRecord($key);
         if (!$record) {
-            $record = new SysConfig();
             [$namespace, $group, $item] = $this->parseKey($key);
-            $record->namespace = $namespace;
-            $record->group     = $group;
-            $record->item      = $item;
+            SysConfig::create([
+                'namespace' => $namespace,
+                'group'     => $group,
+                'item'      => $item,
+                'value'     => serialize($value),
+            ]);
         }
-        $record->value = serialize($value);
-        $record->save();
+        else {
+            $record->value = serialize($value);
+            $record->save();
+        }
 
-        static::$cache[$key] = $value;
-        // 写入缓存
-        $this->save();
-
+        self::$rds->hSet(PySystemDef::ckSetting(), $key, serialize($value));
         return true;
     }
 
@@ -212,10 +157,11 @@ class SettingRepository implements SettingContract
         $Db     = SysConfig::where('namespace', $ns)->where('group', $group);
         $values = (clone $Db)->pluck('item');
         if ($values->count()) {
-            $values->each(function ($item) use ($ns, $group) {
-                unset(static::$cache["{$ns}::{$group}.{$item}"]);
+            $keys = [];
+            $values->each(function ($item) use ($ns, $group, &$keys) {
+                $keys[] = "{$ns}::{$group}.{$item}";
             });
-            $this->save();
+            self::$rds->hDel(PySystemDef::ckSetting(), $keys);
             try {
                 $Db->delete();
                 return true;
@@ -228,19 +174,21 @@ class SettingRepository implements SettingContract
 
     /**
      * 保存配置
+     * @deprecated 3.2 直接从缓存中读取
      */
     public function save(): void
     {
-        sys_cache('py-system')->forever(PySystemDef::ckSetting(), static::$cache);
+        // none
     }
 
     /**
      * 设置是否重新读取缓存
      * @param bool $reRead 标识
+     * @deprecated 3.2 直接从缓存中取, 无视静态变量
      */
     public function setReRead(bool $reRead): void
     {
-        $this->reRead = $reRead;
+        return;
     }
 
     /**

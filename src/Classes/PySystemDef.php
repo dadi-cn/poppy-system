@@ -20,7 +20,7 @@ class PySystemDef
      */
     public static function ckSetting(): string
     {
-        return 'setting';
+        return 'tag:py-system:setting';
     }
 
     /**
