@@ -26,11 +26,13 @@ class UploadController extends WebApiController
      * @apiParam   {string} [type]        上传图片的类型 [form|表单(默认),base64,url]
      * @apiParam   {string} [image_type]  图片图片存储类型[default|默认]
      * @apiParam   {string} [from]        上传来源,根据不同来源返回不同的格式 [wang-editor]
+     * @apiParam   {string} [watermark]   是否开启水印[1:开启]
      */
     public function image()
     {
         $type       = input('type', 'form');
         $image_type = input('image_type', 'default');
+        $watermark  = input('watermark');
 
         $all               = Request::all();
         $all['image_type'] = $image_type ?: 'default';
@@ -56,6 +58,10 @@ class UploadController extends WebApiController
         /** @var DefaultUploadProvider $Image */
         $Image = app(UploadContract::class);
         $Image->setFolder($image_type);
+
+        if ($watermark) {
+            $Image->enableWatermark();
+        }
 
         /* 图片上传大小限制,过大则需要手都进行缩放
          * ---------------------------------------- */

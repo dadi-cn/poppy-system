@@ -108,6 +108,13 @@ interface UploadContract
      */
     public function getReturnUrl(): string;
 
+
+    /**
+     * 启用水印
+     * @return void
+     */
+    public function enableWatermark(): void;
+
     /**
      * 将上传成功的文件复制到另外一个位置
      * @param string $dist 目标路径

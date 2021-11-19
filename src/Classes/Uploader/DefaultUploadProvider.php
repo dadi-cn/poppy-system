@@ -86,7 +86,13 @@ class DefaultUploadProvider implements UploadContract
     /**
      * @var string 图片mime类型
      */
-    private $mimeType;
+    private      $mimeType;
+
+    /**
+     * 是否启用水印
+     * @var bool
+     */
+    protected $watermark = false;
 
     public function __construct()
     {
@@ -135,16 +141,6 @@ class DefaultUploadProvider implements UploadContract
         $fileName = $now->format('is') . Str::random(8) . '.' . $extension;
 
         return ($this->folder ? $this->folder . '/' : '') . $now->format('Ym/d/H/') . $fileName;
-    }    /**
-     * 设置返回地址
-     * @param string $url 地址
-     */
-    public function setReturnUrl(string $url)
-    {
-        if (!Str::endsWith($url, '/')) {
-            $url .= '/';
-        }
-        $this->returnUrl = $url;
     }
 
     /**
@@ -175,7 +171,19 @@ class DefaultUploadProvider implements UploadContract
         }
 
         return $img_stream;
+    }    /**
+     * 设置返回地址
+     * @param string $url 地址
+     */
+    public function setReturnUrl(string $url)
+    {
+        if (!Str::endsWith($url, '/')) {
+            $url .= '/';
+        }
+        $this->returnUrl = $url;
     }
+
+
 
     /**
      * Set Extension
@@ -185,7 +193,6 @@ class DefaultUploadProvider implements UploadContract
     {
         $this->allowedExtensions = $extension;
     }
-
 
 
     /**
@@ -423,5 +430,13 @@ class DefaultUploadProvider implements UploadContract
             $this->storage()->delete($this->destination);
         }
         return true;
+    }
+
+    /**
+     * @inerhitDoc
+     */
+    public function enableWatermark(): void
+    {
+        $this->watermark = true;
     }
 }
