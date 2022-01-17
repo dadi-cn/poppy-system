@@ -6,9 +6,13 @@ use Closure;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\EnvHelper;
 use Poppy\System\Action\Ban as ActBan;
+use Poppy\System\Models\PamAccount;
 use Poppy\System\Models\PamBan;
+use Poppy\System\Models\PamRole;
+use Poppy\System\Models\PamRoleAccount;
 use Poppy\System\Models\PamToken;
 use Poppy\System\Models\SysConfig;
+use Tymon\JWTAuth\JWTGuard;
 
 class Ban
 {
@@ -36,6 +40,17 @@ class Ban
          * ---------------------------------------- */
         if (!$status) {
             return $next($request);
+        }
+        // 是否是root用户 不进行拦截
+        if ($type === PamAccount::TYPE_BACKEND) {
+            /** @var JWTGuard $guard */
+            $guard = app('auth')->guard();
+            /** @var PamAccount $user */
+            $user     = $guard->user();
+            $roleName = PamRole::whereRaw('id = ' . PamRoleAccount::where('account_id', $user->id)->value('role_id'))->value('name');
+            if ($roleName === PamRole::BE_ROOT) {
+                return $next($request);
+            }
         }
         $Ban  = new ActBan();
         $ipIn = $Ban->checkIn($type, PamBan::TYPE_IP, $ip);
