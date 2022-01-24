@@ -11,7 +11,6 @@
     "require": {
         "php": ">=7.4",
         "ext-bcmath": "*",
-        "symfony/yaml": "^4.3.4",
         "tucker-eric/eloquentfilter": "^3",
         "tymon/jwt-auth": "1.0.*",
         "hieu-le/active": "4.0.*",
