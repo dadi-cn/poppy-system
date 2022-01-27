@@ -4,6 +4,7 @@ namespace Poppy\System\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * 角色 & 权限表
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|PamPermissionRole query()
  * @mixin Eloquent
  */
-class PamPermissionRole extends Eloquent
+class PamPermissionRole extends Model
 {
     protected $table = 'pam_permission_role';
 

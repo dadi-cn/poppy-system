@@ -4,6 +4,7 @@ namespace Poppy\System\Models;
 
 use Carbon\Carbon;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -23,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read PamAccount $pam
  * @mixin Eloquent
  */
-class PamLog extends Eloquent
+class PamLog extends Model
 {
 
     protected $table = 'pam_log';

@@ -3,6 +3,7 @@
 namespace Poppy\System\Models;
 
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Poppy\Core\Rbac\Contracts\RbacRoleContract;
 use Poppy\Core\Rbac\Traits\RbacRoleTrait;
@@ -21,7 +22,7 @@ use Poppy\Framework\Helper\ArrayHelper;
  * @property-read Collection|PamAccount[]    $users
  * @mixin Eloquent
  */
-class PamRole extends Eloquent implements RbacRoleContract
+class PamRole extends Model implements RbacRoleContract
 {
     use RbacRoleTrait;
 

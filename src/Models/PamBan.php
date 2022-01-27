@@ -4,6 +4,7 @@ namespace Poppy\System\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
@@ -20,7 +21,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|PamBan query()
  * @mixin Eloquent
  */
-class PamBan extends Eloquent
+class PamBan extends Model
 {
     // 黑白名单类型
     const WB_TYPE_BLACK = 'black';
