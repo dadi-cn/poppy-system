@@ -2,10 +2,6 @@
 
 namespace Poppy\System\Tests\Configuration;
 
-/**
- * Copyright (C) Update For IDE
- */
-
 use Poppy\System\Tests\Base\SystemTestCase;
 
 class EnvironmentTest extends SystemTestCase

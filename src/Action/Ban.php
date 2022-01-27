@@ -273,7 +273,7 @@ class Ban
         // ip 范围 : 192.168.1.21-192.168.1.255
         if (Str::contains($value, '-')) {
             [$start, $end] = explode('-', $value);
-            if (is_null(Factory::rangesFromBoundaries($start, $end))) {
+            if (is_null(Factory::getRangesFromBoundaries($start, $end))) {
                 return $this->setError('错误的IP段写法');
             }
             $isRange = true;
@@ -282,7 +282,7 @@ class Ban
         }
         //  192.168.1.*
         else if (Str::contains($value, '*') || Str::contains($value, '/')) {
-            if (is_null($range = Factory::rangeFromString($value))) {
+            if (is_null($range = Factory::parseRangeString($value))) {
                 return $this->setError('错误的IP格式写法');
             }
             $isRange = true;

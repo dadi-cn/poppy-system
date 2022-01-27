@@ -2,10 +2,6 @@
 
 namespace Poppy\System\Tests\Ability;
 
-/**
- * Copyright (C) Update For IDE
- */
-
 use Poppy\Core\Classes\Traits\CoreTrait;
 use Poppy\Core\Rbac\Permission\Permission;
 use Poppy\System\Models\PamPermission;
