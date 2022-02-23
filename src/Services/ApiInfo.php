@@ -12,7 +12,7 @@ class ApiInfo implements ServiceArray
 		return 'py-system';
 	}
 
-	public function data()
+	public function data():array
 	{
 		return [
 			'title' => '系统',

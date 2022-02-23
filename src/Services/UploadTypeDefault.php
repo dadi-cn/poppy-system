@@ -13,7 +13,7 @@ class UploadTypeDefault implements ServiceArray
         return 'default';
     }
 
-    public function data()
+    public function data():array
     {
         return [
             'title'    => '默认(uploads 目录下)',
