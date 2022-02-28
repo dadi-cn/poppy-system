@@ -46,6 +46,8 @@ Route::group([
 ], function (Illuminate\Routing\Router $route) {
     $route->post('auth/access', 'AuthController@access')
         ->name('py-system:pam.auth.access');
+    $route->post('auth/renew', 'AuthController@renew')
+        ->name('py-system:pam.auth.renew');
     $route->post('auth/logout', 'AuthController@logout')
         ->name('py-system:pam.auth.logout');
 });

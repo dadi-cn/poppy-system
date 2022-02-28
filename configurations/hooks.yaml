@@ -10,3 +10,7 @@
   name: 'poppy.system.api_info'
   hooks:
     - '\Poppy\System\Services\ApiInfo'
+-
+  name: 'poppy.system.auth_append'
+  hooks:
+    - '\Poppy\System\Services\System\ServiceAuthAppend'

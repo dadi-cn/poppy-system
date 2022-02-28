@@ -135,8 +135,7 @@ class AuthController extends WebApiController
             if (!$Pam->captchaLogin($passport, $captcha, $platform)) {
                 return Resp::error($Pam->getError());
             }
-        }
-        elseif (!$Pam->loginCheck($passport, $password, PamAccount::GUARD_JWT)) {
+        } elseif (!$Pam->loginCheck($passport, $password, PamAccount::GUARD_JWT)) {
             return Resp::error($Pam->getError());
         }
 
@@ -257,6 +256,34 @@ class AuthController extends WebApiController
         }
         return Resp::success('成功绑定手机');
     }
+
+    /**
+     * @api                    {post} api_v1/system/auth/renew [Sys]续期
+     * @apiVersion             1.0.0
+     * @apiName                SysAuthRenew
+     * @apiGroup               Poppy
+     */
+    public function renew()
+    {
+        $pam = $this->pam;
+        if (!$token = app('tymon.jwt.auth')->fromUser($pam)) {
+            return Resp::error('获取 Token 失败, 请联系管理员');
+        }
+
+        try {
+            $deviceId   = x_header('app-id') ?: input('device_id', '');
+            $deviceType = x_header('app-os') ?: input('device_type', '');
+            event(new LoginTokenPassedEvent($pam, $token, $deviceId, $deviceType));
+        } catch (Throwable $e) {
+            return Resp::error($e->getMessage());
+        }
+
+        return Resp::success('登录成功', [
+            'token' => $token,
+            'type'  => $pam->type,
+        ]);
+    }
+
 
     /**
      * @api                    {post} api_v1/system/auth/logout [Sys]退出登录

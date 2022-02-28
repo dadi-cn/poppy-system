@@ -66,12 +66,12 @@ class MiddlewareServiceProvider extends ServiceProvider
         ]);
 
         $router->middlewareGroup('api-sso', [
-            'sys-app_sign',
-            'sys-site_open',
-            'sys-ban:user',
-            'sys-sso',
-            'sys-auth:jwt_web',
-            'sys-disabled_pam',
+            'sys-app_sign',     // 签名
+            'sys-site_open',    // 网站开启
+            'sys-ban:user',     // 禁用
+            'sys-sso',          // 单点登录
+            'sys-auth:jwt_web', // 用户登录
+            'sys-disabled_pam', // 用户禁用
         ]);
 
 
