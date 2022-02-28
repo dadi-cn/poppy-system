@@ -30,10 +30,5 @@ class RouteServiceProvider extends ServiceProvider
         ], function () {
             require_once __DIR__ . '/Routes/api_v1_web.php';
         });
-        Route::group([
-            'prefix' => 'api_v1/backend/system',
-        ], function () {
-            require_once __DIR__ . '/Routes/api_v1_backend.php';
-        });
     }
 }
