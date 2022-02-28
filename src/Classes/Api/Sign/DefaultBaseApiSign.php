@@ -48,7 +48,7 @@ abstract class DefaultBaseApiSign implements ApiSignContract
 	        params.push($(ele).attr("name"));
         });
 
-        params = _.without(params, "sign", "token", "image", "_py_sys_secret");
+        params = _.without(params, "sign", "token", "image", "_py_secret");
         params.sort();
 
         _.each(params, function(key) {
@@ -71,7 +71,7 @@ JS;
     public function check(Request $request): bool
     {
         // 加密 debug, 不验证签名
-        if (config('poppy.system.secret') && (string) $request->input('_py_sys_secret') === (string) config('poppy.system.secret')) {
+        if (config('poppy.system.secret') && (string) $request->input('_py_secret') === (string) config('poppy.system.secret')) {
             return true;
         }
 
