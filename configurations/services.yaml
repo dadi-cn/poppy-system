@@ -2,10 +2,6 @@ poppy.system.api_info :
   title : 系统接口
   type : array
   description : 系统信息接口调用, 系统信息返回的灵活数据
-poppy.system.auth_append :
-  title : 授权追加
-  type : array
-  description : 对用户 Access 接口进行访问, 追加授权信息
 poppy.system.html_cp :
   title : 主页卡片
   type : html
