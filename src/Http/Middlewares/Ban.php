@@ -68,7 +68,7 @@ class Ban
         }
 
 
-        $deviceId = x_app('id') ?: input('device_id');
+        $deviceId = (x_header('id') ?: x_app('id')) ?: input('device_id');
         if ($deviceId) {
             $deviceIn = $Ban->checkIn($type, PamBan::TYPE_DEVICE, $deviceId);
             /* 黑名单策略, 设备In : 封禁
