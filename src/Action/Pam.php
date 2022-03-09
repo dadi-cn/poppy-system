@@ -123,16 +123,17 @@ class Pam
      * @param string $role_name 用户角色名称
      * @param string $platform  支持的平台
      * @return bool
+     * @throws Throwable
      */
-    public function register(string $passport, $password = '', $role_name = PamRole::FE_USER, $platform = ''): bool
+    public function register(string $passport, string $password = '', string $role_name = PamRole::FE_USER, string $platform = ''): bool
     {
         $passport = PamAccount::fullFilledPassport($passport);
         $type     = PamAccount::passportType($passport);
 
         $initDb = [
             $type          => $passport,
-            'password'     => (string) $password,
-            'reg_platform' => (string) $platform,
+            'password'     => $password,
+            'reg_platform' => $platform,
             'parent_id'    => $this->parentId,
         ];
 
@@ -165,8 +166,7 @@ class Pam
 
                 // 注册子用户, 子用户比主账号多一个 :
                 array_unshift($rule[$type], Rule::username(true));
-            }
-            else {
+            } else {
                 array_unshift($rule[$type], Rule::username());
             }
         }
@@ -188,8 +188,7 @@ class Pam
 
         if (is_string($role_name)) {
             $role = PamRole::whereIn('name', (array) $role_name)->get();
-        }
-        else {
+        } else {
             $roleNames = (array) $role_name;
             $role      = PamRole::whereIn('id', $roleNames)->get();
         }
@@ -206,8 +205,7 @@ class Pam
                 return $this->setError(trans('py-system::action.pam.not_set_name_prefix'));
             }
             $username = $prefix . '_' . Carbon::now()->format('YmdHis') . Str::random(6);
-        }
-        else {
+        } else {
             $hasAccountName = true;
             $username       = $passport;
         }
@@ -289,8 +287,7 @@ class Pam
             if ($guard instanceof JWTGuard) {
                 /** @var PamAccount $pam */
                 $pam = $guard->getLastAttempted();
-            }
-            else {
+            } else {
                 /** @var PamAccount $user */
                 $pam = $guard->user();
             }
@@ -353,7 +350,12 @@ class Pam
         $validator = Validator::make([
             'password' => $password,
         ], [
-            'password' => 'required|between:6,20',
+            'password' => [
+                Rule::string(),
+                Rule::required(),
+                Rule::simplePwd(),
+                Rule::between(6, 20)
+            ],
         ]);
         if ($validator->fails()) {
             return $this->setError($validator->messages());
@@ -419,14 +421,11 @@ class Pam
     {
         if (UtilHelper::isMobile($passport)) {
             $type = PamAccount::REG_TYPE_MOBILE;
-        }
-        elseif (UtilHelper::isEmail($passport)) {
+        } elseif (UtilHelper::isEmail($passport)) {
             $type = PamAccount::REG_TYPE_EMAIL;
-        }
-        elseif (is_numeric($passport)) {
+        } elseif (is_numeric($passport)) {
             $type = 'id';
-        }
-        else {
+        } else {
             $type = PamAccount::REG_TYPE_USERNAME;
         }
 
@@ -449,8 +448,7 @@ class Pam
         if (is_numeric($old_passport) || is_string($old_passport)) {
             $old_passport = PamAccount::fullFilledPassport($old_passport);
             $pam          = PamAccount::passport($old_passport);
-        }
-        else if ($old_passport instanceof PamAccount) {
+        } else if ($old_passport instanceof PamAccount) {
             $pam = $old_passport;
         }
         if (!$pam) {
