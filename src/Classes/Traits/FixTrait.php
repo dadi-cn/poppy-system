@@ -4,6 +4,7 @@ namespace Poppy\System\Classes\Traits;
 
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
+use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Exceptions\ApplicationException;
 
 /**
@@ -116,8 +117,7 @@ trait FixTrait
     {
         if ($this->fix['total']) {
             $percentage = round((($this->fix['total'] - $this->fix['left']) / $this->fix['total']) * 100);
-        }
-        else {
+        } else {
             $percentage = '0';
         }
 
@@ -132,6 +132,37 @@ trait FixTrait
         ]);
 
         return view('py-mgr-page::tpl.progress', [
+            'total'         => $this->fix['total'],
+            'section'       => $this->fix['section'],
+            'left'          => $this->fix['left'],
+            'percentage'    => $percentage,
+            'continue_time' => $this->fix['interval'], // ms 毫秒
+            'continue_url'  => $url,
+        ]);
+    }
+
+    /**
+     * 返回修复的下一次请求
+     */
+    protected function fixResp()
+    {
+        if ($this->fix['total']) {
+            $percentage = round((($this->fix['total'] - $this->fix['left']) / $this->fix['total']) * 100);
+        } else {
+            $percentage = 0;
+        }
+
+        $url = route_url('', null, [
+            'max'     => $this->fix['max'],
+            'min'     => $this->fix['min'],
+            'section' => $this->fix['section'],
+            'start'   => $this->fix['lastId'],
+            'total'   => $this->fix['total'],
+            'cache'   => $this->fix['cached'],
+            'method'  => $this->fix['method'],
+        ]);
+
+        return Resp::success('更新中', [
             'total'         => $this->fix['total'],
             'section'       => $this->fix['section'],
             'left'          => $this->fix['left'],
