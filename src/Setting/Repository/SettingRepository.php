@@ -50,7 +50,6 @@ class SettingRepository implements SettingContract
                 return false;
             }
         }
-
         return true;
     }
 
@@ -65,7 +64,7 @@ class SettingRepository implements SettingContract
             ]));
         }
 
-        if ($val = self::$rds->hGet(PySystemDef::ckSetting(), $key, false)) {
+        if ($val = self::$rds->hGet(PySystemDef::ckSetting(), $this->convertKey($key), false)) {
             return unserialize($val);
         }
 
@@ -75,7 +74,7 @@ class SettingRepository implements SettingContract
             return $default;
         }
 
-        self::$rds->hSet(PySystemDef::ckSetting(), $key, $record->value);
+        self::$rds->hSet(PySystemDef::ckSetting(), $this->convertKey($key), $record->value);
 
         return unserialize($record->value);
     }
@@ -110,13 +109,12 @@ class SettingRepository implements SettingContract
                 'item'      => $item,
                 'value'     => serialize($value),
             ]);
-        }
-        else {
+        } else {
             $record->value = serialize($value);
             $record->save();
         }
 
-        self::$rds->hSet(PySystemDef::ckSetting(), $key, serialize($value));
+        self::$rds->hSet(PySystemDef::ckSetting(), $this->convertKey($key), serialize($value));
         return true;
     }
 
@@ -159,7 +157,7 @@ class SettingRepository implements SettingContract
         if ($values->count()) {
             $keys = [];
             $values->each(function ($item) use ($ns, $group, &$keys) {
-                $keys[] = "{$ns}::{$group}.{$item}";
+                $keys[] = $this->convertKey("{$ns}::{$group}.{$item}");
             });
             self::$rds->hDel(PySystemDef::ckSetting(), $keys);
             try {
@@ -189,6 +187,16 @@ class SettingRepository implements SettingContract
     public function setReRead(bool $reRead): void
     {
         return;
+    }
+
+    /**
+     * 转换 KEY
+     * @param $key
+     * @return string
+     */
+    private function convertKey($key): string
+    {
+        return str_replace(['::', '.'], ['--', '-'], $key);
     }
 
     /**

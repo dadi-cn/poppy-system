@@ -41,7 +41,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
  * @property-read Collection|PamRole[] $roles
  * @mixin Eloquent
  */
-class PamAccount extends Eloquent implements Authenticatable, JWTSubjectAuthenticatable
+class PamAccount extends Model implements Authenticatable, JWTSubjectAuthenticatable
 {
     use TraitAuthenticatable, RbacUserTrait, Authorizable, Notifiable;
 

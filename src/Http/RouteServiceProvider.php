@@ -2,10 +2,6 @@
 
 namespace Poppy\System\Http;
 
-/**
- * Copyright (C) Update For IDE
- */
-
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Route;
 
@@ -33,11 +29,6 @@ class RouteServiceProvider extends ServiceProvider
             'prefix' => 'api_v1/system',
         ], function () {
             require_once __DIR__ . '/Routes/api_v1_web.php';
-        });
-        Route::group([
-            'prefix' => 'api_v1/backend/system',
-        ], function () {
-            require_once __DIR__ . '/Routes/api_v1_backend.php';
         });
     }
 }

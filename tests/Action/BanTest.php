@@ -46,7 +46,7 @@ class BanTest extends SystemTestCase
                 $this->assertTrue(true);
             }
             else {
-                $this->assertTrue(false, $Ban->getError());
+                $this->fail($Ban->getError());
             }
         }
     }

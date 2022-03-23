@@ -3,7 +3,6 @@
 namespace Poppy\System\Classes;
 
 use Closure;
-use Eloquent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -153,7 +152,7 @@ class Grid
     /**
      * Create a new grid instance.
      *
-     * @param Eloquent|\Illuminate\Database\Eloquent\Model $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @param Closure|null                                 $builder
      */
     public function __construct($model, Closure $builder = null)
@@ -172,7 +171,7 @@ class Grid
     /**
      * Get Grid model.
      *
-     * @return Eloquent|Model
+     * @return Model
      */
     public function model()
     {

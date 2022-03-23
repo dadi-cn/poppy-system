@@ -323,8 +323,8 @@ if (!function_exists('sys_api_demo')) {
     function sys_api_demo(): bool
     {
         $all = input();
-        if(isset($all['_py_sys_secret']) && $all['_py_sys_secret']) {
-            return $all['_py_sys_secret'] === config('poppy.system.secret');
+        if(isset($all['_py_secret']) && $all['_py_secret']) {
+            return $all['_py_secret'] === config('poppy.system.secret');
         }
         return false;
     }

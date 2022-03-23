@@ -3,14 +3,16 @@
 namespace Poppy\System\Models;
 
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * 用户角色映射
  *
  * @property int $account_id 账户id
  * @property int $role_id    角色id
+ * @mixin Eloquent
  */
-class PamRoleAccount extends Eloquent
+class PamRoleAccount extends Model
 {
     protected $table = 'pam_role_account';
 

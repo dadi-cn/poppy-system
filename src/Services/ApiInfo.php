@@ -7,15 +7,16 @@ use Poppy\Core\Services\Contracts\ServiceArray;
 class ApiInfo implements ServiceArray
 {
 
-	public function key():string
-	{
-		return 'py-system';
-	}
+    public function key(): string
+    {
+        return 'py-system';
+    }
 
-	public function data()
-	{
-		return [
-			'title' => '系统',
-		];
-	}
+    public function data(): array
+    {
+        return [
+            'title' => sys_setting('py-system::site.name'),
+            'logo'  => sys_setting('py-system::site.logo'),
+        ];
+    }
 }

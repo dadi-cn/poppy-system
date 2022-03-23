@@ -5,6 +5,20 @@
 |--------------------------------------------------------------------------
 |
 */
+
+/* 核心信息无需禁用, 仅需要加密鉴权即可
+ * ---------------------------------------- */
+Route::group([
+    'middleware' => ['sys-app_sign'],
+    'namespace'  => 'Poppy\System\Http\Request\ApiV1\Web',
+], function (Illuminate\Routing\Router $route) {
+    $route->post('core/info', 'CoreController@info');
+    $route->post('core/translate', 'CoreController@translate');
+    $route->post('core/mock', 'CoreController@mock');
+});
+
+/* 可以对用户设备进行封禁
+ * ---------------------------------------- */
 Route::group([
     'middleware' => ['api-sign'],
     'namespace'  => 'Poppy\System\Http\Request\ApiV1\Web',
@@ -17,15 +31,9 @@ Route::group([
     $route->post('captcha/send', 'CaptchaController@send');
     $route->post('captcha/fetch', 'CaptchaController@fetch');
 
-    // info
-    $route->post('core/info', 'CoreController@info');
-    $route->post('core/translate', 'CoreController@translate');
-    $route->post('core/mock', 'CoreController@mock');
-
     // auth
     $route->post('auth/reset_password', 'AuthController@resetPassword');
     $route->post('auth/bind_mobile', 'AuthController@bindMobile');
-
 });
 
 // Jwt 合法性验证
@@ -46,6 +54,8 @@ Route::group([
 ], function (Illuminate\Routing\Router $route) {
     $route->post('auth/access', 'AuthController@access')
         ->name('py-system:pam.auth.access');
+    $route->post('auth/renew', 'AuthController@renew')
+        ->name('py-system:pam.auth.renew');
     $route->post('auth/logout', 'AuthController@logout')
         ->name('py-system:pam.auth.logout');
 });

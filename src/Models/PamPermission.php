@@ -5,6 +5,7 @@ namespace Poppy\System\Models;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Poppy\Core\Rbac\Contracts\RbacPermissionContract;
 use Poppy\Core\Rbac\Traits\RbacPermissionTrait;
 
@@ -25,7 +26,7 @@ use Poppy\Core\Rbac\Traits\RbacPermissionTrait;
  * @method static Builder|PamPermission query()
  * @mixin Eloquent
  */
-class PamPermission extends Eloquent implements RbacPermissionContract
+class PamPermission extends Model implements RbacPermissionContract
 {
     use RbacPermissionTrait;
 

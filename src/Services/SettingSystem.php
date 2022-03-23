@@ -14,7 +14,7 @@ class SettingSystem implements ServiceArray
 		return 'poppy.system';
 	}
 
-	public function data()
+	public function data():array
 	{
 		return [
 			'title' => '系统',

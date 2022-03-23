@@ -2,10 +2,6 @@
 
 namespace Poppy\System\Tests\Ability;
 
-/**
- * Copyright (C) Update For IDE
- */
-
 use Mail;
 use Poppy\Framework\Application\TestCase;
 use Poppy\Framework\Exceptions\ApplicationException;

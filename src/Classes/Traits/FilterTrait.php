@@ -2,7 +2,6 @@
 
 namespace Poppy\System\Classes\Traits;
 
-use Eloquent;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -32,7 +31,7 @@ trait FilterTrait
     }
 
     /**
-     * @param Eloquent|Model  $Db       数据对象
+     * @param Model  $Db       数据对象
      * @param string|\Closure $resource 资源
      * @param array           $append   增加
      * @return JsonResponse

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use DB;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
 
 /**
@@ -16,10 +17,10 @@ use Poppy\Framework\Classes\Traits\KeyParserTrait;
  * @property string $item        配置名称
  * @property string $value       配置值
  * @property string $description 配置介绍
- * @mixin Eloquent
  * @method static Builder|SysConfig applyKey($key)
+ * @mixin Eloquent
  */
-class SysConfig extends Eloquent
+class SysConfig extends Model
 {
     use KeyParserTrait;
 

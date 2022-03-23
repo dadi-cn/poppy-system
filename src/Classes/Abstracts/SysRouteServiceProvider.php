@@ -2,9 +2,6 @@
 
 namespace Poppy\System\Classes\Abstracts;
 
-/**
- * Copyright (C) Update For IDE
- */
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 

@@ -37,6 +37,33 @@ class Authenticate extends IlluminateAuthenticate
     /**
      * @inheritDoc
      */
+    public function handle($request, Closure $next, ...$guards)
+    {
+        try {
+            $this->authenticate($request, $guards);
+        } catch (AuthenticationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status'  => 401,
+                    'message' => 'Unauthorized',
+                ], 401);
+            }
+
+            if ($location = self::detectLocation($guards)) {
+                return Resp::error('无权限访问', [
+                    '_location' => $location,
+                    '_time'     => false,
+                ]);
+            }
+
+            return response('Unauthorized.', 401);
+        }
+        return $next($request);
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected function authenticate($request, array $guards)
     {
         if (empty($guards)) {
@@ -48,32 +75,5 @@ class Authenticate extends IlluminateAuthenticate
             }
         }
         throw new AuthenticationException('Unauthenticated.', $guards);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function handle($request, Closure $next, ...$guards)
-    {
-        try {
-
-            $this->authenticate($request, $guards);
-        } catch (AuthenticationException $e) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'status'  => 401,
-                    'message' => 'Unauthorized',
-                ], 401);
-            }
-
-            $append = [];
-            if ($location = self::detectLocation($guards)) {
-                $append['_location'] = $location;
-                return Resp::error('无权限访问', $append);
-            }
-
-            return response('Unauthorized.', 401);
-        }
-        return $next($request);
     }
 }
