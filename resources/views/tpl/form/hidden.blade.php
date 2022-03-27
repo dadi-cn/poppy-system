@@ -1,1 +1,0 @@
-{!! app('form')->hidden($name, $value, $attributes) !!}
