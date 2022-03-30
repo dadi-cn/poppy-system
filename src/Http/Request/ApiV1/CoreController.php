@@ -1,6 +1,6 @@
 <?php
 
-namespace Poppy\System\Http\Request\ApiV1\Web;
+namespace Poppy\System\Http\Request\ApiV1;
 
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Poppy\Framework\Classes\Mocker;
@@ -9,7 +9,7 @@ use Poppy\Framework\Classes\Resp;
 /**
  * 系统信息控制
  */
-class CoreController extends WebApiController
+class CoreController extends JwtApiController
 {
     use ThrottlesLogins;
 
@@ -36,10 +36,8 @@ class CoreController extends WebApiController
      */
     public function info()
     {
-
         $hook   = sys_hook('poppy.system.api_info');
         $system = array_merge([], $hook);
-
         return Resp::success('获取系统配置信息', $system);
     }
 

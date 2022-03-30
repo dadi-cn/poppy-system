@@ -1,19 +1,15 @@
 <?php
 
-namespace Poppy\System\Http\Request\ApiV1\Web;
+namespace Poppy\System\Http\Request\ApiV1;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Poppy\Framework\Application\ApiController;
-use Poppy\System\Http\Request\ApiV1\JwtApiController;
 use Poppy\System\Models\PamAccount;
 
 /**
- * Web api 控制器
- * @deprecated 4.0
- * @removed 5.0
- * @see JwtApiController
+ * Jwt api 控制器[支持多个用户类型]
  */
-abstract class WebApiController extends ApiController
+abstract class JwtApiController extends ApiController
 {
 
     /**
@@ -40,9 +36,9 @@ abstract class WebApiController extends ApiController
         if ($this->pam) {
             return $this->pam;
         }
-        $this->pam = app('request')->user(PamAccount::GUARD_JWT_WEB);
+        $this->pam = app('request')->user(PamAccount::GUARD_JWT);
         if (!$this->pam) {
-            $this->pam = app('auth')->guard(PamAccount::GUARD_JWT_WEB)->user();
+            $this->pam = app('auth')->guard(PamAccount::GUARD_JWT)->user();
         }
 
         return $this->pam;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Poppy\System\Http\Request\ApiV1\Web;
+namespace Poppy\System\Http\Request\ApiV1;
 
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -22,7 +22,7 @@ use Validator;
 /**
  * 认证控制器
  */
-class AuthController extends WebApiController
+class AuthController extends JwtApiController
 {
     use PoppyTrait, ThrottlesLogins;
 
@@ -135,7 +135,8 @@ class AuthController extends WebApiController
             if (!$Pam->captchaLogin($passport, $captcha, $platform)) {
                 return Resp::error($Pam->getError());
             }
-        } elseif (!$Pam->loginCheck($passport, $password, PamAccount::GUARD_JWT)) {
+        }
+        elseif (!$Pam->loginCheck($passport, $password, PamAccount::GUARD_JWT)) {
             return Resp::error($Pam->getError());
         }
 
@@ -149,8 +150,8 @@ class AuthController extends WebApiController
         /* 设备单一性登陆验证(基于 Redis + Db)
          * ---------------------------------------- */
         try {
-            $deviceId   = (x_header('id') ?: x_app('id')) ?: input('device_id', '');
-            $deviceType = (x_header('os') ?: x_app('os')) ?: input('device_type', '');
+            $deviceId   = x_header('id') ?: input('device_id', '');
+            $deviceType = x_header('os') ?: input('device_type', '');
             event(new LoginTokenPassedEvent($pam, $token, $deviceId, $deviceType));
         } catch (Throwable $e) {
             return Resp::error($e->getMessage());

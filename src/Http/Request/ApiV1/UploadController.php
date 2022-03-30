@@ -1,6 +1,6 @@
 <?php
 
-namespace Poppy\System\Http\Request\ApiV1\Web;
+namespace Poppy\System\Http\Request\ApiV1;
 
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\UtilHelper;
@@ -13,7 +13,7 @@ use Validator;
 /**
  * 图片处理控制器
  */
-class UploadController extends WebApiController
+class UploadController extends JwtApiController
 {
 
     /**

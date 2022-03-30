@@ -1,6 +1,6 @@
 <?php
 
-namespace Poppy\System\Http\Request\ApiV1\Web;
+namespace Poppy\System\Http\Request\ApiV1;
 
 use Poppy\Framework\Classes\Resp;
 use Poppy\System\Action\Verification;
@@ -11,7 +11,7 @@ use Throwable;
 /**
  * 验证码控制器
  */
-class CaptchaController extends WebApiController
+class CaptchaController extends JwtApiController
 {
 
     /**
